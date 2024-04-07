@@ -1,0 +1,99 @@
+*{
+  font-family: 'Inter', sans-serif;
+font-family: 'Kanit', sans-serif;
+font-family: 'Montserrat', sans-serif;
+font-family: 'Open Sans', sans-serif;
+}
+body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.block{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.block#about_us{
+  background: linear-gradient(to bottom right, #342052, #190537);
+}
+
+#about_us .content {
+  width: 1200px;
+  height: 580px;
+  margin: 125px 120px;
+
+}
+#about_us .stroke_box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 380px;
+  border: 1px solid transparent;
+  border-image: linear-gradient(to bottom right, #977133, #f2eaad);
+  -moz-border-image: -moz-linear-gradient(to bottom right, #977133 , #f2eaad);
+  -webkit-border-image: -webkit-linear-gradient(to bottom right, #977133 , #f2eaad);
+  border-width: 5px 2px;
+  border-image-slice: 1;
+
+  border-top: none;
+}
+
+#about_us .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+#about_us .header .stroke_header{
+  border: 1px solid transparent;
+  border-width: 5px 2px;
+  width: 355px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+#about_us .header .stroke_header.left{
+  border-image: linear-gradient(to right, #977133, #ac8d4f);
+  -moz-border-image: -moz-linear-gradient(to right, #977133 , #ac8d4f);
+  -webkit-border-image: -webkit-linear-gradient(to right, #977133 , #ac8d4f);
+  border-image-slice: 1;
+}
+
+
+#about_us .header .stroke_header.right{
+  border-image: linear-gradient(to right, #ccb87a, #c5af71);
+  -moz-border-image: -moz-linear-gradient(to right, #ccb87a , #c5af71);
+  -webkit-border-image: -webkit-linear-gradient(to right, #ccb87a , #c5af71);
+  border-image-slice: 1;
+}
+
+#about_us .header .header_text {
+  position: relative;
+  display: block;
+  width: 433px;
+  height: 77px;
+  margin: 0 31px;
+}
+
+#about_us .header .header_text span{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-size: 64px;
+  font-weight: bold;
+  background: -webkit-linear-gradient(left, #977133 , #f2eaad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  top: -39px;
+  z-index: 10;
+  display: block;
+}
