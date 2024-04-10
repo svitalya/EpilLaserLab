@@ -1,0 +1,16 @@
+﻿version: '3.9'
+
+services:
+  server:
+    build: EpilLaserLab.Server/
+  mysql:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    volumes:
+      - ~/apps/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=qwery
+      - MYSQL_PASSWORD=qwery
+      - MYSQL_USER=root
+      - MYSQL_DATABASE=epilaserlab
