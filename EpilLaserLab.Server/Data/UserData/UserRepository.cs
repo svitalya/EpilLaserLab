@@ -1,13 +1,13 @@
 ﻿using EpilLaserLab.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace EpilLaserLab.Server.Data
+namespace EpilLaserLab.Server.Data.UserData
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UserContext context;
+        private readonly EpilLaserContext context;
 
-        public UserRepository(UserContext context)
+        public UserRepository(EpilLaserContext context)
         {
             this.context = context;
         }

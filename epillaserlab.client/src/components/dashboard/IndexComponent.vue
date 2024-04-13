@@ -3,8 +3,10 @@
     <div class="container-fluid">
         <div class="row">
             <sidebar></sidebar>
-            <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
-                <router-view></router-view>
+            <main class="col-10 ml-sm-auto px-md-4 py-4">
+                <div class="row col-12 d-flex justify-content-center">
+                    <router-view class="col-6"/>
+                </div>
             </main>
         </div>
     </div>
@@ -25,4 +27,5 @@
 </script>
 
 <style>
+
 </style>

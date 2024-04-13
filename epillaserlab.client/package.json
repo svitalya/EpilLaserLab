@@ -10,15 +10,22 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@jobinsjp/vue3-datatable": "^1.0.15",
     "axios": "^1.6.8",
     "vite-plugin-encoding": "^1.0.0",
     "vue": "^3.4.21",
-    "vue-toastification": "^2.0.0-rc.5"
+    "vue-good-table": "^2.21.11",
+    "vue-table-dynamic": "^0.4.10",
+    "vue-toastification": "^2.0.0-rc.5",
+    "vue3-table-lite": "^1.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
+    "postcss": "^8.4.38",
+    "sass": "^1.75.0",
+    "tailwindcss": "^3.4.3",
     "vite": "^5.1.6",
     "vue-router": "^4.3.0"
   }

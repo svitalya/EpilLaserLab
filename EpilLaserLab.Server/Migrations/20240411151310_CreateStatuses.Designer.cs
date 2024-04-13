@@ -2,6 +2,7 @@
 using EpilLaserLab.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EpilLaserLab.Server.Migrations
 {
     [DbContext(typeof(EpilLaserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240411151310_CreateStatuses")]
+    partial class CreateStatuses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,13 +63,6 @@ namespace EpilLaserLab.Server.Migrations
                         .IsUnique();
 
                     b.ToTable("Statuses");
-
-                    b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            Name = "Создана"
-                        });
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.User", b =>
@@ -107,7 +103,7 @@ namespace EpilLaserLab.Server.Migrations
                         {
                             UserId = 1,
                             Login = "Admin",
-                            PasswordHash = "$2a$11$nX/PMyZyy1KywNUKZnDPXODr54o0sj0eeFcrYx9p5O3aKiRqKQqRS",
+                            PasswordHash = "$2a$11$H8pr7WqVGAqsm3uc.xrCv.8UQJAtyiCKKN/1cGpceNMj4sK3PBNWu",
                             RoleId = 1
                         });
                 });

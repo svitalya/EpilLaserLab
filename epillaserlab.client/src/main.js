@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory} from 'vue-router'
 import App from './App.vue'
 import Toast from "vue-toastification";
+
 import "vue-toastification/dist/index.css";
 
 const router = createRouter({
@@ -26,9 +27,29 @@ const router = createRouter({
             },
             children: [
                 {
-                    'path': 'home',
+                    'path': '/dashboard/home',
                     'name': 'dashboard.home',
                     component: () => import('./components/dashboard/Pages/HomeComponent.vue')
+                },
+                {
+                    'path': '/dashboard/references',
+                    'name': 'dashboard.references',
+                    component: () => import('./components/dashboard/Pages/ReferencesComponent.vue')
+                },
+                {
+                    path: '/dashboard/reference/:referencename',
+                    name: 'dashboard.reference',
+                    component: () => import('./components/dashboard/Pages/Reference/ShowListComponent.vue')
+                },
+                {     
+                    path: '/dashboard/reference/:referencename/add',
+                    name: 'dashboard.reference.add',
+                    component: () => import('./components/dashboard/Pages/Reference/AddComponent.vue')  
+                },
+                {     
+                    path: '/dashboard/reference/:referencename/edit/:id',
+                    name: 'dashboard.reference.edit',
+                    component: () => import('./components/dashboard/Pages/Reference/EditComponent.vue')  
                 }
             ]
         }

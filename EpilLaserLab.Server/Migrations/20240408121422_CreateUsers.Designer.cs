@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EpilLaserLab.Server.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(EpilLaserContext))]
     [Migration("20240408121422_CreateUsers")]
     partial class CreateUsers
     {

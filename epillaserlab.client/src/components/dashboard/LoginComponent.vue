@@ -60,15 +60,11 @@ export default defineComponent({
             });
 
             if(response.ok){
-                toast.success("Вход выполнен", {
-                    timeout: 5000,
-                });
+                toast.success("Вход выполнен");
 
                 await router.push("/dashboard/home");
             }else{
-                toast.error("Нет пользователя с таким логином и паролем", {
-                    timeout: 5000,
-                });
+                toast.error("Нет пользователя с таким логином и паролем");
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using EpilLaserLab.Server.Models;
 
-namespace EpilLaserLab.Server.Data
+namespace EpilLaserLab.Server.Data.UserData
 {
     public interface IUserRepository
     {

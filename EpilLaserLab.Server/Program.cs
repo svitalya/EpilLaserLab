@@ -1,4 +1,6 @@
 using EpilLaserLab.Server.Data;
+using EpilLaserLab.Server.Data.References;
+using EpilLaserLab.Server.Data.UserData;
 using EpilLaserLab.Server.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,14 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 Action<DbContextOptionsBuilder> contextBuilder = (opt) =>
     opt.UseMySQL(builder.Configuration.GetConnectionString("Default")
     ?? throw new Exception("Не удалось подключиться к БД"));
+builder.Services.AddDbContext<EpilLaserContext>(contextBuilder);
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-
-builder.Services.AddDbContext<UserContext>(contextBuilder);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 
+builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddControllers();
 
@@ -24,6 +25,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -48,6 +51,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 
 app.UseHttpsRedirection();
 

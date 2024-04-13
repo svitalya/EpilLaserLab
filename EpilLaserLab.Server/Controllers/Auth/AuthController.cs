@@ -1,5 +1,5 @@
-﻿using EpilLaserLab.Server.Data;
-using EpilLaserLab.Server.Dtos;
+﻿using EpilLaserLab.Server.Data.UserData;
+using EpilLaserLab.Server.Dtos.Auth;
 using EpilLaserLab.Server.Helpers;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace EpilLaserLab.Server.Controllers
+namespace EpilLaserLab.Server.Controllers.Auth
 {
     [Route("api/auth")]
     [ApiController]
@@ -16,7 +16,8 @@ namespace EpilLaserLab.Server.Controllers
         private readonly IUserRepository _repository;
         private readonly JwtService _jwtService;
 
-        public AuthController(IUserRepository repository, JwtService jwtService) {
+        public AuthController(IUserRepository repository, JwtService jwtService)
+        {
             _repository = repository;
             _jwtService = jwtService;
         }
@@ -29,12 +30,12 @@ namespace EpilLaserLab.Server.Controllers
 
             if (user == null)
             {
-                return BadRequest(new {message = "Invalid Credentials"});
+                return BadRequest(new { message = "Invalid Credentials" });
             }
 
-            if(!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+            if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {
-                return BadRequest(new { message = "Invalid Credentials"});
+                return BadRequest(new { message = "Invalid Credentials" });
             }
 
             var jwt = _jwtService.Generate(user.UserId);
@@ -75,7 +76,7 @@ namespace EpilLaserLab.Server.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");
-            return Ok(new { message = "success"});
+            return Ok(new { message = "success" });
         }
 
         //[HttpPost("register")]

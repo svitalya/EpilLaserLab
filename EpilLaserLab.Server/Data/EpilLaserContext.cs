@@ -3,19 +3,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EpilLaserLab.Server.Data;
 
-public class UserContext : DbContext
+public class EpilLaserContext : DbContext
 {
-    public UserContext(DbContextOptions<UserContext> options) : base(options)
+    public EpilLaserContext(DbContextOptions<EpilLaserContext> options) : base(options)
     {
 
     }
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<Models.User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
+
+    public DbSet<Status> Statuses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
+        modelBuilder.Entity<Models.User>()
             .HasOne(u => u.Role)
             .WithMany(r => r.Users)
             .HasForeignKey(u => u.RoleId)
@@ -24,16 +26,22 @@ public class UserContext : DbContext
             .IsRequired();
 
         modelBuilder.Entity<Role>(entity =>
-        {
+        { 
             entity.HasData(new Role() { RoleId = 1, Name = "Админ", LevelAccess = uint.MaxValue });
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<Models.User>(entity =>
         {
             entity.HasIndex(e => e.Login).IsUnique();
             entity.HasIndex(e => e.Email).IsUnique();
-            entity.HasData(new User {UserId = 1, Login = "Admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin"), RoleId = 1});
-             
+            entity.HasData(new Models.User { UserId = 1, Login = "Admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin"), RoleId = 1 });
+
+        });
+
+        modelBuilder.Entity<Status>(entity =>
+        {
+            entity.HasIndex(e => e.Name).IsUnique();
+            entity.HasData(new Status() { StatusId = 1, Name = "Создана" });
         });
     }
 }
