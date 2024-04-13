@@ -41,7 +41,7 @@ export default defineComponent({
             headers: {'Content-Type': "application/json"},
             credentials: "include"
         }).catch(async () => await this.router.push("/login-dashboard")));
-        console.log(response);
+        
         if(response.ok){
             this.user = await response.json();
         }

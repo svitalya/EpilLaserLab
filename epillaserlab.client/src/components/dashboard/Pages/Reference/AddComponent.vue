@@ -22,34 +22,31 @@ export default defineComponent({
 
     const toast = useToast();
 
-
     const data = reactive({
       name: "",
     });
-
 
     const submitForm = async (e) => {
       if(data.name == ""){
         return toast.info("Введите значение");
       }
 
-      const response = await fetch(`https://localhost:7243/api/${refName}`, {
+      await fetch(`https://localhost:7243/api/${refName}`, {
         method: "POST",
         headers: {'Content-Type': "application/json"},
         credentials: "include",
         body: JSON.stringify(data)
-      })
-
-      const result = await response.json();
-
-      if(result.message == "OK"){
-        toast.success("Запись успешно добавлена");
-        router.push({name: "dashboard.reference", params: {referencename: refName}})
-      }else{
-        toast.error("Дублирование записи");
-      }
-
-
+      }).then(async response => {
+          const result = await response.json();
+          if(result.message == "OK"){
+            toast.success("Запись успешно добавлена");
+            router.push({name: "dashboard.reference", params: {referencename: refName}})
+          }else if(result.message == "DUPLICATION"){
+            toast.error("Дублирование записи");
+          }else{
+            toast.error("Ошибка при добавлении записи");
+          }
+        }).catch(r => router.push({name: "dashboard"}))
     }; 
 
     return {data, submitForm, refName}

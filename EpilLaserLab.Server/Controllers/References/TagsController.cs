@@ -1,19 +1,17 @@
 ﻿using EpilLaserLab.Server.Data.References;
 using EpilLaserLab.Server.Dtos.References;
 using EpilLaserLab.Server.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.Json;
 
 namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StatusesController : ControllerBase
+    public class TagsController : ControllerBase
     {
-        private readonly IStatusRepository _repository;
+        private readonly ITagRepository _repository;
 
-        public StatusesController(IStatusRepository repository)
+        public TagsController(ITagRepository repository)
         {
             _repository = repository;
         }
@@ -21,11 +19,11 @@ namespace EpilLaserLab.Server.Controllers.References
         [HttpGet]
         public IActionResult GetList(int page = 0, int limit = 10, string sort = "asc", string? search = null)
         {
-            IEnumerable<ReferenceRec> data = _repository.GetAll().Select(s => new ReferenceRec()
+            IEnumerable<ReferenceRec> data = _repository.GetAll().Select(t => new ReferenceRec()
             {
-                Id = s.StatusId,
-                Name = s.Name,
-                AccessDelete = _repository.AccessDelete(s),
+                Id = t.TagId,
+                Name = t.Name,
+                AccessDelete = _repository.AccessDelete(t)
             }).AsEnumerable();
 
             var querable = (sort == "asc" ? data.OrderBy(r => r.Name) : data.OrderByDescending(r => r.Name)).AsQueryable();
@@ -36,44 +34,38 @@ namespace EpilLaserLab.Server.Controllers.References
             }
 
             var maxRecs = querable.Count();
-
+              
             if ((page + 1 * limit) > maxRecs)
             {
                 page = 0;
             }
 
 
-            return Ok(new
-            {
-                Data = new
-                {
-                    Recs = querable.AsQueryable()
+            return Ok(new { Data = new{
+                Recs = querable.AsQueryable()
                     .Skip(page * limit)
                     .Take(limit),
-                    Page = page,
-                    Max = maxRecs
-                },
-                Message = "OK"
-            });
+                Page = page,
+                Max = maxRecs
+            }, Message = "OK"});
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var status = _repository.Get(id);
+            var tag = _repository.Get(id); 
 
-            if (status is null)
+            if (tag is null)
             {
-                return Ok(new { Message = "NOT FOUND" });
+                return Ok(new { Message = "NOT FOUND"});
             };
 
-            return Ok(new
-            {
+            return Ok(new {
                 Rec = new ReferenceRec()
                 {
-                    Id = status.StatusId,
-                    Name = status.Name,
-                    AccessDelete = _repository.AccessDelete(status)
+                    Id = tag.TagId,
+                    Name = tag.Name,
+                    AccessDelete = _repository.AccessDelete(tag)
                 },
                 Message = "OK"
             });
@@ -83,14 +75,14 @@ namespace EpilLaserLab.Server.Controllers.References
         [HttpPost]
         public IActionResult Create(ReferenceRecCreate referenceRec)
         {
-            Status status = new()
+            Tag tag = new()
             {
                 Name = referenceRec.Name,
             };
 
             try
             {
-                if (_repository.CheckForDuplication(status) && _repository.Add(status))
+                if (_repository.CheckForDuplication(tag) && _repository.Add(tag))
                 {
                     return Ok(new { Message = "OK" });
                 }
@@ -109,28 +101,29 @@ namespace EpilLaserLab.Server.Controllers.References
         [HttpPut("{id}")]
         public IActionResult Update(int id, ReferenceRecCreate referenceRec)
         {
+
             try
             {
-                Status? statusOld = _repository.Get(id);
+                Tag? tagOld = _repository.Get(id);
 
-                if (statusOld is null)
+                if (tagOld is null)
                 {
                     return Ok(new { Message = "NOT FOUND" });
                 }
 
-                Status statusNew = new()
+                Tag tagNew = new()
                 {
                     Name = referenceRec.Name,
                 };
 
-                if (_repository.CheckForDuplication(statusNew) && _repository.Update(statusOld, statusNew))
+                if(_repository.CheckForDuplication(tagNew) && _repository.Update(tagOld, tagNew))
                 {
                     return Ok(new { Message = "OK" });
                 }
                 else
                 {
                     return Ok(new { Message = "DUPLICATION" });
-                }
+                }      
             }
             catch (Exception ex)
             {
@@ -143,9 +136,9 @@ namespace EpilLaserLab.Server.Controllers.References
         {
             try
             {
-                Status? tag = _repository.Get(id);
+                Tag? tag = _repository.Get(id);
 
-                if (tag is null)
+                if(tag is null)
                 {
                     return Ok(new { Message = "NOT FOUND" });
                 }
@@ -165,4 +158,5 @@ namespace EpilLaserLab.Server.Controllers.References
             }
         }
     }
+
 }

@@ -73,26 +73,25 @@
             if(!isDel) return;
 
             let id = getId(e);
-            const responce = await fetch(`https://localhost:7243/api/${refName}/${id}`, {
+            await fetch(`https://localhost:7243/api/${refName}/${id}`, {
                 method: "DELETE",
                 credentials: "include"
-            })
-            const data = await responce.json();
+            }).then(async responce => {
+                const data = await responce.json();
 
-            if(data.message == 'OK'){
-                toast.success("Запись удалена");
-                loadData(undefined)
-            }else if(data.message == 'BLOCK'){
-                toast.error("Удаление записи приведет к потере данных");
-            }else{
-                toast.error("Неизвестная ошибка при удалении записи");
-            }
-            
+                if(data.message == 'OK'){
+                    toast.success("Запись удалена");
+                    loadData(undefined)
+                }else if(data.message == 'BLOCK'){
+                    toast.error("Удаление записи приведет к потере данных");
+                }else{
+                    toast.error("Ошибка при удалении записи");
+                }
+            }).catch(r => router.push({name: "dashboard"})); 
           }
 
           const loadData = async (query) => {
         
-
             let page, limit, sortDirection, searchInfo;
 
             sortDirection = sort.value["sort"]
@@ -127,20 +126,29 @@
 
             var prms = new URLSearchParams(params);
 
-            const responce = await fetch(`https://localhost:7243/api/${refName}?${prms}`, {
+            await fetch(`https://localhost:7243/api/${refName}?${prms}`, {
                 headers: {'Content-Type': "application/json"},
                 credentials: "include"
-            })
+            }).then(async responce => {
+                let responceJson = await responce.json()
 
-            let data = await responce.json()
-            let max = data.max;
-            page = data.page;
-            let recs = data.data;
+                if(responceJson.message = "OK"){
+                    let data = responceJson.data;
+                    let max = data.max;
+                    page = data.page;
+                    let recs = data.recs;
 
-            tableData.value = recs
-            pagination.value = { ...pagination.value, page: page, total: max, limit: limit}
-            sort.value = { ...sort.value, sort: sortDirection};
-            search.value = {...search.value, search: searchInfo};
+                    tableData.value = recs
+                    pagination.value = { ...pagination.value, page: page, total: max, limit: limit}
+                    sort.value = { ...sort.value, sort: sortDirection};
+                    search.value = {...search.value, search: searchInfo};
+                }else{
+                    tableData.value = [];
+                    pagination.value = { ...pagination.value, page: 0, total: 0, limit: limit}
+                    sort.value = { ...sort.value, sort: sortDirection};
+                    search.value = {...search.value, search: searchInfo};
+                }
+            }).catch(r => router.push({name: "dashboard"}))
           }
 
 

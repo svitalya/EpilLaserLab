@@ -30,12 +30,12 @@ namespace EpilLaserLab.Server.Controllers.Auth
 
             if (user == null)
             {
-                return BadRequest(new { message = "Invalid Credentials" });
+                return BadRequest(new { Message = "Invalid Credentials" });
             }
 
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {
-                return BadRequest(new { message = "Invalid Credentials" });
+                return BadRequest(new { Message = "Invalid Credentials" });
             }
 
             var jwt = _jwtService.Generate(user.UserId);
@@ -45,7 +45,7 @@ namespace EpilLaserLab.Server.Controllers.Auth
                 HttpOnly = true
             });
 
-            return Ok(new { message = "success" });
+            return Ok(new { Message = "success" });
         }
 
 
@@ -76,7 +76,7 @@ namespace EpilLaserLab.Server.Controllers.Auth
         public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");
-            return Ok(new { message = "success" });
+            return Ok(new { Message = "success" });
         }
 
         //[HttpPost("register")]

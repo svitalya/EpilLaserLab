@@ -7,7 +7,9 @@ namespace EpilLaserLab.Server.Data.References
         public IEnumerable<Status> GetAll();
         public Status? Get(int id);
         public bool Add(Status status);
-        public bool Update(int id, Status status);
-        public bool Delete(int id);
+        public bool Update(Status statusOld, Status statusNew);
+        public bool Delete(Status status);
+        public bool CheckForDuplication(Status status);
+        public bool AccessDelete(Status status);
     }
 }

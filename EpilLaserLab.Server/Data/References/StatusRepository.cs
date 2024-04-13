@@ -10,17 +10,24 @@ namespace EpilLaserLab.Server.Data.References
             _context = context;
         }
 
+        public bool AccessDelete(Status status)
+        {
+            return status.StatusId % 2 == 0; 
+        }
+
         public bool Add(Status status)
         {
             _context.Statuses.Add(status);
             return _context.SaveChanges() > 0;
         }
 
-        public bool Delete(int id)
+        public bool CheckForDuplication(Status status)
         {
-            var status = _context.Statuses.Find(id);
-            if (status is null) return false;
+            return !_context.Statuses.Where(t => t.Name.Equals(status.Name, StringComparison.CurrentCultureIgnoreCase)).Any();
+        }
 
+        public bool Delete(Status status)
+        {
             _context.Statuses.Remove(status);
             return _context.SaveChanges() > 0;
         }
@@ -35,12 +42,9 @@ namespace EpilLaserLab.Server.Data.References
             return _context.Statuses.ToArray();
         }
 
-        public bool Update(int id, Status status)
+        public bool Update(Status statusOld, Status statusNew)
         {
-            var statusOld = _context.Statuses.Find(id);
-            if (statusOld is null) return false;
-
-            statusOld.Name = status.Name;
+            statusOld.Name = statusNew.Name;
 
             return _context.SaveChanges() > 0;
         }

@@ -16,6 +16,7 @@ builder.Services.AddDbContext<EpilLaserContext>(contextBuilder);
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 builder.Services.AddScoped<JwtService>();
 

@@ -51,25 +51,24 @@ export default defineComponent({
         return toast.info("Введите новое значение");
       }
 
-      const response = await fetch(`https://localhost:7243/api/${refName}/${idRec}`, {
+      await fetch(`https://localhost:7243/api/${refName}/${idRec}`, {
         method: "PUT",
         headers: {'Content-Type': "application/json"},
         credentials: "include",
         body: JSON.stringify(data)
-      })
+      }).then(async responce => {
+        const result = await responce.json();
 
-      const result = await response.json();
-
-      if(result.message == "OK"){
-        toast.success("Запись успешно изменена");
-        router.push({name: "dashboard.reference", params: {referencename: refName}})
-      }else{
-        toast.error("Дублирование записи");
-      }
-
-
+        if(result.message == "OK"){
+          toast.success("Запись успешно изменена");
+          router.push({name: "dashboard.reference", params: {referencename: refName}})
+        }else if(result.message == "DUPLICATION"){
+          toast.error("Дублирование записи");
+        }else{
+          toast.error("Ошибка при изменении записи");
+        }
+      }).catch(e => router.push({name: "dashboard"}))
     }; 
-
     return {data, submitForm, refName, idRec, oldDataName}
   }
 });

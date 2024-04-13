@@ -12,7 +12,8 @@ namespace EpilLaserLab.Server.Controllers.References
     {
         private Dictionary<string, string> _references = new()
         {
-            {"statuses", "Статусы"}
+            {"tags", "Теги"},
+            {"statuses", "Статусы"},
         };
 
         // GET: api/<ReferencesController>
