@@ -24,8 +24,8 @@ export default defineComponent({
     });
 
     const result = await response.json();
-    this.data.name = result.name;
-    this.oldDataName.name = result.name;
+    this.data.name = result.rec.name;
+    this.oldDataName.name = result.rec.name;
   },
   setup(){
 

@@ -15,6 +15,8 @@ public class EpilLaserContext : DbContext
 
     public DbSet<Status> Statuses { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Models.Type> Types { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -51,6 +53,16 @@ public class EpilLaserContext : DbContext
         {
             entity.HasIndex(e => e.Name).IsUnique();
             entity.HasData(new Tag() { TagId = 1, Name = "Новый" });
+        });
+
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasIndex(e => e.Name).IsUnique();
+        });
+
+        modelBuilder.Entity<Models.Type>(entity =>
+        {
+            entity.HasIndex(e => e.Name).IsUnique();
         });
     }
 }

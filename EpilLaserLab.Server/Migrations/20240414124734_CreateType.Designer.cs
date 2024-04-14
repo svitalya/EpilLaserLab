@@ -2,6 +2,7 @@
 using EpilLaserLab.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EpilLaserLab.Server.Migrations
 {
     [DbContext(typeof(EpilLaserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240414124734_CreateType")]
+    partial class CreateType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,7 +131,7 @@ namespace EpilLaserLab.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Types");
+                    b.ToTable("Type");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.User", b =>
@@ -169,14 +172,14 @@ namespace EpilLaserLab.Server.Migrations
                         {
                             UserId = 1,
                             Login = "Admin",
-                            PasswordHash = "$2a$11$ysPp6hPJU56kWLW4eUE66.DfxYz0oNj.Sd29h0DcywnQeAQYSdFxa",
+                            PasswordHash = "$2a$11$7S5/T0BtCyCtooxLuPh./uinyzw/eTqUF15u4orzxCDUcDWhghOSm",
                             RoleId = 1
                         },
                         new
                         {
                             UserId = 2,
                             Login = "User",
-                            PasswordHash = "$2a$11$CCGRmwsTBCKDX749Z5XCXe8c0gXfamrEhm4Y.sixKzy4PpV0nLi..",
+                            PasswordHash = "$2a$11$6zPAufXP/USL85ZfoVUaHeGLe281DpixpS8sTvyt09oYg/n3Zn3/O",
                             RoleId = 2
                         });
                 });

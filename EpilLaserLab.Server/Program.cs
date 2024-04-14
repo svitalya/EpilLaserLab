@@ -3,6 +3,7 @@ using EpilLaserLab.Server.Data.References;
 using EpilLaserLab.Server.Data.UserData;
 using EpilLaserLab.Server.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.Json;
@@ -29,6 +30,8 @@ builder.Services.AddDbContext<EpilLaserContext>(contextBuilder);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ITypeRepository, TypeRepository>();
 
 builder.Services.AddControllers();
 
@@ -75,7 +78,11 @@ app.UseAuthorization();
 app.MapGet("/accessdenied", async (HttpContext context) =>
 {
     context.Response.StatusCode = 403;
-    var json = JsonSerializer.Serialize(new { Message = "ACCESS DENIED" });
+    JsonSerializerOptions options = new JsonSerializerOptions() {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
+    var json = JsonSerializer.Serialize(new { Message = "ACCESS DENIED" }, options: options);
     await context.Response.WriteAsync(json);
 });
 

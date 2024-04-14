@@ -9,16 +9,24 @@ namespace EpilLaserLab.Server.Controllers.References
     [Route("api/[controller]")]
     [Authorize(Roles = "admin")]
     [ApiController]
-    public class ReferencesController : ControllerBase
+    public class DashboardController : ControllerBase
     {
         private Dictionary<string, string> _references = new()
         {
             {"tags", "Теги"},
             {"statuses", "Статусы"},
+            {"categories", "Категории"},
+            {"types", "Виды прайслистов"},
         };
 
-        // GET: api/<ReferencesController>
         [HttpGet]
+        public IActionResult AccessCheck()
+        {
+            return Ok(new { Message = "OK"});
+        }
+
+        // GET: api/<DashboardController>
+        [HttpGet("references")]
         public IActionResult Get()
         {
             var recs = _references.Select(kvp => new ReferenceDto {

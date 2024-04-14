@@ -60,8 +60,20 @@ export default defineComponent({
             }).then(async response => {
                 let responceJson = await response.json();
                 if(responceJson.message == "OK"){
-                    toast.success("Вход выполнен");
-                    await router.push("/dashboard/home");
+                    fetch("https://localhost:7243/api/dashboard", {
+                        method: "GET",
+                        headers: {'Content-Type': "application/json"},
+                        credentials: "include"
+                    }).then(async response => {
+                        let responceJson = await response.json();
+                        if(responceJson.message == "OK"){
+                            await router.push({name: 'dashboard'});
+                        }else{
+                            toast.error("Вход в панель не разрешен");
+                        }
+                        
+                    });
+                    
                 }else if(responceJson.message == "INVALID CREDENTIALS"){
                     toast.error("Нет пользователя с таким логином и паролем");
                 }

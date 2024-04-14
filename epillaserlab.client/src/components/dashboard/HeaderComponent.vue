@@ -15,6 +15,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 export default defineComponent({
     data(){
         return {
@@ -24,6 +25,7 @@ export default defineComponent({
 
     setup(){
         const router = useRouter();
+        const toast = useToast();
         const logoutBtnClic = async () => {
             const response = await fetch("https://localhost:7243/api/auth/logout", {
                 method: "POST",
@@ -36,15 +38,23 @@ export default defineComponent({
 
     async beforeCreate(){
         
-        fetch("https://localhost:7243/api/auth/user", {
+        fetch("https://localhost:7243/api/dashboard", {
             method: "GET",
             headers: {'Content-Type': "application/json"},
             credentials: "include"
         }).then(async response => {
             let responceJson = await response.json();
-            if(responceJson.message == "OK"){
-                this.user = responceJson.user;
-            }else if(responceJson.message == "UNAUTHORIZED"){
+            if(responceJson.message == "OK"){     
+                fetch("https://localhost:7243/api/auth/user", {
+                    method: "GET",
+                    headers: {'Content-Type': "application/json"},
+                    credentials: "include"
+                }).then(async response =>{
+                    let responceJson = await response.json();
+                    this.user = responceJson.user;
+                });
+            }else if(responceJson.message == "ACCESS DENIED"){
+                await this.toast.error("Вход в панель не разрешен");
                 await this.router.push("/login-dashboard");
             }
         })

@@ -4,16 +4,18 @@ using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using Type = EpilLaserLab.Server.Models.Type;
+
 namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "admin")]
-    public class TagsController : ControllerBase
+    public class TypesController : ControllerBase
     {
-        private readonly ITagRepository _repository;
+        private readonly ITypeRepository _repository;
 
-        public TagsController(ITagRepository repository)
+        public TypesController(ITypeRepository repository)
         {
             _repository = repository;
         }
@@ -23,7 +25,7 @@ namespace EpilLaserLab.Server.Controllers.References
         {
             IEnumerable<ReferenceRec> data = _repository.GetAll().Select(t => new ReferenceRec()
             {
-                Id = t.TagId,
+                Id = t.TypeId,
                 Name = t.Name,
                 AccessDelete = _repository.AccessDelete(t)
             }).AsEnumerable();
@@ -36,36 +38,42 @@ namespace EpilLaserLab.Server.Controllers.References
             }
 
             var maxRecs = querable.Count();
-              
+
             if ((page + 1 * limit) > maxRecs)
             {
                 page = 0;
             }
 
 
-            return Ok(new { Data = new{
-                Recs = querable.AsQueryable()
+            return Ok(new
+            {
+                Data = new
+                {
+                    Recs = querable.AsQueryable()
                     .Skip(page * limit)
                     .Take(limit),
-                Page = page,
-                Max = maxRecs
-            }, Message = "OK"});
+                    Page = page,
+                    Max = maxRecs
+                },
+                Message = "OK"
+            });
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var tag = _repository.Get(id); 
+            var tag = _repository.Get(id);
 
             if (tag is null)
             {
-                return Ok(new { Message = "NOT FOUND"});
+                return Ok(new { Message = "NOT FOUND" });
             };
 
-            return Ok(new {
+            return Ok(new
+            {
                 Rec = new ReferenceRec()
                 {
-                    Id = tag.TagId,
+                    Id = tag.TypeId,
                     Name = tag.Name,
                     AccessDelete = _repository.AccessDelete(tag)
                 },
@@ -77,14 +85,14 @@ namespace EpilLaserLab.Server.Controllers.References
         [HttpPost]
         public IActionResult Create(ReferenceRecCreate referenceRec)
         {
-            Tag tag = new()
+            Type type = new()
             {
                 Name = referenceRec.Name,
             };
 
             try
             {
-                if (_repository.CheckForDuplication(tag) && _repository.Add(tag))
+                if (_repository.CheckForDuplication(type) && _repository.Add(type))
                 {
                     return Ok(new { Message = "OK" });
                 }
@@ -106,26 +114,26 @@ namespace EpilLaserLab.Server.Controllers.References
 
             try
             {
-                Tag? tagOld = _repository.Get(id);
+                Type? typeOld = _repository.Get(id);
 
-                if (tagOld is null)
+                if (typeOld is null)
                 {
                     return Ok(new { Message = "NOT FOUND" });
                 }
 
-                Tag tagNew = new()
+                Type typeNew = new()
                 {
                     Name = referenceRec.Name,
                 };
 
-                if(_repository.CheckForDuplication(tagNew) && _repository.Update(tagOld, tagNew))
+                if (_repository.CheckForDuplication(typeNew) && _repository.Update(typeOld, typeNew))
                 {
                     return Ok(new { Message = "OK" });
                 }
                 else
                 {
                     return Ok(new { Message = "DUPLICATION" });
-                }      
+                }
             }
             catch (Exception ex)
             {
@@ -138,14 +146,14 @@ namespace EpilLaserLab.Server.Controllers.References
         {
             try
             {
-                Tag? tag = _repository.Get(id);
+                Type? type = _repository.Get(id);
 
-                if(tag is null)
+                if (type is null)
                 {
                     return Ok(new { Message = "NOT FOUND" });
                 }
 
-                if (_repository.AccessDelete(tag) && _repository.Delete(tag))
+                if (_repository.AccessDelete(type) && _repository.Delete(type))
                 {
                     return Ok(new { Message = "OK" });
                 }
