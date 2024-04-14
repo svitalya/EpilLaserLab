@@ -28,7 +28,8 @@ public class EpilLaserContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         { 
-            entity.HasData(new Role() { RoleId = 1, Name = "Админ", LevelAccess = uint.MaxValue });
+            entity.HasData(new Role() { RoleId = 1, Name = "admin"});
+            entity.HasData(new Role() { RoleId = 2, Name = "user"});
         });
 
         modelBuilder.Entity<Models.User>(entity =>
@@ -36,6 +37,7 @@ public class EpilLaserContext : DbContext
             entity.HasIndex(e => e.Login).IsUnique();
             entity.HasIndex(e => e.Email).IsUnique();
             entity.HasData(new Models.User { UserId = 1, Login = "Admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin"), RoleId = 1 });
+            entity.HasData(new Models.User { UserId = 2, Login = "User", PasswordHash = BCrypt.Net.BCrypt.HashPassword("User"), RoleId = 2 });
 
         });
 

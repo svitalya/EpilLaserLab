@@ -10,8 +10,6 @@ namespace EpilLaserLab.Server.Models
         [Required]
         public string Name { get; set; } = string.Empty;
 
-        public uint LevelAccess { get; set; }
-
         [JsonIgnore]
         public ICollection<User> Users { get; set; } = [];
     }

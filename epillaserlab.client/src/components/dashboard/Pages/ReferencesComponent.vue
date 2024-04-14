@@ -24,7 +24,7 @@ export default defineComponent({
     fetch("https://localhost:7243/api/references", {
       method: "GET",
       credentials: "include"
-    }).then(result => result.json().then(j => this.referencesData = j))
+    }).then(result => result.json().then(j => this.referencesData = j.recs))
   }
 })
 </script>

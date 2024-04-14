@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "admin")]
     [ApiController]
     public class ReferencesController : ControllerBase
     {
@@ -18,9 +19,14 @@ namespace EpilLaserLab.Server.Controllers.References
 
         // GET: api/<ReferencesController>
         [HttpGet]
-        public IEnumerable<ReferenceDto> Get()
+        public IActionResult Get()
         {
-            return _references.Select(kvp => new ReferenceDto { Name = kvp.Key, Title = kvp.Value });
+            var recs = _references.Select(kvp => new ReferenceDto {
+                Name = kvp.Key,
+                Title = kvp.Value
+            });
+
+            return Ok(new { Message = "OK", Recs = recs});
         }
     }
 }

@@ -36,15 +36,20 @@ export default defineComponent({
 
     async beforeCreate(){
         
-        const response = await (fetch("https://localhost:7243/api/auth/user", {
+        fetch("https://localhost:7243/api/auth/user", {
             method: "GET",
             headers: {'Content-Type': "application/json"},
             credentials: "include"
-        }).catch(async () => await this.router.push("/login-dashboard")));
-        
-        if(response.ok){
-            this.user = await response.json();
-        }
+        }).then(async response => {
+            let responceJson = await response.json();
+            if(responceJson.message == "OK"){
+                this.user = responceJson.user;
+            }else if(responceJson.message == "UNAUTHORIZED"){
+                await this.router.push("/login-dashboard");
+            }
+        })
+        .catch(async () => await this.router.push("/login-dashboard"));
+    
     }
 })
 </script>

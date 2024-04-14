@@ -2,6 +2,7 @@
 using EpilLaserLab.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EpilLaserLab.Server.Migrations
 {
     [DbContext(typeof(EpilLaserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240414065234_UpdateRoles")]
+    partial class UpdateRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,6 +26,9 @@ namespace EpilLaserLab.Server.Migrations
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<uint>("LevelAccess")
+                        .HasColumnType("int unsigned");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -36,11 +42,13 @@ namespace EpilLaserLab.Server.Migrations
                         new
                         {
                             RoleId = 1,
+                            LevelAccess = 0u,
                             Name = "admin"
                         },
                         new
                         {
                             RoleId = 2,
+                            LevelAccess = 0u,
                             Name = "user"
                         });
                 });
@@ -133,14 +141,14 @@ namespace EpilLaserLab.Server.Migrations
                         {
                             UserId = 1,
                             Login = "Admin",
-                            PasswordHash = "$2a$11$0O9Jt1CN.qNklBcvZ2MsVOxrnVwtZozYo4e1FJ4EUK83h7f7dQHRy",
+                            PasswordHash = "$2a$11$.yq54P4LuavFwjwA6l4HQ.lgU8lMLhEEjOlIXSeoA/IharO9Zq4yG",
                             RoleId = 1
                         },
                         new
                         {
                             UserId = 2,
                             Login = "User",
-                            PasswordHash = "$2a$11$X4978Q/r2uEvNu5xyN4CE.hNvXnf45C4tfjqudOvQkfyrzZz4Wd.K",
+                            PasswordHash = "$2a$11$J7bSLeGi9STb0GVLXqeL8eoW/J/DB3HQg0BFGEtdhRw5dNth5d19S",
                             RoleId = 2
                         });
                 });

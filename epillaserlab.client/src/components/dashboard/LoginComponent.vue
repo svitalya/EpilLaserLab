@@ -52,20 +52,24 @@ export default defineComponent({
         const toast = useToast();
 
         const submit = async () => {
-            const response = await fetch("https://localhost:7243/api/auth/login", {
+            fetch("https://localhost:7243/api/auth/login", {
                 method: "POST",
                 headers: {'Content-Type': "application/json"},
                 credentials: "include",
                 body: JSON.stringify(data)
+            }).then(async response => {
+                let responceJson = await response.json();
+                if(responceJson.message == "OK"){
+                    toast.success("Вход выполнен");
+                    await router.push("/dashboard/home");
+                }else if(responceJson.message == "INVALID CREDENTIALS"){
+                    toast.error("Нет пользователя с таким логином и паролем");
+                }
+                else{
+                    toast.error("Ошибка при авторизации");
+                }
             });
 
-            if(response.ok){
-                toast.success("Вход выполнен");
-
-                await router.push("/dashboard/home");
-            }else{
-                toast.error("Нет пользователя с таким логином и паролем");
-            }
         }
 
         return {data, submit, toast}

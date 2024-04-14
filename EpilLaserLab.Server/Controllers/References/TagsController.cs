@@ -1,12 +1,14 @@
 ﻿using EpilLaserLab.Server.Data.References;
 using EpilLaserLab.Server.Dtos.References;
 using EpilLaserLab.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class TagsController : ControllerBase
     {
         private readonly ITagRepository _repository;

@@ -1,6 +1,7 @@
 ﻿using EpilLaserLab.Server.Data.References;
 using EpilLaserLab.Server.Dtos.References;
 using EpilLaserLab.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.Json;
@@ -9,6 +10,7 @@ namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class StatusesController : ControllerBase
     {
         private readonly IStatusRepository _repository;

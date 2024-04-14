@@ -17,7 +17,6 @@ import { useToast } from "vue-toastification";
 import { defineComponent } from 'vue';
 export default defineComponent({
   async beforeCreate() {
-    console.log(`https://localhost:7243/api/${this.refName}/${this.idRec}`);
     const response = await fetch(`https://localhost:7243/api/${this.refName}/${this.idRec}`, {
         method: "GET",
         headers: {'Content-Type': "application/json"},
