@@ -1,5 +1,6 @@
 using EpilLaserLab.Server.Data;
 using EpilLaserLab.Server.Data.References;
+using EpilLaserLab.Server.Data.Tables;
 using EpilLaserLab.Server.Data.UserData;
 using EpilLaserLab.Server.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -32,6 +33,8 @@ builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITypeRepository, TypeRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IServicePricesRepository, ServicePricesRepository>();
 
 builder.Services.AddControllers();
 

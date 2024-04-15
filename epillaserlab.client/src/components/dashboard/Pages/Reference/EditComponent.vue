@@ -1,8 +1,9 @@
 <template>
-<form @submit.prevent="submitForm">
-  <div class="form-group">
+<form class="row col-3" @submit.prevent="submitForm">
+  <div class="form-group row">
     <label>Изменить запись</label>
-    <input type="text" v-model="data.name" class="form-control mt-3" placeholder="Введите значение">
+
+    <input type="text" v-model="data.name" class="col-3 form-control mt-3" placeholder="Введите значение">
   </div>
   <div class="row mt-3">
     <button type="submit" class="btn btn-success me-3" style="width: 120px;">Сохранить</button>

@@ -5,7 +5,7 @@
             <sidebar></sidebar>
             <main class="col-10 ml-sm-auto px-md-4 py-4">
                 <div class="row col-12 d-flex justify-content-center">
-                    <router-view class="col-6"/>
+                    <router-view class="row"/>
                 </div>
             </main>
         </div>

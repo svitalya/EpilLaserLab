@@ -1,5 +1,5 @@
 <template>
-<form @submit.prevent="submitForm">
+<form class="row col-3" @submit.prevent="submitForm">
   <div class="form-group">
     <label>Добавить запись</label>
     <input type="text" v-model="data.name" class="form-control mt-3" placeholder="Введите значение">

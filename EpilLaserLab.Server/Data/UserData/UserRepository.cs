@@ -15,7 +15,7 @@ namespace EpilLaserLab.Server.Data.UserData
         public User Create(User user)
         {
             context.Users.Add(user);
-            user.UserId = context.SaveChanges();
+            context.SaveChanges();
             return user;
         }
 

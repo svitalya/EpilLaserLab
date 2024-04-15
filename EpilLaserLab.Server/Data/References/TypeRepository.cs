@@ -1,5 +1,7 @@
 ﻿
 using EpilLaserLab.Server.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Type = EpilLaserLab.Server.Models.Type;
 
 namespace EpilLaserLab.Server.Data.References
 {
@@ -12,9 +14,18 @@ namespace EpilLaserLab.Server.Data.References
             this._context = context;
         }
 
-        public bool AccessDelete(Models.Type type)
+        public bool AccessDelete(Type type)
         {
-            return type.TypeId % 2 == 0;
+            CollectionEntry<Type, ServicePrice> servicePrices = _context
+                .Entry(type)
+                .Collection(s => s.ServicePrices);
+
+            if (!servicePrices.IsLoaded)
+            {
+                servicePrices.Load();
+            }
+
+            return !type.ServicePrices.Any();
         }
 
         public bool Add(Models.Type type)

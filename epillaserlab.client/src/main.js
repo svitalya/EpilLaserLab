@@ -50,7 +50,22 @@ const router = createRouter({
                     path: '/dashboard/reference/:referencename/edit/:id',
                     name: 'dashboard.reference.edit',
                     component: () => import('./components/dashboard/Pages/Reference/EditComponent.vue')  
-                }
+                },
+                {
+                    'path': '/dashboard/services',
+                    'name': 'dashboard.services',
+                    component: () => import('./components/dashboard/Pages/Services/ShowListComponent.vue')
+                },
+                {
+                    'path': '/dashboard/service/add',
+                    'name': 'dashboard.service.add',
+                    component: () => import('./components/dashboard/Pages/Services/AddComponent.vue')
+                },
+                {
+                    'path': '/dashboard/service/edit/:id',
+                    'name': 'dashboard.service.edit',
+                    component: () => import('./components/dashboard/Pages/Services/EditComponent.vue')
+                },
             ]
         }
     ]

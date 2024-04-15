@@ -5,7 +5,7 @@
   </h1>
 
     <div class="row list-group" v-for="reference in referencesData">
-      <router-link style="width: 120px;" :to="'/dashboard/reference/'+reference.name" class="list-group-item list-group-item-action mt-2">{{reference.title}}</router-link>
+      <router-link style="width: 120px;" :to="'/dashboard/reference/'+reference.name" class="col-3 list-group-item list-group-item-action mt-2">{{reference.title}}</router-link>
     </div>
   </div>
 

@@ -8,5 +8,7 @@ namespace EpilLaserLab.Server.Models
 
         [Required]
         public required string Name { get; set; }
+
+        public ICollection<ServicePrice> ServicePrices { get; set; } = [];
     }
 }

@@ -12,11 +12,12 @@ public class EpilLaserContext : DbContext
 
     public DbSet<Models.User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
-
     public DbSet<Status> Statuses { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Models.Type> Types { get; set; }
+    public DbSet<Service> Services { get; set; }
+    public DbSet<ServicePrice> ServicePrices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,8 +39,8 @@ public class EpilLaserContext : DbContext
         {
             entity.HasIndex(e => e.Login).IsUnique();
             entity.HasIndex(e => e.Email).IsUnique();
-            entity.HasData(new Models.User { UserId = 1, Login = "Admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin"), RoleId = 1 });
-            entity.HasData(new Models.User { UserId = 2, Login = "User", PasswordHash = BCrypt.Net.BCrypt.HashPassword("User"), RoleId = 2 });
+            entity.HasData(new User { UserId = 1, Login = "Admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin"), RoleId = 1 });
+            entity.HasData(new User { UserId = 2, Login = "User", PasswordHash = BCrypt.Net.BCrypt.HashPassword("User"), RoleId = 2 });
 
         });
 
@@ -63,6 +64,21 @@ public class EpilLaserContext : DbContext
         modelBuilder.Entity<Models.Type>(entity =>
         {
             entity.HasIndex(e => e.Name).IsUnique();
+        });
+
+        modelBuilder.Entity<Service>(entity =>
+        {
+            entity.HasIndex(e => e.Name).IsUnique();
+        });
+
+        modelBuilder.Entity<ServicePrice>(entity =>
+        {
+            entity.HasOne(e => e.Service)
+                .WithMany(e => e.ServicePrices);
+
+            entity.HasOne(e => e.Type)
+                .WithMany(e => e.ServicePrices);
+
         });
     }
 }
