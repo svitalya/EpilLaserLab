@@ -112,8 +112,6 @@ export default defineComponent({
           }   
       });
 
-      console.log(data);
-      console.log(JSON.stringify(data));
 
       await fetch(`https://localhost:7243/api/services`, {
         method: "POST",

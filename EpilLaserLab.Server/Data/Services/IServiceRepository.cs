@@ -1,6 +1,6 @@
 ﻿using EpilLaserLab.Server.Models;
 
-namespace EpilLaserLab.Server.Data.Tables
+namespace EpilLaserLab.Server.Data.Services
 {
     public interface IServiceRepository
     {

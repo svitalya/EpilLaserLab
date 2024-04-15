@@ -18,6 +18,8 @@ public class EpilLaserContext : DbContext
     public DbSet<Models.Type> Types { get; set; }
     public DbSet<Service> Services { get; set; }
     public DbSet<ServicePrice> ServicePrices { get; set; }
+    public DbSet<Models.SeasonTicket> SeasonTickets { get; set; }
+    public DbSet<SeasonTicketPrice> SeasonTicketsPrice { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -78,7 +80,22 @@ public class EpilLaserContext : DbContext
 
             entity.HasOne(e => e.Type)
                 .WithMany(e => e.ServicePrices);
+        });
 
+        modelBuilder.Entity<Models.SeasonTicket>(entity =>
+        {
+            entity.HasOne(e => e.Service)
+                .WithMany(e => e.SeasonTickets)
+                .HasPrincipalKey(e => e.ServiceId)
+                .HasForeignKey(e => e.ServiceId);
+        });
+
+        modelBuilder.Entity<SeasonTicketPrice>(entity =>
+        {
+            entity.HasOne(e => e.SeasonTicket)
+                .WithMany(e => e.SeasonTicketPrices)
+                .HasPrincipalKey(e => e.SeasonTicketId)
+                .HasForeignKey(e => e.SeasonTicketId);
         });
     }
 }

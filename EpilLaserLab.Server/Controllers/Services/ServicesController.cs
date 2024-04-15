@@ -1,14 +1,14 @@
 ﻿using EpilLaserLab.Server.Data.References;
-using EpilLaserLab.Server.Data.Tables;
+using EpilLaserLab.Server.Data.Services;
 using EpilLaserLab.Server.Dtos.References;
-using EpilLaserLab.Server.Dtos.Tables;
+using EpilLaserLab.Server.Dtos.Services;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Ocsp;
 using System.Linq.Expressions;
 
-namespace EpilLaserLab.Server.Controllers.Tables;
+namespace EpilLaserLab.Server.Controllers.Services;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -39,15 +39,15 @@ public class ServicesController(
         var querable = _repository.GetQuerable();
         if (functor.TryGetValue(order, out Func<Service, object?>? f) && f is not null)
         {
-            querable = (sort == "desc" 
-                ? querable.OrderByDescending(f) 
+            querable = (sort == "desc"
+                ? querable.OrderByDescending(f)
                 : querable.OrderBy(f)
             ).AsQueryable();
         }
 
         int maxRecs = querable.Count();
 
-        if ((page + 1 * limit) > maxRecs)
+        if (page + 1 * limit > maxRecs)
         {
             page = 0;
         }
@@ -64,18 +64,18 @@ public class ServicesController(
             Data = new
             {
                 Recs = recs.Select(s => new ServiceDto
-                    {
-                        ServiceId = s.ServiceId,
-                        Description = s.Description,
-                        Name = s.Name,
-                        TimeCost = s.TimeCost,
-                        PriceByType = _servicePricesRepository.GetPriceByTypes(s.ServiceId),
-                    }),
+                {
+                    ServiceId = s.ServiceId,
+                    Description = s.Description,
+                    Name = s.Name,
+                    TimeCost = s.TimeCost,
+                    PriceByType = _servicePricesRepository.GetPriceByTypes(s.ServiceId),
+                }),
                 Page = page,
                 Max = maxRecs
             },
             Message = "OK"
-        }); ;
+        }); 
     }
 
     [HttpGet("{id}")]
@@ -90,7 +90,8 @@ public class ServicesController(
 
         return Ok(new
         {
-            Rec = new ServiceDto {
+            Rec = new ServiceDto
+            {
                 ServiceId = rec.ServiceId,
                 Name = rec.Name,
                 Description = rec.Description,
@@ -116,9 +117,9 @@ public class ServicesController(
 
 
             var count = serviceDto.PriceByType.Count;
-            List<ServicePrice> servicePrices = new List<ServicePrice>(count); 
+            List<ServicePrice> servicePrices = new List<ServicePrice>(count);
 
-            foreach(var priceInType in serviceDto.PriceByType)
+            foreach (var priceInType in serviceDto.PriceByType)
             {
                 servicePrices.Add(new ServicePrice()
                 {
@@ -167,7 +168,7 @@ public class ServicesController(
             };
 
             bool isChanged = false;
-            if(!(serviceOld.Name == serviceNew.Name
+            if (!(serviceOld.Name == serviceNew.Name
                 && serviceOld.Description == serviceNew.Description
                 && serviceOld.TimeCost == serviceNew.TimeCost))
             {
@@ -230,7 +231,7 @@ public class ServicesController(
 
             if (!(_repository.AccessDelete(service) && _repository.Delete(service)))
             {
-                
+
                 return Ok(new { Message = "BLOCK" });
             }
 

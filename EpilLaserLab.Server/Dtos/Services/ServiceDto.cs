@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EpilLaserLab.Server.Dtos.Tables
+namespace EpilLaserLab.Server.Dtos.Services
 {
     public class ServiceDto
     {

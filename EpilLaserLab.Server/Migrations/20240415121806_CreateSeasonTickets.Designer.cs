@@ -3,6 +3,7 @@ using System;
 using EpilLaserLab.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EpilLaserLab.Server.Migrations
 {
     [DbContext(typeof(EpilLaserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240415121806_CreateSeasonTickets")]
+    partial class CreateSeasonTickets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,28 +87,6 @@ namespace EpilLaserLab.Server.Migrations
                     b.HasIndex("ServiceId");
 
                     b.ToTable("SeasonTickets");
-                });
-
-            modelBuilder.Entity("EpilLaserLab.Server.Models.SeasonTicketPrice", b =>
-                {
-                    b.Property<int>("SeasonTicketPriceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("SeasonTicketId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SeasonTicketPriceId");
-
-                    b.HasIndex("SeasonTicketId");
-
-                    b.ToTable("SeasonTicketsPrice");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Service", b =>
@@ -265,14 +246,14 @@ namespace EpilLaserLab.Server.Migrations
                         {
                             UserId = 1,
                             Login = "Admin",
-                            PasswordHash = "$2a$11$QSN8ew7ZfJ5fdJhae8s53.74.BDnU4/8YiWsOpW5ctJbcYvCaicRu",
+                            PasswordHash = "$2a$11$CWU.I/jndl7YWQNQcZRFKOlvkUogqJFLRHKSs17LbFcoWQ7ZigX6S",
                             RoleId = 1
                         },
                         new
                         {
                             UserId = 2,
                             Login = "User",
-                            PasswordHash = "$2a$11$/AM1YvJwLDWzJtpbbzdWveEMrHehAkZLI2/MFEhsRND.e68OKlHO2",
+                            PasswordHash = "$2a$11$MpAKwe5kJ07AjVQKnpOkZORnGlGz4cu3OAfkLPMPVyJ2iPxUpEPV.",
                             RoleId = 2
                         });
                 });
@@ -286,17 +267,6 @@ namespace EpilLaserLab.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("EpilLaserLab.Server.Models.SeasonTicketPrice", b =>
-                {
-                    b.HasOne("EpilLaserLab.Server.Models.SeasonTicket", "SeasonTicket")
-                        .WithMany("SeasonTicketPrices")
-                        .HasForeignKey("SeasonTicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SeasonTicket");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.ServicePrice", b =>
@@ -332,11 +302,6 @@ namespace EpilLaserLab.Server.Migrations
             modelBuilder.Entity("EpilLaserLab.Server.Models.Role", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("EpilLaserLab.Server.Models.SeasonTicket", b =>
-                {
-                    b.Navigation("SeasonTicketPrices");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Service", b =>

@@ -1,8 +1,7 @@
-﻿using EpilLaserLab.Server.Data;
-using EpilLaserLab.Server.Models;
+﻿using EpilLaserLab.Server.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace EpilLaserLab.Server.Data.Tables
+namespace EpilLaserLab.Server.Data.Services
 {
     public class ServiceRepository : IServiceRepository
     {

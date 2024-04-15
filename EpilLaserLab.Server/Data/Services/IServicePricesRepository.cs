@@ -1,7 +1,6 @@
 ﻿using EpilLaserLab.Server.Models;
-using Type = EpilLaserLab.Server.Models.Type;
 
-namespace EpilLaserLab.Server.Data.Tables
+namespace EpilLaserLab.Server.Data.Services
 {
     public interface IServicePricesRepository
     {

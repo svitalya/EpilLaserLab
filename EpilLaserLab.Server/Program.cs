@@ -1,6 +1,7 @@
 using EpilLaserLab.Server.Data;
 using EpilLaserLab.Server.Data.References;
-using EpilLaserLab.Server.Data.Tables;
+using EpilLaserLab.Server.Data.SeasonTicket;
+using EpilLaserLab.Server.Data.Services;
 using EpilLaserLab.Server.Data.UserData;
 using EpilLaserLab.Server.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -35,6 +36,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITypeRepository, TypeRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IServicePricesRepository, ServicePricesRepository>();
+builder.Services.AddScoped<ISeasonTicketPriceRepository, SeasonTicketPriceRepository>();
+builder.Services.AddScoped<ISeasonTicketRepository, SeasonTicketRepository>();
 
 builder.Services.AddControllers();
 
