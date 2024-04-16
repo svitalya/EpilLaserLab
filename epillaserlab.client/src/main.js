@@ -82,6 +82,22 @@ const router = createRouter({
                     'name': 'dashboard.seasontickets.edit',
                     component: () => import('./components/dashboard/Pages/SeasonTickets/EditComponent.vue')
                 },
+
+                {
+                    'path': '/dashboard/branches',
+                    'name': 'dashboard.branches',
+                    component: () => import('./components/dashboard/Pages/Branches/ShowListComponent.vue')
+                },
+                {
+                    'path': '/dashboard/branches/add',
+                    'name': 'dashboard.branches.add',
+                    component: () => import('./components/dashboard/Pages/Branches/AddComponent.vue')
+                },
+                {
+                    'path': '/dashboard/branches/edit/:id',
+                    'name': 'dashboard.branches.edit',
+                    component: () => import('./components/dashboard/Pages/Branches/EditComponent.vue')
+                },
             ]
         }
     ]

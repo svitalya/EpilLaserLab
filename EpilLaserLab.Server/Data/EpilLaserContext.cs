@@ -20,6 +20,8 @@ public class EpilLaserContext : DbContext
     public DbSet<ServicePrice> ServicePrices { get; set; }
     public DbSet<Models.SeasonTicket> SeasonTickets { get; set; }
     public DbSet<SeasonTicketPrice> SeasonTicketsPrice { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Branch> Branches { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

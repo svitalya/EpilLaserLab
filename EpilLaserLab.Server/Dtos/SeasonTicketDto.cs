@@ -1,7 +1,7 @@
 ﻿using EpilLaserLab.Server.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace EpilLaserLab.Server.Dtos.SeasonTickets
+namespace EpilLaserLab.Server.Dtos
 {
     public class SeasonTicketDto
     {

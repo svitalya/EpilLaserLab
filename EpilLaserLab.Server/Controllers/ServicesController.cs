@@ -1,14 +1,14 @@
 ﻿using EpilLaserLab.Server.Data.References;
 using EpilLaserLab.Server.Data.Services;
+using EpilLaserLab.Server.Dtos;
 using EpilLaserLab.Server.Dtos.References;
-using EpilLaserLab.Server.Dtos.Services;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Ocsp;
 using System.Linq.Expressions;
 
-namespace EpilLaserLab.Server.Controllers.Services;
+namespace EpilLaserLab.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -75,7 +75,7 @@ public class ServicesController(
                 Max = maxRecs
             },
             Message = "OK"
-        }); 
+        });
     }
 
     [HttpGet("{id}")]

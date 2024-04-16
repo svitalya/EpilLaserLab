@@ -166,6 +166,8 @@
               toast.error("Дублирование записи");
             }else if(result.message == "NOT CHANGED"){
               toast.info("Внесите изменения");
+            }else if(result.message == "DATA NOT VALID" || result.status == 400){
+              toast.error("Введите значения");
             }else{
               toast.error("Ошибка при изменении записи");
             }

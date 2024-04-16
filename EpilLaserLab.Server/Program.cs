@@ -1,4 +1,5 @@
 using EpilLaserLab.Server.Data;
+using EpilLaserLab.Server.Data.Branches;
 using EpilLaserLab.Server.Data.References;
 using EpilLaserLab.Server.Data.SeasonTicket;
 using EpilLaserLab.Server.Data.Services;
@@ -15,8 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.AccessDeniedPath = "/accessdenied";
-        options.LoginPath = "/accessdenied";
+        options.AccessDeniedPath = "/api/accessdenied";
+        options.LoginPath = "/api/accessdenied";
     });
 builder.Services.AddAuthorization();
 
@@ -38,6 +39,9 @@ builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IServicePricesRepository, ServicePricesRepository>();
 builder.Services.AddScoped<ISeasonTicketPriceRepository, SeasonTicketPriceRepository>();
 builder.Services.AddScoped<ISeasonTicketRepository, SeasonTicketRepository>();
+builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+
+builder.Services.AddScoped<ImageSaveService>();
 
 builder.Services.AddControllers();
 
@@ -81,7 +85,7 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/accessdenied", async (HttpContext context) =>
+app.MapGet("/api/accessdenied", async (HttpContext context) =>
 {
     context.Response.StatusCode = 403;
     JsonSerializerOptions options = new JsonSerializerOptions() {
@@ -91,6 +95,7 @@ app.MapGet("/accessdenied", async (HttpContext context) =>
     var json = JsonSerializer.Serialize(new { Message = "ACCESS DENIED" }, options: options);
     await context.Response.WriteAsync(json);
 });
+
 
 
 app.MapControllers();

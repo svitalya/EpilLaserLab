@@ -3,6 +3,7 @@ using System;
 using EpilLaserLab.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,33 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EpilLaserLab.Server.Migrations
 {
     [DbContext(typeof(EpilLaserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240415192809_CreateEmployees")]
+    partial class CreateEmployees
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("EpilLaserLab.Server.Models.Branch", b =>
-                {
-                    b.Property<int>("BranchId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhotoPath")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("BranchId");
-
-                    b.ToTable("Branches");
-                });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Category", b =>
                 {
@@ -309,14 +293,14 @@ namespace EpilLaserLab.Server.Migrations
                         {
                             UserId = 1,
                             Login = "Admin",
-                            PasswordHash = "$2a$11$D/0jRp3MYCZpE8idPz95AuLvIWzQ8VOX6h5dfvh5CLExeDWHw7ysm",
+                            PasswordHash = "$2a$11$BlQazlFmrnFOt8zFou.pVuRkQDLzgMTET3c8ZfVdlm2FJ1GORSeOS",
                             RoleId = 1
                         },
                         new
                         {
                             UserId = 2,
                             Login = "User",
-                            PasswordHash = "$2a$11$IBGMa/.IG/Jh2TgnWdbVAe/13vtZX0AJn8NJq07ApU6rYAMOFtrPe",
+                            PasswordHash = "$2a$11$ZNYoDEYiuerorlDoNKvnluivjSwAcx1eUOljM8bCiQQDsBU4WOxcW",
                             RoleId = 2
                         });
                 });

@@ -1,6 +1,5 @@
 ﻿using EpilLaserLab.Server.Data.UserData;
-using EpilLaserLab.Server.Dtos.Auth;
-using EpilLaserLab.Server.Helpers;
+using EpilLaserLab.Server.Dtos;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

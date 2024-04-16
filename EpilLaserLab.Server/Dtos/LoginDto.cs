@@ -1,4 +1,4 @@
-﻿namespace EpilLaserLab.Server.Dtos.Auth
+﻿namespace EpilLaserLab.Server.Dtos
 {
     public class LoginDto
     {

@@ -1,5 +1,5 @@
 ﻿using EpilLaserLab.Server.Data.SeasonTicket;
-using EpilLaserLab.Server.Dtos.SeasonTickets;
+using EpilLaserLab.Server.Dtos;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Diagnostics;
 
-namespace EpilLaserLab.Server.Controllers.SeasonTickets
+namespace EpilLaserLab.Server.Controllers
 {
 
     [Route("api/[controller]")]
@@ -16,11 +16,11 @@ namespace EpilLaserLab.Server.Controllers.SeasonTickets
     public class SeasonTicketsController(
         ISeasonTicketPriceRepository seasonTicketPriceRepository,
         ISeasonTicketRepository seasonTicketRepository
-        ): ControllerBase
+        ) : ControllerBase
     {
-        private readonly ISeasonTicketPriceRepository 
+        private readonly ISeasonTicketPriceRepository
             _seasonTicketPriceRepository = seasonTicketPriceRepository;
-        private readonly ISeasonTicketRepository 
+        private readonly ISeasonTicketRepository
             _seasonTicketRepository = seasonTicketRepository;
 
         static object? orderById(SeasonTicketDto s) => s.SeasonTicketId;
@@ -126,7 +126,7 @@ namespace EpilLaserLab.Server.Controllers.SeasonTickets
                     Price = seasonTicketDto.Price,
                     DateTime = DateTime.Now,
                 };
-                
+
                 seasonTicket.SeasonTicketPrices = [seasonTicketPrice];
 
                 if (!(_seasonTicketRepository.CheckForDuplication(seasonTicket) && _seasonTicketRepository.Add(seasonTicket)))
@@ -172,12 +172,11 @@ namespace EpilLaserLab.Server.Controllers.SeasonTickets
                     if (_seasonTicketRepository.CheckForDuplication(seasonTicketNew)
                         && _seasonTicketRepository.Update(seasonTicketOld, seasonTicketNew))
                     {
-                        
+
                         isChanged = true;
                     }
                     else
                     {
-                        Debug.WriteLine(seasonTicketNew.SeasonTicketId);
                         return Ok(new { Message = "DUPLICATION" });
                     }
                 }
@@ -193,7 +192,7 @@ namespace EpilLaserLab.Server.Controllers.SeasonTickets
                 {
                     isChanged = true;
                     _seasonTicketPriceRepository.Add(seasonTicketPrice);
-                }   
+                }
 
                 if (!isChanged)
                 {

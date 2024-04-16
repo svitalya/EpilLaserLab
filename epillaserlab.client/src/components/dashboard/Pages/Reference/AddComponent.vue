@@ -42,10 +42,14 @@ export default defineComponent({
             toast.success("Запись успешно добавлена");
             router.push({name: "dashboard.reference", params: {referencename: refName}})
           }else if(result.message == "DUPLICATION"){
-            toast.error("Дублирование записи");
-          }else{
-            toast.error("Ошибка при добавлении записи");
-          }
+              toast.error("Дублирование записи");
+            }else if(result.message == "NOT CHANGED"){
+              toast.info("Внесите изменения");
+            }else if(result.message == "DATA NOT VALID" || result.status == 400){
+              toast.error("Введите значения");
+            }else{
+              toast.error("Ошибка при добавлении записи");
+            }
         }).catch(r => router.push({name: "dashboard"}))
     }; 
 
