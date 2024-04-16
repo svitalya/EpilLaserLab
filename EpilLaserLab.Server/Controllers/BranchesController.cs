@@ -1,5 +1,5 @@
 ﻿using EpilLaserLab.Server.Data.Branches;
-using EpilLaserLab.Server.Dtos;
+using EpilLaserLab.Server.Dtos.Branchs;
 using EpilLaserLab.Server.Helpers;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authorization;
