@@ -98,6 +98,22 @@ const router = createRouter({
                     'name': 'dashboard.branches.edit',
                     component: () => import('./components/dashboard/Pages/Branches/EditComponent.vue')
                 },
+
+                {
+                    'path': '/dashboard/masters',
+                    'name': 'dashboard.masters',
+                    component: () => import('./components/dashboard/Pages/Masters/ShowListComponent.vue')
+                },
+                {
+                    'path': '/dashboard/masters/add',
+                    'name': 'dashboard.masters.add',
+                    component: () => import('./components/dashboard/Pages/Masters/AddComponent.vue')
+                },
+                {
+                    'path': '/dashboard/masters/edit/:id',
+                    'name': 'dashboard.masters.edit',
+                    component: () => import('./components/dashboard/Pages/Masters/EditComponent.vue')
+                },
             ]
         }
     ]

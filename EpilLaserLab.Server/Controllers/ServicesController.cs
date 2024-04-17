@@ -21,14 +21,14 @@ public class ServicesController(
     private readonly IServiceRepository _repository = repository;
     private readonly IServicePricesRepository _servicePricesRepository = servicePricesRepository;
 
+    object? orderById(Service s) => s.ServiceId;
+    object? orderByName(Service s) => s.Name;
+    object? orderByDescription(Service s) => s.Description;
+    object? orderByTimeCost(Service s) => s.TimeCost;
+
     [HttpGet]
     public IActionResult GetList(int page = 0, int limit = 10, string order = "id", string sort = "asc")
     {
-        Func<Service, object?> orderById = s => s.ServiceId;
-        Func<Service, object?> orderByName = s => s.Name;
-        Func<Service, object?> orderByDescription = s => s.Description;
-        Func<Service, object?> orderByTimeCost = s => s.TimeCost;
-
         Dictionary<string, Func<Service, object?>> functor = [];
 
         functor.Add("id", orderById);
@@ -137,6 +137,8 @@ public class ServicesController(
 
                 return Ok(new { Message = "DUPLICATION" });
             }
+
+
 
             return Ok(new { Message = "OK" });
 

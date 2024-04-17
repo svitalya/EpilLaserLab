@@ -1,4 +1,4 @@
-﻿using EpilLaserLab.Server.Models;
+﻿ using EpilLaserLab.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EpilLaserLab.Server.Data;
@@ -22,6 +22,7 @@ public class EpilLaserContext : DbContext
     public DbSet<SeasonTicketPrice> SeasonTicketsPrice { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Branch> Branches { get; set; }
+    public DbSet<Master> Masters { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,6 +99,15 @@ public class EpilLaserContext : DbContext
                 .WithMany(e => e.SeasonTicketPrices)
                 .HasPrincipalKey(e => e.SeasonTicketId)
                 .HasForeignKey(e => e.SeasonTicketId);
+        });
+
+        modelBuilder.Entity<Master>(entity =>
+        {
+            entity.HasOne(e => e.Employee)
+                .WithOne(e => e.Master);
+
+            entity.HasOne(e => e.Branch)
+                .WithMany(e => e.Masters);
         });
     }
 }

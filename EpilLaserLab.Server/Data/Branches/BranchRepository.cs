@@ -1,4 +1,5 @@
 ﻿using EpilLaserLab.Server.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EpilLaserLab.Server.Data.Branches
 {
@@ -12,18 +13,16 @@ namespace EpilLaserLab.Server.Data.Branches
 
         public bool AccessDelete(Branch branch)
         {
-            //CollectionEntry<Branch, > seasonTicketPrices = _context
-            //    .Entry(seasonTicket)
-            //    .Collection(s => s.SeasonTicketPrices);
+            CollectionEntry<Branch, Master> masters = _context
+                .Entry(branch)
+                .Collection(s => s.Masters);
 
-            //if (!seasonTicketPrices.IsLoaded)
-            //{
-            //    seasonTicketPrices.Load();
-            //}
+            if (!masters.IsLoaded)
+            {
+                masters.Load();
+            }
 
-            //return !seasonTicket.SeasonTicketPrices.Any();
-
-            return true;
+            return !branch.Masters.Any();
         }
 
         public bool Add(Branch branch)

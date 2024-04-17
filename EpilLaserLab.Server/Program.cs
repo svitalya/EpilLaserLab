@@ -1,5 +1,6 @@
 using EpilLaserLab.Server.Data;
 using EpilLaserLab.Server.Data.Branches;
+using EpilLaserLab.Server.Data.Employees;
 using EpilLaserLab.Server.Data.References;
 using EpilLaserLab.Server.Data.SeasonTicket;
 using EpilLaserLab.Server.Data.Services;
@@ -40,6 +41,8 @@ builder.Services.AddScoped<IServicePricesRepository, ServicePricesRepository>();
 builder.Services.AddScoped<ISeasonTicketPriceRepository, SeasonTicketPriceRepository>();
 builder.Services.AddScoped<ISeasonTicketRepository, SeasonTicketRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<IMasterRepository, MasterRepository>();
+builder.Services.AddScoped<IEmployeRepository, EmployeRepository>();
 
 builder.Services.AddScoped<ImageSaveService>();
 
