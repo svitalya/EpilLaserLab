@@ -1,13 +1,13 @@
 ﻿using EpilLaserLab.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace EpilLaserLab.Server.Data.UserData
+namespace EpilLaserLab.Server.Data.Auths
 {
     public class UserRepository : IUserRepository
     {
-        private readonly EpilLaserContext context;
+        private readonly EpilLaserLabContext context;
 
-        public UserRepository(EpilLaserContext context)
+        public UserRepository(EpilLaserLabContext context)
         {
             this.context = context;
         }
@@ -21,17 +21,22 @@ namespace EpilLaserLab.Server.Data.UserData
 
         public ICollection<User> GetAll()
         {
-            return context.Users.Include(u => u.Role).ToArray();
+            return GetQuerable().ToArray();
         }
 
         public User? GetById(int id)
         {
-            return context.Users.Include(u => u.Role).FirstOrDefault(u => u.UserId == id);
+            return GetQuerable().FirstOrDefault(u => u.UserId == id);
         }
 
         public User? GetByLogin(string login)
         {
-            return context.Users.Include(u => u.Role).FirstOrDefault(u => u.Login == login);
+            return GetQuerable().FirstOrDefault(u => u.Login == login);
+        }
+
+        public IQueryable<User> GetQuerable()
+        {
+            return context.Users.Include(u => u.Role).AsQueryable();
         }
     }
 }

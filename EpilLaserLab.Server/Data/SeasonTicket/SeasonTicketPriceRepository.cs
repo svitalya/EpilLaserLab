@@ -2,9 +2,9 @@
 
 namespace EpilLaserLab.Server.Data.SeasonTicket
 {
-    public class SeasonTicketPriceRepository(EpilLaserContext context) : ISeasonTicketPriceRepository
+    public class SeasonTicketPriceRepository(EpilLaserLabContext context) : ISeasonTicketPriceRepository
     {
-        private readonly EpilLaserContext _context = context;
+        private readonly EpilLaserLabContext _context = context;
 
         public bool Add(SeasonTicketPrice seasonTicketPrice)
         {

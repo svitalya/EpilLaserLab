@@ -1,19 +1,29 @@
 ﻿using EpilLaserLab.Server.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EpilLaserLab.Server.Data.Employees
 {
     public class MasterRepository(
-        EpilLaserContext context,
+        EpilLaserLabContext context,
         IEmployeRepository employeRepository
         ) : IMasterRepository
     {
 
-        EpilLaserContext _context = context;
+        EpilLaserLabContext _context = context;
 
         public bool AccessDelete(Master master)
         {
-            return master.MasterId % 2 == 0;
+            CollectionEntry<Master, Schedule> schedules = _context
+                .Entry(master)
+                .Collection(m => m.Schedules);
+
+            if (!schedules.IsLoaded)
+            {
+                schedules.Load();
+            }
+
+            return !master.Schedules.Any();
         }
 
         public bool Add(Master master)

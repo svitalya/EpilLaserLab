@@ -4,9 +4,9 @@ namespace EpilLaserLab.Server.Data.References
 {
     public class TagRepository : ITagRepository
     {
-        private readonly EpilLaserContext _context;
+        private readonly EpilLaserLabContext _context;
 
-        public TagRepository(EpilLaserContext context)
+        public TagRepository(EpilLaserLabContext context)
         {
             _context = context;
         }

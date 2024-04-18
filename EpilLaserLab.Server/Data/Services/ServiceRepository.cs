@@ -5,9 +5,9 @@ namespace EpilLaserLab.Server.Data.Services
 {
     public class ServiceRepository : IServiceRepository
     {
-        private readonly EpilLaserContext _context;
+        private readonly EpilLaserLabContext _context;
 
-        public ServiceRepository(EpilLaserContext context)
+        public ServiceRepository(EpilLaserLabContext context)
         {
             _context = context;
         }

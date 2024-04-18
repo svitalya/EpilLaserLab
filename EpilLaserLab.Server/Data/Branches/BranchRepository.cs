@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace EpilLaserLab.Server.Data.Branches
 {
     public class BranchRepository(
-            EpilLaserContext context
+            EpilLaserLabContext context
         )
         : IBranchRepository
     {
 
-        private readonly EpilLaserContext _context = context;
+        private readonly EpilLaserLabContext _context = context;
 
         public bool AccessDelete(Branch branch)
         {

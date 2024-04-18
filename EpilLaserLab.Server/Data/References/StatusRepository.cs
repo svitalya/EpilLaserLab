@@ -4,9 +4,9 @@ namespace EpilLaserLab.Server.Data.References
 {
     public class StatusRepository : IStatusRepository
     {
-        private readonly EpilLaserContext _context;
+        private readonly EpilLaserLabContext _context;
 
-        public StatusRepository(EpilLaserContext context) {
+        public StatusRepository(EpilLaserLabContext context) {
             _context = context;
         }
 

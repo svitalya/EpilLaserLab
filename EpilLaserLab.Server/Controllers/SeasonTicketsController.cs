@@ -12,7 +12,6 @@ namespace EpilLaserLab.Server.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin")]
     public class SeasonTicketsController(
         ISeasonTicketPriceRepository seasonTicketPriceRepository,
         ISeasonTicketRepository seasonTicketRepository

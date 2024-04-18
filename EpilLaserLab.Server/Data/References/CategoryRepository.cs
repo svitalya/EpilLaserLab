@@ -4,9 +4,9 @@ namespace EpilLaserLab.Server.Data.References
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private readonly EpilLaserContext _context;
+        private readonly EpilLaserLabContext _context;
 
-        public CategoryRepository(EpilLaserContext context)
+        public CategoryRepository(EpilLaserLabContext context)
         {
             _context = context;
         }

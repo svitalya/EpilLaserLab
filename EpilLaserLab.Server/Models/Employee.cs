@@ -23,5 +23,7 @@ namespace EpilLaserLab.Server.Models
         public bool IsWork { get; set; } = true;
 
         public Master? Master { get; set; }
+
+        public Admin? Admin { get; set; }
     }
 }

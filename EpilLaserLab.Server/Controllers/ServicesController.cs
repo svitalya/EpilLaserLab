@@ -12,7 +12,6 @@ namespace EpilLaserLab.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "admin")]
 public class ServicesController(
         IServiceRepository repository,
         IServicePricesRepository servicePricesRepository

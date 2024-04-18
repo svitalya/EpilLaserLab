@@ -7,9 +7,9 @@ namespace EpilLaserLab.Server.Data.References
 {
     public class TypeRepository : ITypeRepository
     {
-        private readonly EpilLaserContext _context;
+        private readonly EpilLaserLabContext _context;
 
-        public TypeRepository(EpilLaserContext context)
+        public TypeRepository(EpilLaserLabContext context)
         {
             this._context = context;
         }

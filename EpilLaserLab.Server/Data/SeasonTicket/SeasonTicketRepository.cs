@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EpilLaserLab.Server.Data.SeasonTicket
 {
-    public class SeasonTicketRepository(EpilLaserContext context) : ISeasonTicketRepository
+    public class SeasonTicketRepository(EpilLaserLabContext context) : ISeasonTicketRepository
     {
-        private readonly EpilLaserContext _context = context;
+        private readonly EpilLaserLabContext _context = context;
 
         public bool AccessDelete(Models.SeasonTicket seasonTicket)
         {

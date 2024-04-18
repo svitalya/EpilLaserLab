@@ -10,7 +10,6 @@ namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin")]
     public class TypesController : ControllerBase
     {
         private readonly ITypeRepository _repository;

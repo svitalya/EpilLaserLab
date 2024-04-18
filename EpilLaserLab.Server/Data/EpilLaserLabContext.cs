@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EpilLaserLab.Server.Data;
 
-public class EpilLaserContext : DbContext
+public class EpilLaserLabContext : DbContext
 {
-    public EpilLaserContext(DbContextOptions<EpilLaserContext> options) : base(options)
+    public EpilLaserLabContext(DbContextOptions<EpilLaserLabContext> options) : base(options)
     {
 
     }
@@ -23,6 +23,10 @@ public class EpilLaserContext : DbContext
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Branch> Branches { get; set; }
     public DbSet<Master> Masters { get; set; }
+    public DbSet<Schedule> Schedules { get; set; }
+    public DbSet<Interval> Intervals { get; set; }
+    public DbSet<Client> Clients { get; set; }
+    public DbSet<Admin> Admins { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,8 +40,9 @@ public class EpilLaserContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         { 
-            entity.HasData(new Role() { RoleId = 1, Name = "admin"});
-            entity.HasData(new Role() { RoleId = 2, Name = "user"});
+            entity.HasData(new Role() { RoleId = 1, Name = "root", Title = "Главный"});
+            entity.HasData(new Role() { RoleId = 2, Name = "admin", Title = "Администратор"});
+            entity.HasData(new Role() { RoleId = 3, Name = "client", Title = "Клиент"});
         });
 
         modelBuilder.Entity<Models.User>(entity =>
@@ -108,6 +113,38 @@ public class EpilLaserContext : DbContext
 
             entity.HasOne(e => e.Branch)
                 .WithMany(e => e.Masters);
+        });
+
+        modelBuilder.Entity<Schedule>(entity =>
+        {
+            entity.HasOne(e => e.Master)
+                .WithMany(e => e.Schedules);
+        });
+
+        modelBuilder.Entity<Interval>(entity =>
+        {
+            entity.HasOne(i => i.Schedule)
+                .WithMany(s => s.Intervals);
+       });
+
+        modelBuilder.Entity<Client>(entity => 
+        {
+            entity.HasOne(e => e.User)
+                .WithOne(e => e.Client);
+
+            entity.HasIndex(e => e.Phone).IsUnique();
+        });
+
+        modelBuilder.Entity<Admin>(entity =>
+        {
+            entity.HasOne(e => e.Branch)
+                .WithMany(e => e.Admins);
+
+            entity.HasOne(e => e.Employee)
+                .WithOne(e => e.Admin);
+
+            entity.HasOne(e => e.User)
+                .WithOne(e => e.Admin);
         });
     }
 }

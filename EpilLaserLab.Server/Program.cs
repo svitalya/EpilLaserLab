@@ -1,10 +1,11 @@
 using EpilLaserLab.Server.Data;
+using EpilLaserLab.Server.Data.Auths;
 using EpilLaserLab.Server.Data.Branches;
 using EpilLaserLab.Server.Data.Employees;
 using EpilLaserLab.Server.Data.References;
+using EpilLaserLab.Server.Data.Schedules;
 using EpilLaserLab.Server.Data.SeasonTicket;
 using EpilLaserLab.Server.Data.Services;
-using EpilLaserLab.Server.Data.UserData;
 using EpilLaserLab.Server.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Json;
@@ -28,7 +29,7 @@ builder.Services.AddAuthorization();
 Action<DbContextOptionsBuilder> contextBuilder = (opt) =>
     opt.UseMySQL(builder.Configuration.GetConnectionString("Default")
     ?? throw new Exception("Не удалось подключиться к БД"));
-builder.Services.AddDbContext<EpilLaserContext>(contextBuilder);
+builder.Services.AddDbContext<EpilLaserLabContext>(contextBuilder);
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -43,6 +44,10 @@ builder.Services.AddScoped<ISeasonTicketRepository, SeasonTicketRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<IMasterRepository, MasterRepository>();
 builder.Services.AddScoped<IEmployeRepository, EmployeRepository>();
+builder.Services.AddScoped<ISchedulesRepository, SchedulesRepository>();
+builder.Services.AddScoped<IIntervalsRepository, IntervalsRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
 builder.Services.AddScoped<ImageSaveService>();
 

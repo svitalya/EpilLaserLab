@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EpilLaserLab.Server.Migrations
 {
-    [DbContext(typeof(EpilLaserContext))]
+    [DbContext(typeof(EpilLaserLabContext))]
     [Migration("20240414065402_UpdateRoles2")]
     partial class UpdateRoles2
     {

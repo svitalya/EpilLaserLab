@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace EpilLaserLab.Server.Models
 {
@@ -18,6 +19,8 @@ namespace EpilLaserLab.Server.Models
         public Branch Branch { get; set; }
 
         public Employee Employee { get; set; }
+
+        public ICollection<Schedule> Schedules { get; set; }
 
     }
 }

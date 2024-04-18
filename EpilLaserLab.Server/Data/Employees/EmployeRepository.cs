@@ -3,9 +3,9 @@
 namespace EpilLaserLab.Server.Data.Employees
 {
     public class EmployeRepository(
-        EpilLaserContext context) : IEmployeRepository
+        EpilLaserLabContext context) : IEmployeRepository
     {
-        private readonly EpilLaserContext _context = context;
+        private readonly EpilLaserLabContext _context = context;
 
         public bool AccessDelete(Employee employee)
         {

@@ -13,5 +13,7 @@ namespace EpilLaserLab.Server.Models
         public string PhotoPath {  get; set; }
 
         public ICollection<Master> Masters { get; set; }
+
+        public ICollection<Admin> Admins { get; set; }
     }
 }

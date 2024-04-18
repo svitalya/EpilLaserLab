@@ -23,4 +23,8 @@ public class User
 
     public virtual Role? Role { get; set; }
 
+    public Client? Client { get; set; }
+
+    public Admin? Admin { get; set; }
+
 }

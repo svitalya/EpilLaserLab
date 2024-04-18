@@ -114,6 +114,23 @@ const router = createRouter({
                     'name': 'dashboard.masters.edit',
                     component: () => import('./components/dashboard/Pages/Masters/EditComponent.vue')
                 },
+
+                
+                {
+                    'path': '/dashboard/schedules',
+                    'name': 'dashboard.schedules',
+                    component: () => import('./components/dashboard/Pages/Schedules/ShowListComponent.vue')
+                },
+                {
+                    'path': '/dashboard/schedules/add',
+                    'name': 'dashboard.schedules.add',
+                    component: () => import('./components/dashboard/Pages/Schedules/AddComponent.vue')
+                },
+                {
+                    'path': '/dashboard/schedules/edit/:id',
+                    'name': 'dashboard.schedules.edit',
+                    component: () => import('./components/dashboard/Pages/Schedules/EditComponent.vue')
+                },
             ]
         }
     ]

@@ -8,7 +8,6 @@ namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin")]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository _repository;

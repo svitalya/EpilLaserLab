@@ -32,7 +32,7 @@ namespace EpilLaserLab.Server.Controllers.Employees
 
             functor.Add("masterId", OrderById);
             functor.Add("FIO", OrderByFIO);
-            functor.Add(" ", OrderByBranch);
+            functor.Add("branch", OrderByBranch);
 
             var querable = masterRepository.GetQueryable();
             if (functor.TryGetValue(order, out Func<Master, object?>? f) && f is not null)
@@ -45,7 +45,7 @@ namespace EpilLaserLab.Server.Controllers.Employees
 
             int maxRecs = querable.Count();
 
-            if (page + 1 * limit > maxRecs) 
+            if (page + 1 * limit > maxRecs)
             {
                 page = 0;
             }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EpilLaserLab.Server.Migrations
 {
-    [DbContext(typeof(EpilLaserContext))]
+    [DbContext(typeof(EpilLaserLabContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -18,6 +18,34 @@ namespace EpilLaserLab.Server.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Admin", b =>
+                {
+                    b.Property<int>("AdminId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AdminId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Admins");
+                });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Branch", b =>
                 {
@@ -56,6 +84,34 @@ namespace EpilLaserLab.Server.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Client", b =>
+                {
+                    b.Property<int>("ClientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClientId");
+
+                    b.HasIndex("Phone")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("EpilLaserLab.Server.Models.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
@@ -79,6 +135,28 @@ namespace EpilLaserLab.Server.Migrations
                     b.HasKey("EmployeeId");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Interval", b =>
+                {
+                    b.Property<int>("IntervalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimeEnd")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimeStart")
+                        .HasColumnType("int");
+
+                    b.HasKey("IntervalId");
+
+                    b.HasIndex("ScheduleId");
+
+                    b.ToTable("Intervals");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Master", b =>
@@ -117,6 +195,10 @@ namespace EpilLaserLab.Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
@@ -125,13 +207,40 @@ namespace EpilLaserLab.Server.Migrations
                         new
                         {
                             RoleId = 1,
-                            Name = "admin"
+                            Name = "root",
+                            Title = "Главный"
                         },
                         new
                         {
                             RoleId = 2,
-                            Name = "user"
+                            Name = "admin",
+                            Title = "Администратор"
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            Name = "client",
+                            Title = "Клиент"
                         });
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Schedule", b =>
+                {
+                    b.Property<int>("ScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("MasterId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ScheduleId");
+
+                    b.HasIndex("MasterId");
+
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.SeasonTicket", b =>
@@ -335,16 +444,65 @@ namespace EpilLaserLab.Server.Migrations
                         {
                             UserId = 1,
                             Login = "Admin",
-                            PasswordHash = "$2a$11$yf7OExWtIi1kR8NVPGRs7uWUabjwKiT4Pc3sPeT6SbJ0FdQU8Ah4.",
+                            PasswordHash = "$2a$11$5T5wJZt8TJMGFFAuyvJxgeaANiGkR.e7k.AxKcjardIsdhUYW5sCm",
                             RoleId = 1
                         },
                         new
                         {
                             UserId = 2,
                             Login = "User",
-                            PasswordHash = "$2a$11$6F0LoCbsZ7n/WrtC9pfR7.tavIkMIQBTy3JpCl0wNc33FsQwvFNwa",
+                            PasswordHash = "$2a$11$v8aiaOCTQLHkmlS03Ct.JO3moSmNYlo5XG1MgQOCstQrAgI/Ps5g6",
                             RoleId = 2
                         });
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Admin", b =>
+                {
+                    b.HasOne("EpilLaserLab.Server.Models.Branch", "Branch")
+                        .WithMany("Admins")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EpilLaserLab.Server.Models.Employee", "Employee")
+                        .WithOne("Admin")
+                        .HasForeignKey("EpilLaserLab.Server.Models.Admin", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EpilLaserLab.Server.Models.User", "User")
+                        .WithOne("Admin")
+                        .HasForeignKey("EpilLaserLab.Server.Models.Admin", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Client", b =>
+                {
+                    b.HasOne("EpilLaserLab.Server.Models.User", "User")
+                        .WithOne("Client")
+                        .HasForeignKey("EpilLaserLab.Server.Models.Client", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Interval", b =>
+                {
+                    b.HasOne("EpilLaserLab.Server.Models.Schedule", "Schedule")
+                        .WithMany("Intervals")
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Master", b =>
@@ -364,6 +522,17 @@ namespace EpilLaserLab.Server.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Schedule", b =>
+                {
+                    b.HasOne("EpilLaserLab.Server.Models.Master", "Master")
+                        .WithMany("Schedules")
+                        .HasForeignKey("MasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Master");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.SeasonTicket", b =>
@@ -420,17 +589,31 @@ namespace EpilLaserLab.Server.Migrations
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Branch", b =>
                 {
+                    b.Navigation("Admins");
+
                     b.Navigation("Masters");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Employee", b =>
                 {
+                    b.Navigation("Admin");
+
                     b.Navigation("Master");
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Master", b =>
+                {
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.Schedule", b =>
+                {
+                    b.Navigation("Intervals");
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.SeasonTicket", b =>
@@ -448,6 +631,13 @@ namespace EpilLaserLab.Server.Migrations
             modelBuilder.Entity("EpilLaserLab.Server.Models.Type", b =>
                 {
                     b.Navigation("ServicePrices");
+                });
+
+            modelBuilder.Entity("EpilLaserLab.Server.Models.User", b =>
+                {
+                    b.Navigation("Admin");
+
+                    b.Navigation("Client");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,6 @@ namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin")]
     public class TagsController : ControllerBase
     {
         private readonly ITagRepository _repository;

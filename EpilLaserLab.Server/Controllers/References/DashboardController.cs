@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace EpilLaserLab.Server.Controllers.References
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "admin")]
     [ApiController]
     public class DashboardController : ControllerBase
     {
