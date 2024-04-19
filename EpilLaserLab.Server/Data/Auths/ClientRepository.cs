@@ -11,5 +11,10 @@ namespace EpilLaserLab.Server.Data.Auths
             context.Clients.Add( client );
             return context.SaveChanges() > 0;
         }
+
+        public IQueryable<Client> GetQueryable()
+        {
+            return context.Clients.AsQueryable();
+        }
     }
 }

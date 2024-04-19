@@ -25,7 +25,7 @@ namespace EpilLaserLab.Server.Controllers.Schedules
         object? OrderByDate(Schedule s) => s.Date;
 
         [HttpGet]
-        public IActionResult GetList(int page = 0, int limit = 10, string order = "scheduleId", string sort = "asc")
+        public IActionResult GetList(int page = 0, int limit = 10, string order = "scheduleId", string sort = "asc", int? masterId = null)
         {
             Dictionary<string, Func<Schedule, object?>> functor = [];
 
@@ -47,6 +47,11 @@ namespace EpilLaserLab.Server.Controllers.Schedules
             if (page + 1 * limit > maxRecs)
             {
                 page = 0;
+            }
+
+            if(masterId is not null)
+            {
+                querable = querable.Where(s => s.MasterId == masterId);
             }
 
 

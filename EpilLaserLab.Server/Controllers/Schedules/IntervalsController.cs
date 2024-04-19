@@ -1,4 +1,5 @@
 ﻿using EpilLaserLab.Server.Data.Schedules;
+using EpilLaserLab.Server.Helpers;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,14 @@ namespace EpilLaserLab.Server.Controllers.Schedules
         ISchedulesRepository schedulesRepository
         ): ControllerBase
     {
+
+        public DateTime Now { get
+            {
+                DateOnly dateo = DateTime.Now.ToDateOnly();
+                DateTime now = dateo.ToDateTime(new TimeOnly(0, 0, 0));
+                return now;
+            } }
+
         [HttpPost("{id}")]
         public IActionResult SetIntervalsInSchedule(int id, [FromBody] string intervalsStr)
         {
@@ -20,8 +29,8 @@ namespace EpilLaserLab.Server.Controllers.Schedules
             {
                 Schedule? schedult = schedulesRepository.Get(id);
 
-                if(schedult is null) {
-                    return Ok("NOT FOUND");
+                if (schedult is null || schedult.Date < Now) {
+                    return Ok(new { Message = "NOT FOUND" });
                 }
 
                 try
@@ -57,8 +66,10 @@ namespace EpilLaserLab.Server.Controllers.Schedules
                         });
                     }
 
-                    if (intervalsRepository.DeleteRangeInSchedule(id)){
-                        intervalsRepository.SetRengeInSchedule(id, intervals);
+                    if (intervalsRepository.AccessSet(id, intervals)
+                        && intervalsRepository.DeleteRangeInSchedule(id) 
+                        && intervalsRepository.SetRengeInSchedule(id, intervals)){
+                        
                         return Ok(new { Message = "OK" });
                     }
 
@@ -75,32 +86,45 @@ namespace EpilLaserLab.Server.Controllers.Schedules
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetIntervalsString(int id)
+        public IActionResult GetIntervalsString(int id, int? timeCost = null)
         {
             try
             {
                 Schedule? schedult = schedulesRepository.Get(id);
 
-                if (schedult is null)
+                if (schedult is null ||  schedult.Date <= Now)
                 {
-                    return Ok("NOT FOUND");
+                    return Ok(new { Message = "NOT FOUND" });
                 }
 
-                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder IntervalsStringBuilder = new StringBuilder();
+                StringBuilder WorkIntervalsStringBuilder = new StringBuilder();
                 var intervals = intervalsRepository.GetIntervalsInSchedule(schedult.ScheduleId);
 
-                foreach(var interval in intervals)
+                if(timeCost is not null)
+                {
+                    intervals = intervals.Where(i => (i.TimeStart + timeCost) <= i.TimeEnd).ToList();
+                }
+                
+
+                foreach (var interval in intervals)
                 {
                     string minutsToTimeStr(int minuts) => $"{(minuts / 60).ToString().PadLeft(2, '0')}" +
                         $":{(minuts % 60).ToString().PadLeft(2, '0')}";
 
+                    StringBuilder stringBuilder = interval.Application is null ?
+                        IntervalsStringBuilder : WorkIntervalsStringBuilder;
+
                     stringBuilder.Append(minutsToTimeStr(interval.TimeStart));
                     stringBuilder.Append('-');
-                    stringBuilder.Append(minutsToTimeStr(interval.TimeEnd));
+                    stringBuilder.Append(minutsToTimeStr(interval.TimeEnd - (timeCost ?? 0)));
                     stringBuilder.Append(';');
                 }
 
-                return Ok(new { Message = "OK", IntervalsString=stringBuilder.ToString()});
+                return Ok(new {
+                    Message = "OK",
+                    IntervalsString= IntervalsStringBuilder.ToString(),
+                    WorkIntervals = WorkIntervalsStringBuilder.ToString()});
             }
             catch(Exception ex)
             {

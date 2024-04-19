@@ -1,4 +1,5 @@
 using EpilLaserLab.Server.Data;
+using EpilLaserLab.Server.Data.Applications;
 using EpilLaserLab.Server.Data.Auths;
 using EpilLaserLab.Server.Data.Branches;
 using EpilLaserLab.Server.Data.Employees;
@@ -48,6 +49,8 @@ builder.Services.AddScoped<ISchedulesRepository, SchedulesRepository>();
 builder.Services.AddScoped<IIntervalsRepository, IntervalsRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IPurchasedSeasonTicketsRepository, PurchasedSeasonTicketsRepository>();
+builder.Services.AddScoped<IApplicationsRepository, ApplicationsRepository>();
 
 builder.Services.AddScoped<ImageSaveService>();
 

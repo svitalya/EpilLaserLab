@@ -1,4 +1,5 @@
 ﻿using EpilLaserLab.Server.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EpilLaserLab.Server.Data.Schedules
 {
@@ -6,33 +7,104 @@ namespace EpilLaserLab.Server.Data.Schedules
         EpilLaserLabContext context
         ) : IIntervalsRepository
     {
-        public bool AccessDeleteRange(int[] intervalIds)
+
+        public bool AccessSet(int scheduleId, List<Interval> intervals)
         {
+
+            intervals = intervals.OrderBy(i => i.TimeStart).ToList();
+
+            int timeStart = 0;
+
+            foreach(var interval in intervals)
+            {
+                if(timeStart == interval.TimeEnd)
+                {
+                    return false;
+                }
+
+                timeStart = interval.TimeEnd;
+            }
+
+            var intervalsWithApplication = GetIntervalsInScheduleQurable(scheduleId)
+                .Where(i => i.Application != null)
+                .ToArray();
+
+            foreach ( var interval in intervalsWithApplication) {
+                var isAny = intervals.Where(i =>
+                    (i.TimeStart >= interval.TimeStart && i.TimeStart <= interval.TimeEnd)
+                    || (i.TimeEnd >= interval.TimeStart && i.TimeEnd <= interval.TimeEnd)).Any();
+
+                if(isAny) return false;
+            }
+
             return true;
         }
 
         public bool DeleteRangeInSchedule(int scheduleId)
         {
-            var intervals = GetIntervalsInSchedule(scheduleId);
-            var intervalIds = intervals.Select(i => i.IntervalId).ToArray();
+            var intervals = GetIntervalsInScheduleQurable(scheduleId)
+                .Where(i => i.Application == null)
+                .ToArray();
 
-            if(AccessDeleteRange(intervalIds))
-            {
-                context.RemoveRange(intervals);
-                return context.SaveChanges() > 0 || intervalIds.Length == 0;
-            }
+            context.RemoveRange(intervals);
 
-            return false;
+            return true;
         }
 
         public ICollection<Interval> GetIntervalsInSchedule(int scheduleId)
         {
-            return GetQurable().Where(i => i.ScheduleId == scheduleId).ToArray();
+            return GetIntervalsInScheduleQurable(scheduleId).ToArray();
+        }
+
+        public IQueryable<Interval> GetIntervalsInScheduleQurable(int scheduleId)
+        {
+            return GetQurable().OrderBy(i => i.TimeStart).Where(i => i.ScheduleId == scheduleId);
         }
 
         public IQueryable<Interval> GetQurable()
         {
-            return context.Intervals.AsQueryable();
+            return context.Intervals.Include(i => i.Application).AsQueryable();
+        }
+
+        public Interval? InsertIntervalInInterval(int scheduleId, int timeStart, int timeEnd)
+        {
+            if(timeStart >= timeEnd) return null;
+
+            var interval = GetIntervalsInScheduleQurable(scheduleId).Where(i =>
+                (timeStart >= i.TimeStart && timeStart <= i.TimeEnd)
+                && (timeEnd >= i.TimeStart && timeEnd <= i.TimeEnd)
+                && i.Application == null).Single();
+
+            if (interval is null) return null;
+
+            if(timeStart > interval.TimeStart)
+            {
+                context.Intervals.Add(new Interval()
+                {
+                    TimeStart = interval.TimeStart,
+                    TimeEnd = timeStart - 1,
+                    ScheduleId = scheduleId,
+                });            
+            }
+
+            if(timeEnd < interval.TimeEnd)
+            {
+                context.Intervals.Add(new Interval()
+                {
+                    TimeStart = timeEnd+1,
+                    TimeEnd = interval.TimeEnd,
+                    ScheduleId = scheduleId,
+                });
+            }
+
+            Interval newInterval = new() { TimeEnd = timeEnd, ScheduleId = scheduleId, TimeStart = timeStart };
+
+            context.Remove(interval);
+            context.Add(newInterval);
+
+            context.SaveChanges();
+
+            return newInterval;
         }
 
         public bool SetRengeInSchedule(int scheduleId, ICollection<Interval> intervals)

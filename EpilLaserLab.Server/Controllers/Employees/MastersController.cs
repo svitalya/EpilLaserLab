@@ -26,7 +26,11 @@ namespace EpilLaserLab.Server.Controllers.Employees
         object? OrderByBranch(Master m) => m.Branch.Address;
 
         [HttpGet]
-        public IActionResult GetList(int page = 0, int limit = 10, string order = "masterId", string sort = "asc")
+        public IActionResult GetList(int page = 0,
+            int limit = 10,
+            string order = "masterId",
+            string sort = "asc",
+            int? branchId = null)
         {
             Dictionary<string, Func<Master, object?>> functor = [];
 
@@ -48,6 +52,11 @@ namespace EpilLaserLab.Server.Controllers.Employees
             if (page + 1 * limit > maxRecs)
             {
                 page = 0;
+            }
+
+            if(branchId is not null)
+            {
+                querable = querable.Where(m => m.BranchId == branchId).AsQueryable();
             }
 
 

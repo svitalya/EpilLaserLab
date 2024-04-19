@@ -3,6 +3,7 @@ using System;
 using EpilLaserLab.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EpilLaserLab.Server.Migrations
 {
     [DbContext(typeof(EpilLaserLabContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240419015422_CreatePurchasedSeasonTickets")]
+    partial class CreatePurchasedSeasonTickets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +62,7 @@ namespace EpilLaserLab.Server.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DateTimeClosed")
+                    b.Property<DateTime>("DateTimeClosed")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("DateTimeCreated")
@@ -68,10 +71,7 @@ namespace EpilLaserLab.Server.Migrations
                     b.Property<int>("IntervalId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PrepaymentPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PurchasedSeasonTicketId")
+                    b.Property<int>("PurchasedSeasonTicketId")
                         .HasColumnType("int");
 
                     b.Property<int>("ServicePriceId")
@@ -520,8 +520,15 @@ namespace EpilLaserLab.Server.Migrations
                         {
                             UserId = 1,
                             Login = "Admin",
-                            PasswordHash = "$2a$11$NG/vnlrP2DBM9W6PAFbx3.A/rEpkE/i.hjWsil89O6Fxf0sXO8ClS",
+                            PasswordHash = "$2a$11$tecGI8IUsgJ//zo41/Ax0uRQusuMoKHeYsm6Uvgj/ScJCgkirNKmS",
                             RoleId = 1
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            Login = "User",
+                            PasswordHash = "$2a$11$iWyOWH5RTYzMo40cT5BoNeC6maqHKp.j9oBNwg4y8FttE5rm8mU4m",
+                            RoleId = 2
                         });
                 });
 
@@ -574,7 +581,9 @@ namespace EpilLaserLab.Server.Migrations
 
                     b.HasOne("EpilLaserLab.Server.Models.PurchasedSeasonTicket", "PurchasedSeasonTicket")
                         .WithMany("Applications")
-                        .HasForeignKey("PurchasedSeasonTicketId");
+                        .HasForeignKey("PurchasedSeasonTicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EpilLaserLab.Server.Models.ServicePrice", "ServicePrice")
                         .WithMany()

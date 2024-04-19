@@ -131,6 +131,12 @@ const router = createRouter({
                     'name': 'dashboard.schedules.edit',
                     component: () => import('./components/dashboard/Pages/Schedules/EditComponent.vue')
                 },
+
+                {
+                    'path': '/dashboard/applications/add',
+                    'name': 'dashboard.applications.edit',
+                    component: () => import('./components/dashboard/Pages/Applications/AddComponent.vue')
+                },
             ]
         }
     ]

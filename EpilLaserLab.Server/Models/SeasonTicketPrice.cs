@@ -13,5 +13,7 @@ namespace EpilLaserLab.Server.Models
         public DateTime DateTime { get; set; }
 
         public SeasonTicket SeasonTicket { get; set; }
+
+        public ICollection<PurchasedSeasonTicket> PurchasedSeasonTickets { get; set; }
     }
 }

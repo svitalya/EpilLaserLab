@@ -27,6 +27,8 @@ public class EpilLaserLabContext : DbContext
     public DbSet<Interval> Intervals { get; set; }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Admin> Admins { get; set; }
+    public DbSet<Application> Applications { get; set; }
+    public DbSet<PurchasedSeasonTicket> PurchasedSeasonTickets { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,7 +52,6 @@ public class EpilLaserLabContext : DbContext
             entity.HasIndex(e => e.Login).IsUnique();
             entity.HasIndex(e => e.Email).IsUnique();
             entity.HasData(new User { UserId = 1, Login = "Admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin"), RoleId = 1 });
-            entity.HasData(new User { UserId = 2, Login = "User", PasswordHash = BCrypt.Net.BCrypt.HashPassword("User"), RoleId = 2 });
 
         });
 
@@ -145,6 +146,24 @@ public class EpilLaserLabContext : DbContext
 
             entity.HasOne(e => e.User)
                 .WithOne(e => e.Admin);
+        });
+
+        modelBuilder.Entity<PurchasedSeasonTicket>(entity =>
+        {
+            entity.HasOne(e => e.SeasonTicketPrice)
+                .WithMany(e => e.PurchasedSeasonTickets);
+
+            entity.HasOne(e => e.Client)
+                .WithMany(e => e.PurchasedSeasonTickets);
+        });
+
+        modelBuilder.Entity<Application>(entity =>
+        {
+            entity.HasOne(e => e.Interval)
+                .WithOne(e => e.Application);
+
+            entity.HasOne(e => e.PurchasedSeasonTicket)
+                .WithMany(e => e.Applications);
         });
     }
 }
