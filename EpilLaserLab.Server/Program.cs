@@ -53,6 +53,7 @@ builder.Services.AddScoped<IPurchasedSeasonTicketsRepository, PurchasedSeasonTic
 builder.Services.AddScoped<IApplicationsRepository, ApplicationsRepository>();
 
 builder.Services.AddScoped<ImageSaveService>();
+builder.Services.AddScoped<TestDocumentService>();
 
 builder.Services.AddControllers();
 

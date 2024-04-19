@@ -137,6 +137,12 @@ const router = createRouter({
                     'name': 'dashboard.applications.edit',
                     component: () => import('./components/dashboard/Pages/Applications/AddComponent.vue')
                 },
+
+                {
+                    'path': '/dashboard/docs',
+                    'name': 'dashboard.docs',
+                    component: () => import('./components/dashboard/Pages/Docs/ViewComponent.vue')
+                },
             ]
         }
     ]

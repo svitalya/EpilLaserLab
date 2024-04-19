@@ -1,4 +1,5 @@
-﻿using EpilLaserLab.Server.Data.SeasonTicket;
+﻿using EpilLaserLab.Server.Data.Applications;
+using EpilLaserLab.Server.Data.SeasonTicket;
 using EpilLaserLab.Server.Helpers;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +21,38 @@ namespace EpilLaserLab.Server.Controllers
         public IActionResult GetImage(string name)
         {
             Stream stream = _imageSaveService.GetImage(name);
+
+            if (stream == null)
+                return NotFound(); // returns a NotFoundResult with Status404NotFound response.
+
+            return File(stream, "image/jpeg", name); // returns a FileStreamResult
+        }
+    }
+
+    [Route("api/[controller]")]
+    public class DocumentController(
+        TestDocumentService testDocumentService,
+        IApplicationsRepository applicationsRepository
+        ) : ControllerBase
+    {
+
+
+        [HttpGet("test/")]
+        public IActionResult GetImage(string name)
+        {
+            ICollection<Application> applications = applicationsRepository.GetQuerable()
+                .Include(a => a.Interval)
+                    .ThenInclude(i => i.Schedule)
+                        .ThenInclude(i => i.Master)
+                            .ThenInclude(m => m.Branch)
+                .Include(a => a.Client)
+                .Include(a => a.ServicePrice)
+                    .ThenInclude(sp => )
+                .Include(a => a.Category)
+                .ToList();
+                            
+
+            Stream stream = testDocumentService.GetDocument(applications);
 
             if (stream == null)
                 return NotFound(); // returns a NotFoundResult with Status404NotFound response.
