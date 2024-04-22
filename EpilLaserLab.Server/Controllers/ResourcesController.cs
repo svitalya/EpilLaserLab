@@ -37,19 +37,10 @@ namespace EpilLaserLab.Server.Controllers
     {
 
 
-        [HttpGet("test/")]
+        [HttpGet("test")]
         public IActionResult GetImage(string name)
         {
-            ICollection<Application> applications = applicationsRepository.GetQuerable()
-                .Include(a => a.Interval)
-                    .ThenInclude(i => i.Schedule)
-                        .ThenInclude(i => i.Master)
-                            .ThenInclude(m => m.Branch)
-                .Include(a => a.Client)
-                .Include(a => a.ServicePrice)
-                    .ThenInclude(sp => )
-                .Include(a => a.Category)
-                .ToList();
+            ICollection<Application> applications = applicationsRepository.GetQuerable().ToArray();
                             
 
             Stream stream = testDocumentService.GetDocument(applications);
@@ -57,7 +48,7 @@ namespace EpilLaserLab.Server.Controllers
             if (stream == null)
                 return NotFound(); // returns a NotFoundResult with Status404NotFound response.
 
-            return File(stream, "image/jpeg", name); // returns a FileStreamResult
+            return File(stream, "application/pdf", name); // returns a FileStreamResult
         }
     }
 }

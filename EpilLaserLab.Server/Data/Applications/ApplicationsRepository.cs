@@ -38,7 +38,7 @@ namespace EpilLaserLab.Server.Data.Applications
 
         public IQueryable<Application> GetQuerable()
         {
-            throw new NotImplementedException();
+            return context.Applications.AsQueryable();
         }
 
         public bool Update(Application applicationOld, Application applicationNew)
