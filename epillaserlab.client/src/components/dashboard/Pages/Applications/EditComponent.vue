@@ -153,7 +153,6 @@ export default defineComponent({
       this.data.branchId = recs[0].branchId  
 
       await this.branchChange();
-      this.$forceUpdate();
     })
   },
   setup(){
@@ -161,6 +160,7 @@ export default defineComponent({
 
     const toast = useToast();
     const router = useRouter();
+    const id = router.currentRoute.value.params.id;
     
 
     const clientsData = reactive([{clientId: 0, name: null}]);
@@ -262,24 +262,8 @@ export default defineComponent({
         headers: {'Content-Type': "application/json"},
         body: JSON.stringify(data)
       }).then(async responce => {
-          let result = await responce.json();
-
-          if(result.message == "OK"){
-
-            toast.success("Запись успешно добавлена");
-            router.push({name: "dashboard.home"})
-
-          }else if(result.message == "DUPLICATION"){
-            toast.error("Дублирование записи");
-          }else if(result.message == "DUPLICATION"){
-            toast.error("Дублирование записи");
-          }else if(result.message == "NOT CHANGED"){
-            toast.info("Внесите изменения");
-          }else if(result.message == "DATA NOT VALID" || result.status == 400){
-            toast.error("Введите значения");
-          }else{
-            toast.error("Ошибка при добавлении записи");
-          }
+          console.log(data);
+          toast.success("ПППП");
       })
     };
 

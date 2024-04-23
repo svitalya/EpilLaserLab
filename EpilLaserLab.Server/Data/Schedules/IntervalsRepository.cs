@@ -40,6 +40,12 @@ namespace EpilLaserLab.Server.Data.Schedules
             return true;
         }
 
+        public bool Delete(Interval interval)
+        {
+            context.Remove(interval);
+            return context.SaveChanges() > 0;
+        }
+
         public bool DeleteRangeInSchedule(int scheduleId)
         {
             var intervals = GetIntervalsInScheduleQurable(scheduleId)
@@ -48,7 +54,7 @@ namespace EpilLaserLab.Server.Data.Schedules
 
             context.RemoveRange(intervals);
 
-            return true;
+            return context.SaveChanges() > 0;
         }
 
         public ICollection<Interval> GetIntervalsInSchedule(int scheduleId)

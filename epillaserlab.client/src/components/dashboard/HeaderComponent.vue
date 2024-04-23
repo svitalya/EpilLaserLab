@@ -1,6 +1,6 @@
 <template>
 <nav class="navbar navbar-light bg-light p-3">
-  <div class="col-10 col-md-10 col-lg-10 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
+  <div class="col-12 col-md-12 col-lg-12 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
       <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
               Доброй пожаловать, {{ user.login }}

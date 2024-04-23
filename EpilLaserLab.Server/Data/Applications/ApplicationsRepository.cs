@@ -28,7 +28,7 @@ namespace EpilLaserLab.Server.Data.Applications
 
         public Application? Get(int id)
         {
-            throw new NotImplementedException();
+            return GetQuerable().FirstOrDefault(a => a.ApplicationId == id);
         }
 
         public IEnumerable<Application> GetAll()

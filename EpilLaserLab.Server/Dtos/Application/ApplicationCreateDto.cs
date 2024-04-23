@@ -1,4 +1,4 @@
-﻿namespace EpilLaserLab.Server.Dtos.ApplicationCreate
+﻿namespace EpilLaserLab.Server.Dtos.Application
 {
     public class ApplicationCreateDto
     {
