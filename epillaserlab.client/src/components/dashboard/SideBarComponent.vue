@@ -2,72 +2,52 @@
 <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
   <div class="position-sticky pt-md-5">
       <ul class="nav flex-column">
-          <li class="nav-item" v-for="item in navItems">
-              <router-link class="nav-link active" aria-current="page" :to="{name: item.link}">
+          <li :class="[(item.dropdown && item.dropdown.length > 0 ? 'nav-item' : ''), 'dropdown']" v-for="item in navItems">
+              <router-link
+                :tag="'a'"
+                :class="['nav-link', (item.dropdown && item.dropdown.length > 0 ? 'dropdown-toggle' : '')]"
+                aria-current="page"
+                :data-bs-toggle="[(item.dropdown && item.dropdown.length > 0 ? 'dropdown' : '')]"
+                aria-expanded="true"
+                :to="{name: item.link, params: item.params}">
                   <svg xmlns="http://www.w3.org/2000/svg" 
-                  width="24" height="24" viewBox="0 0 24 24" 
-                  fill="none" stroke="currentColor" stroke-width="2" 
-                  stroke-linecap="round" stroke-linejoin="round" 
-                  v-html="item.svg"
-                  class="feather feather-home">
+                    width="24" height="24" viewBox="0 0 24 24" 
+                    fill="none" stroke="currentColor" stroke-width="2" 
+                    stroke-linecap="round" stroke-linejoin="round" 
+                    v-html="item.svg">
                 </svg>
                   <span class="ml-2 ms-2">{{ item.text }}</span>
               </router-link>
+
+              <ul class="dropdown-menu" v-if="item.dropdown && item.dropdown.length > 0">
+                    <li v-for="dropdownItem in item.dropdown">
+                        <router-link
+                            :to = "{name: item.link, params: dropdownItem.params}"
+                            class="dropdown-item">
+                            {{ dropdownItem.text}}
+                        </router-link>
+                    </li>
+                </ul>
           </li>
       </ul>
   </div>
 </nav>
 </template>
 <script>
-import {defineComponent} from 'vue';
+import {defineComponent, ref} from 'vue';
 
 export default defineComponent({
-    data(){
-        return {
-            navItems: [
-                {
-                    svg: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>',
-                    text: 'Главная',
-                    link: 'dashboard.home'
-                },
-                {
-                    svg: '<path xmlns="http://www.w3.org/2000/svg" d="M3 9.5H21M3 14.5H21M8 4.5V19.5M6.2 19.5H17.8C18.9201 19.5 19.4802 19.5 19.908 19.282C20.2843 19.0903 20.5903 18.7843 20.782 18.408C21 17.9802 21 17.4201 21 16.3V7.7C21 6.5799 21 6.01984 20.782 5.59202C20.5903 5.21569 20.2843 4.90973 19.908 4.71799C19.4802 4.5 18.9201 4.5 17.8 4.5H6.2C5.0799 4.5 4.51984 4.5 4.09202 4.71799C3.71569 4.90973 3.40973 5.21569 3.21799 5.59202C3 6.01984 3 6.57989 3 7.7V16.3C3 17.4201 3 17.9802 3.21799 18.408C3.40973 18.7843 3.71569 19.0903 4.09202 19.282C4.51984 19.5 5.07989 19.5 6.2 19.5Z" stroke-width="2"/>',
-                    text: 'Справочники',
-                    link: 'dashboard.references'
-                },
-                {
-                    svg: '<path xmlns="http://www.w3.org/2000/svg" d="M3 9.5H21M3 14.5H21M8 4.5V19.5M6.2 19.5H17.8C18.9201 19.5 19.4802 19.5 19.908 19.282C20.2843 19.0903 20.5903 18.7843 20.782 18.408C21 17.9802 21 17.4201 21 16.3V7.7C21 6.5799 21 6.01984 20.782 5.59202C20.5903 5.21569 20.2843 4.90973 19.908 4.71799C19.4802 4.5 18.9201 4.5 17.8 4.5H6.2C5.0799 4.5 4.51984 4.5 4.09202 4.71799C3.71569 4.90973 3.40973 5.21569 3.21799 5.59202C3 6.01984 3 6.57989 3 7.7V16.3C3 17.4201 3 17.9802 3.21799 18.408C3.40973 18.7843 3.71569 19.0903 4.09202 19.282C4.51984 19.5 5.07989 19.5 6.2 19.5Z" stroke-width="2"/>',
-                    text: 'Услуги',
-                    link: 'dashboard.services'
-                },
-                {
-                    svg: '<path xmlns="http://www.w3.org/2000/svg" d="M3 9.5H21M3 14.5H21M8 4.5V19.5M6.2 19.5H17.8C18.9201 19.5 19.4802 19.5 19.908 19.282C20.2843 19.0903 20.5903 18.7843 20.782 18.408C21 17.9802 21 17.4201 21 16.3V7.7C21 6.5799 21 6.01984 20.782 5.59202C20.5903 5.21569 20.2843 4.90973 19.908 4.71799C19.4802 4.5 18.9201 4.5 17.8 4.5H6.2C5.0799 4.5 4.51984 4.5 4.09202 4.71799C3.71569 4.90973 3.40973 5.21569 3.21799 5.59202C3 6.01984 3 6.57989 3 7.7V16.3C3 17.4201 3 17.9802 3.21799 18.408C3.40973 18.7843 3.71569 19.0903 4.09202 19.282C4.51984 19.5 5.07989 19.5 6.2 19.5Z" stroke-width="2"/>',
-                    text: 'Абонименты',
-                    link: 'dashboard.seasontickets'
-                },
-                {
-                    svg: '<path xmlns="http://www.w3.org/2000/svg" d="M3 9.5H21M3 14.5H21M8 4.5V19.5M6.2 19.5H17.8C18.9201 19.5 19.4802 19.5 19.908 19.282C20.2843 19.0903 20.5903 18.7843 20.782 18.408C21 17.9802 21 17.4201 21 16.3V7.7C21 6.5799 21 6.01984 20.782 5.59202C20.5903 5.21569 20.2843 4.90973 19.908 4.71799C19.4802 4.5 18.9201 4.5 17.8 4.5H6.2C5.0799 4.5 4.51984 4.5 4.09202 4.71799C3.71569 4.90973 3.40973 5.21569 3.21799 5.59202C3 6.01984 3 6.57989 3 7.7V16.3C3 17.4201 3 17.9802 3.21799 18.408C3.40973 18.7843 3.71569 19.0903 4.09202 19.282C4.51984 19.5 5.07989 19.5 6.2 19.5Z" stroke-width="2"/>',
-                    text: 'Филиалы',
-                    link: 'dashboard.branches'
-                },
-                {
-                    svg: '<path xmlns="http://www.w3.org/2000/svg" d="M3 9.5H21M3 14.5H21M8 4.5V19.5M6.2 19.5H17.8C18.9201 19.5 19.4802 19.5 19.908 19.282C20.2843 19.0903 20.5903 18.7843 20.782 18.408C21 17.9802 21 17.4201 21 16.3V7.7C21 6.5799 21 6.01984 20.782 5.59202C20.5903 5.21569 20.2843 4.90973 19.908 4.71799C19.4802 4.5 18.9201 4.5 17.8 4.5H6.2C5.0799 4.5 4.51984 4.5 4.09202 4.71799C3.71569 4.90973 3.40973 5.21569 3.21799 5.59202C3 6.01984 3 6.57989 3 7.7V16.3C3 17.4201 3 17.9802 3.21799 18.408C3.40973 18.7843 3.71569 19.0903 4.09202 19.282C4.51984 19.5 5.07989 19.5 6.2 19.5Z" stroke-width="2"/>',
-                    text: 'Мастера',
-                    link: 'dashboard.masters'
-                },
-                {
-                    svg: '<path xmlns="http://www.w3.org/2000/svg" d="M3 9.5H21M3 14.5H21M8 4.5V19.5M6.2 19.5H17.8C18.9201 19.5 19.4802 19.5 19.908 19.282C20.2843 19.0903 20.5903 18.7843 20.782 18.408C21 17.9802 21 17.4201 21 16.3V7.7C21 6.5799 21 6.01984 20.782 5.59202C20.5903 5.21569 20.2843 4.90973 19.908 4.71799C19.4802 4.5 18.9201 4.5 17.8 4.5H6.2C5.0799 4.5 4.51984 4.5 4.09202 4.71799C3.71569 4.90973 3.40973 5.21569 3.21799 5.59202C3 6.01984 3 6.57989 3 7.7V16.3C3 17.4201 3 17.9802 3.21799 18.408C3.40973 18.7843 3.71569 19.0903 4.09202 19.282C4.51984 19.5 5.07989 19.5 6.2 19.5Z" stroke-width="2"/>',
-                    text: 'Расписание',
-                    link: 'dashboard.schedules'
-                },
-
-                {
-                    svg: '<path xmlns="http://www.w3.org/2000/svg" d="M3 15H21M3 19H13M21 7H13M21 11H13M4.6 11H7.4C7.96005 11 8.24008 11 8.45399 10.891C8.64215 10.7951 8.79513 10.6422 8.89101 10.454C9 10.2401 9 9.96005 9 9.4V6.6C9 6.03995 9 5.75992 8.89101 5.54601C8.79513 5.35785 8.64215 5.20487 8.45399 5.10899C8.24008 5 7.96005 5 7.4 5H4.6C4.03995 5 3.75992 5 3.54601 5.10899C3.35785 5.20487 3.20487 5.35785 3.10899 5.54601C3 5.75992 3 6.03995 3 6.6V9.4C3 9.96005 3 10.2401 3.10899 10.454C3.20487 10.6422 3.35785 10.7951 3.54601 10.891C3.75992 11 4.03995 11 4.6 11Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
-                    text: 'Документы',
-                    link: 'dashboard.docs'
-                },
-            ]
-        }
+    setup(){
+        const navItems = ref({});
+        fetch("https://localhost:7243/api/dashboard/sidebar", {
+            method: "GET",
+            headers: {'Content-Type': "application/json"},
+            credentials: "include",  
+        }).then(async r => {
+            const responseJson = await r.json();
+            navItems.value = responseJson.navItems;
+        })
+        return {navItems}
     }
 })
 

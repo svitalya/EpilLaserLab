@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace EpilLaserLab.Server.Models
 {
@@ -22,8 +23,10 @@ namespace EpilLaserLab.Server.Models
 
         public bool IsWork { get; set; } = true;
 
+        [JsonIgnore]
         public Master? Master { get; set; }
 
+        [JsonIgnore]
         public Admin? Admin { get; set; }
     }
 }

@@ -149,6 +149,19 @@ const router = createRouter({
                     'name': 'dashboard.docs',
                     component: () => import('./components/dashboard/Pages/Docs/ViewComponent.vue')
                 },
+
+                {
+                    'path': '/dashboard/users/:role?',
+                    'name': 'dashboard.users',
+                    component: () => import('./components/dashboard/Pages/Users/ShowListComponent.vue')
+
+                },
+
+                {
+                    'path': '/dashboard/users/admins/reg',
+                    'name': 'dashboard.users.admins.reg',
+                    component: () => import('./components/dashboard/Pages/Users/RegAdminComponent.vue')
+                },
             ]
         }
     ]

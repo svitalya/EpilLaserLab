@@ -57,7 +57,7 @@
 
       <div class="row mt-4">
         <button type="submit" class="btn btn-success me-3" style="width: 120px;">Сохранить</button>
-        <router-link tag="button" :to="{name: 'dashboard.branches'}" type="submit" class="btn btn-secondary" style="width: 120px;">Назад</router-link>
+        <router-link tag="button" :to="{name: 'dashboard.masters'}" type="submit" class="btn btn-secondary" style="width: 120px;">Назад</router-link>
       </div>
     </div>
   </form>

@@ -36,7 +36,14 @@ namespace EpilLaserLab.Server.Data.Auths
 
         public IQueryable<User> GetQuerable()
         {
-            return context.Users.Include(u => u.Role).AsQueryable();
+            return context.Users
+                .Include(u => u.Admin)
+                    .ThenInclude(a => a.Employee)
+                .Include(u => u.Admin)
+                    .ThenInclude(a => a.Branch)
+                .Include(u => u.Client)
+                .Include(u => u.Role)
+                .AsQueryable();
         }
     }
 }

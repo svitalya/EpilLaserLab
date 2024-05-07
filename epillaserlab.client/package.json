@@ -17,7 +17,8 @@
     "vue-good-table": "^2.21.11",
     "vue-table-dynamic": "^0.4.10",
     "vue-toastification": "^2.0.0-rc.5",
-    "vue3-table-lite": "^1.4.0"
+    "vue3-table-lite": "^1.4.0",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

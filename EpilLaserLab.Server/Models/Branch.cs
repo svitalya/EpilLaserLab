@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EpilLaserLab.Server.Models
 {
@@ -12,8 +13,10 @@ namespace EpilLaserLab.Server.Models
         [Required]
         public string PhotoPath {  get; set; }
 
+        [JsonIgnore]
         public ICollection<Master> Masters { get; set; }
 
+        [JsonIgnore]
         public ICollection<Admin> Admins { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace EpilLaserLab.Server.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EpilLaserLab.Server.Models
 {
     public class Admin
     {
@@ -10,7 +12,10 @@
         public int EmployeeId { get; set; }
         public Employee Employee { get; set; }
 
+        [JsonIgnore]
         public int UserId { get; set; }
+
+        [JsonIgnore]
         public User User { get; set; }
     }
 }

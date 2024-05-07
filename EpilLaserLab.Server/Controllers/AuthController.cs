@@ -4,9 +4,12 @@ using EpilLaserLab.Server.Dtos.Auths;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore;
 using Mysqlx.Crud;
 using System.Security.Claims;
 
@@ -71,7 +74,8 @@ namespace EpilLaserLab.Server.Controllers
                 return Ok(new { Message = "UNAUTHORIZED" });
             }
 
-            return Ok(new { Message = "OK", User = user });
+
+            return Ok(new { Message = "OK", User = user});
         }
 
         [Authorize(Roles = "root, admin, client")]
@@ -87,12 +91,10 @@ namespace EpilLaserLab.Server.Controllers
             var user = new User
             {
                 Login = dto.Login,
-                Email = dto.Email ?? null,
+                Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 RoleId = dto.RoleId
             };
-
-            _repository.Create(user);
 
             return user;
 
@@ -104,7 +106,12 @@ namespace EpilLaserLab.Server.Controllers
         static object? orderByRole(UserInfoDto u) => u.Role;
 
         [HttpGet("users")]
-        public IActionResult Users(int page = 0, int limit = 10, string order = "id", string sort = "asc")
+        public IActionResult Users(
+            int page = 0,
+            int limit = 10,
+            string order = "id",
+            string sort = "asc",
+            string? role = null)
         {
             Dictionary<string, Func<UserInfoDto, object?>> functor = [];
             functor.Add("id", orderById);
@@ -113,15 +120,20 @@ namespace EpilLaserLab.Server.Controllers
             functor.Add("role", orderByRole);
 
             var querable = _repository.GetQuerable()
-                .ToArray()
                 .Select(u => new UserInfoDto
                 {
                     UserId = u.UserId,
                     Login = u.Login,
                     Email = u.Email,
-                    Role = u.Role.Title
+                    Role = u.Role.Title,
+                    RoleName = u.Role.Name,
                 })
                 .AsQueryable();
+
+            if(role is not null)
+            {
+                querable = querable.Where(u => u.RoleName == role).AsQueryable();
+            }
 
             if (functor.TryGetValue(order, out Func<UserInfoDto, object?>? f) && f is not null)
             {
@@ -187,10 +199,14 @@ namespace EpilLaserLab.Server.Controllers
                 }
             };
 
-         
-            adminRepository.Add(admin);
+            if (adminRepository.CheckForDuplication(admin)) {
+                adminRepository.Add(admin);
+                return Ok(new { Message = "OK" });
+            }
 
-            return Ok(new {Message = "OK"});
+            return Ok(new { Message = "DUPLICATION" });
+
+
         }
     }
 }
