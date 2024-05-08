@@ -102,8 +102,8 @@ export default defineComponent({
   background-size: 100% 100%;
   position: relative;
   overflow:hidden;
-  
 }
+
 .content .layer{
   width: 100%;
   height: 100%;
@@ -230,7 +230,8 @@ export default defineComponent({
 
 .menu.horizontal ul li a:hover, .active{
   color: #9C7638 !important;
-  text-decoration: underline;
+  text-decoration: none;
+  border-bottom: 1px #9C7638 solid;
 } 
 
 .suggestion{

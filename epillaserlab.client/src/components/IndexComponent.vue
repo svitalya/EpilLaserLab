@@ -13,6 +13,7 @@
 <script lang="ts">
 import { ref, onMounted, Ref} from 'vue'
 import MainPageComponent  from './Pages/MainPageComponent.vue'
+import PricePageComponent  from './Pages/PricePageComponent.vue'
 
 interface Component {
   page: Ref<HTMLElement | null>
@@ -23,13 +24,11 @@ interface Component {
 export default {
   setup() {
     const mainPage = ref<HTMLElement | null>(null);
-      const mainPage2 = ref<HTMLElement | null>(null);
-        const mainPage3 = ref<HTMLElement | null>(null);
+      const pricePage = ref<HTMLElement | null>(null);
 
     const components: Component[] = [
       {page: mainPage, id: "main", component: MainPageComponent},
-      {page: mainPage2, id: "main2", component: MainPageComponent},
-      {page: mainPage3, id: "main3", component: MainPageComponent},
+      {page: pricePage, id: "price", component: PricePageComponent}
     ]
 
     const currentIndex = ref(0)
