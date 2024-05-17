@@ -45,15 +45,12 @@
         <div class="logo">
           <p>Epil Laser Lab</p>
         </div>
-        <div class="menu horizontal">
-          <ul>
-            <li><a class="active">Главная</a></li>
-            <li><a>Услуги</a></li>
-            <li><a>Отзывы</a></li>
-            <li><a>О нас</a></li>
-            <li><a>Кабинет</a></li>
-          </ul>
-        </div>
+        <men
+          pageId="main"
+          :vertical="false"
+          :show="showMenu"
+          @scrollToComponent="$emit('scrollToComponent', $event)"
+          @shortCloseClick="$emit('shortCloseClick', $event)"/>
         <div class="suggestion">
           <div class="description">
             все тело
@@ -89,13 +86,20 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
+import  MenuComponent  from '../MenuComponent.vue';
 
 export default defineComponent({
-  name: "main-page"
+  name: "main-page",
+  props:{
+    showMenu: {type: Boolean, default: false}
+  },
+  components:{
+    "men": MenuComponent
+  }
 })
 </script>
 <style>
-.content{
+#main .content{
   width: 100%;
   height: 100%;
   background-image: url('@/assets/img/main_back.png');
@@ -104,14 +108,14 @@ export default defineComponent({
   overflow:hidden;
 }
 
-.content .layer{
+#main .content .layer{
   width: 100%;
   height: 100%;
   position: absolute;
   top:0;
   left: 0;
 }
-.content .layer.back{
+#main .content .layer.back{
   z-index: 2;
   position: relative;
 }
@@ -174,14 +178,14 @@ export default defineComponent({
   transform: scale(1.2) rotate(128.14deg);
 }
 
-.content .layer.front{
+#main .content .layer.front{
   z-index: 3;
   display: flex;
   align-items: center;
   flex-direction: column;
 }
 
-.content .layer.front .logo{
+#main .content .layer.front .logo{
   font-size: 64px;
   font-weight: bold;
   line-height: 130%;
@@ -196,43 +200,6 @@ export default defineComponent({
 	background-image: linear-gradient(to right, #977133, #F2EAAD);
 }
 
-.menu.horizontal{
-  width: 460px;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-}
-
-.menu.horizontal ul{
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  list-style-type: none;
-  flex-wrap: initial;
-}
-
-.menu.horizontal ul li{
-  flex: 1;
-  align-items: center;
-  display: inline;
-  text-align: center;
-}
-
-.menu.horizontal ul li a{
-  font-size: 20px;
-  font-weight: bold;
-  line-height: auto;
-  letter-spacing: 0;
-  color: #F7EFB2;
-}
-
-.menu.horizontal ul li a:hover, .active{
-  color: #9C7638 !important;
-  text-decoration: none;
-  border-bottom: 1px #9C7638 solid;
-} 
 
 .suggestion{
   margin-top: 84px;
@@ -284,10 +251,12 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+
 }
 
 .estimation .stars svg{
   flex: 1;
+  fill: #F7EFB2;
 }
 
 </style>

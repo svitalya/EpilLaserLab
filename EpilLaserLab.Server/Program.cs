@@ -28,8 +28,7 @@ builder.Services.AddAuthorization();
 // Add services to the container.
 
 Action<DbContextOptionsBuilder> contextBuilder = (opt) =>
-    opt.UseMySQL(builder.Configuration.GetConnectionString("Default")
-    ?? throw new Exception("Не удалось подключиться к БД"));
+    opt.UseMySQL(DBConnectData.ConnectString);
 builder.Services.AddDbContext<EpilLaserLabContext>(contextBuilder);
 
 

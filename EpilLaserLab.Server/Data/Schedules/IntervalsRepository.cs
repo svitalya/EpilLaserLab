@@ -54,7 +54,7 @@ namespace EpilLaserLab.Server.Data.Schedules
 
             context.RemoveRange(intervals);
 
-            return context.SaveChanges() > 0;
+            return intervals.Length==0 || context.SaveChanges() > 0;
         }
 
         public ICollection<Interval> GetIntervalsInSchedule(int scheduleId)
@@ -88,7 +88,7 @@ namespace EpilLaserLab.Server.Data.Schedules
                 context.Intervals.Add(new Interval()
                 {
                     TimeStart = interval.TimeStart,
-                    TimeEnd = timeStart - 1,
+                    TimeEnd = timeStart,
                     ScheduleId = scheduleId,
                 });            
             }
@@ -97,7 +97,7 @@ namespace EpilLaserLab.Server.Data.Schedules
             {
                 context.Intervals.Add(new Interval()
                 {
-                    TimeStart = timeEnd+1,
+                    TimeStart = timeEnd,
                     TimeEnd = interval.TimeEnd,
                     ScheduleId = scheduleId,
                 });

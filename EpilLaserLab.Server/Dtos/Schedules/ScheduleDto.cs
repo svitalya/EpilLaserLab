@@ -13,5 +13,6 @@ namespace EpilLaserLab.Server.Dtos.Schedules
         public DateTime Date { get; set; }
 
         public string DateString => Date.ToString("dd.MM.yyyy");
+        public string DateShortString => Date.ToString("dd.MM");
     }
 }

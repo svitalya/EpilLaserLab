@@ -162,6 +162,12 @@ const router = createRouter({
                     'name': 'dashboard.users.admins.reg',
                     component: () => import('./components/dashboard/Pages/Users/RegAdminComponent.vue')
                 },
+
+                {
+                    'path': '/dashboard/database',
+                    'name': 'dashboard.db',
+                    component: () => import('./components/dashboard/Pages/DBController/ChangeConnectionComponent.vue')
+                },
             ]
         }
     ]

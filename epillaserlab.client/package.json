@@ -12,6 +12,7 @@
   "dependencies": {
     "@jobinsjp/vue3-datatable": "^1.0.15",
     "axios": "^1.6.8",
+    "ts-semaphore": "^1.0.0",
     "vite-plugin-encoding": "^1.0.0",
     "vue": "^3.4.21",
     "vue-good-table": "^2.21.11",

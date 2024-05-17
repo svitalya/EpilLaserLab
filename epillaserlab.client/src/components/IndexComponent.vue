@@ -1,11 +1,20 @@
 // FullScreenSlider.vue
 <template>
+  <help>
+    <h1>Помощь</h1>
+
+    <h2>Пример 1</h2>
+    <p>Тест тест тест тест тест тест</p>
+  </help>
   <div class="full-screen-slider">
-    <component 
+    <component
+      @scrollToComponent="handleScrollToComponent"
+      @shortCloseClick="shortCloseClickHandler"
       v-for="componentData in components"
       :is="componentData.component"
       :id="componentData.id"
       :ref="async (el) => componentData.page.value = el.$el"
+      :show-menu="showMenu"
       class="full-screen-component"></component>
   </div>
 </template>
@@ -14,6 +23,7 @@
 import { ref, onMounted, Ref} from 'vue'
 import MainPageComponent  from './Pages/MainPageComponent.vue'
 import PricePageComponent  from './Pages/PricePageComponent.vue'
+import HelpComponent from './Pages/Utils/Modals/HelpComponent.vue'
 
 interface Component {
   page: Ref<HTMLElement | null>
@@ -22,9 +32,13 @@ interface Component {
 }
 
 export default {
+  components:{
+    'help': HelpComponent
+  },
   setup() {
+    const showMenu = ref(false);
     const mainPage = ref<HTMLElement | null>(null);
-      const pricePage = ref<HTMLElement | null>(null);
+    const pricePage = ref<HTMLElement | null>(null);
 
     const components: Component[] = [
       {page: mainPage, id: "main", component: MainPageComponent},
@@ -45,6 +59,17 @@ export default {
       scrollToComponent()
     }
 
+    const handleScrollToComponent = (pageId: string) => {
+      components.forEach((c, i) => {
+        if(pageId == c.id) currentIndex.value = i;
+      });
+      scrollToComponent();
+    }
+
+    const shortCloseClickHandler = () => {
+      showMenu.value = !showMenu.value
+    }
+
     const scrollToComponent = () => { 
         components[currentIndex.value].page.value.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     }
@@ -56,17 +81,16 @@ export default {
     return {
       components,
       currentIndex,
-      handleWheel
+      handleWheel,
+      handleScrollToComponent,
+      shortCloseClickHandler,
+      showMenu
     }
   }
 }
 </script>
 
 <style>
-body{
-    overflow: hidden;
-    font-family: "EB Garamond", serif;
-}
 
 .full-screen-slider {
   overflow: none;

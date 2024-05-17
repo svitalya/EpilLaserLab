@@ -2,7 +2,7 @@
 <div>
   <div class ="flex-column">
     <h1 class="row h3">
-      Добавить запись заявки
+      Создать запись заявки
     </h1>
   </div>
 

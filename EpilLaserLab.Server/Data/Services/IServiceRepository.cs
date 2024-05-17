@@ -12,5 +12,7 @@ namespace EpilLaserLab.Server.Data.Services
         public bool CheckForDuplication(Service service);
         public bool AccessDelete(Service service);
         public IQueryable<Service> GetQuerable();
+
+        public ServicePrice? GetPriceByType(Service service, int typeId);
     }
 }

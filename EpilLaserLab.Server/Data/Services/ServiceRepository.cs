@@ -55,6 +55,15 @@ namespace EpilLaserLab.Server.Data.Services
             return _context.Services.ToArray();
         }
 
+        public ServicePrice? GetPriceByType(Service service, int typeId)
+        {
+            return _context.ServicePrices
+                .Where(sp => sp.ServiceId == service.ServiceId && sp.TypeId == typeId)
+                .OrderByDescending(sp => sp.DateTime)
+                .FirstOrDefault();
+
+        }
+
         public IQueryable<Service> GetQuerable()
         {
             return _context.Services.AsQueryable();

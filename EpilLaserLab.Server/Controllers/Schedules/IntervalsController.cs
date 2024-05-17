@@ -73,16 +73,63 @@ namespace EpilLaserLab.Server.Controllers.Schedules
                         return Ok(new { Message = "OK" });
                     }
 
-                    return Ok("BLOCK");
+                    return Ok(new { Message = "BLOCK" });
                 }catch (Exception ex)
                 {
-                    return Ok("DATA NOT VALID");
+                    return Ok(new { Message = "DATA NOT VALID" });
                 }
 
             }catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        string minutsToTimeStr(int minuts) => $"{(minuts / 60).ToString().PadLeft(2, '0')}" +
+            $":{(minuts % 60).ToString().PadLeft(2, '0')}";
+
+        [HttpGet("{id}/separate")]
+        public IActionResult GetIntervalsSeparatedString(int id, int timeCost)
+        {
+            Schedule? schedult = schedulesRepository.Get(id);
+
+            if (schedult is null)
+            {
+                return Ok(new { Message = "NOT FOUND" });
+            }
+
+            if (timeCost == 0)
+            {
+                return Ok(new { Message = "BAD REQUEST"});
+            }
+
+                StringBuilder IntervalsStringBuilder = new StringBuilder();
+
+            var intervals = intervalsRepository.GetIntervalsInSchedule(schedult.ScheduleId);
+
+            intervals = intervals
+                .Where(i => (i.TimeStart + timeCost) <= i.TimeEnd)
+                .Where(i => i.Application is null)
+                .ToList();
+
+            
+
+            List<string> sepIntervalString = new List<string>();
+
+            foreach (var interval in intervals)
+            {
+                for (int startTime = interval.TimeStart; startTime <= (interval.TimeEnd - timeCost); startTime += timeCost)
+                {
+                    sepIntervalString.Add(minutsToTimeStr(startTime));
+                }
+            }
+
+
+            return Ok(new
+            {
+                Message = "OK",
+                Recs= sepIntervalString
+            });
         }
 
         [HttpGet("{id}")]
@@ -92,7 +139,7 @@ namespace EpilLaserLab.Server.Controllers.Schedules
             {
                 Schedule? schedult = schedulesRepository.Get(id);
 
-                if (schedult is null ||  schedult.Date <= Now)
+                if (schedult is null)
                 {
                     return Ok(new { Message = "NOT FOUND" });
                 }
@@ -109,8 +156,6 @@ namespace EpilLaserLab.Server.Controllers.Schedules
 
                 foreach (var interval in intervals)
                 {
-                    string minutsToTimeStr(int minuts) => $"{(minuts / 60).ToString().PadLeft(2, '0')}" +
-                        $":{(minuts % 60).ToString().PadLeft(2, '0')}";
 
                     StringBuilder stringBuilder = interval.Application is null ?
                         IntervalsStringBuilder : WorkIntervalsStringBuilder;

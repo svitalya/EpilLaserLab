@@ -32,7 +32,7 @@
             <table-body v-text="row.service"/>
             <table-body v-text="row.price"/>
             <table-body :data-id="row.applicationId" style="width: 7%">
-                <button type="button" class="btn btn-primary me-2" @click="editClick">Открыть</button>
+                <!-- <button type="button" class="btn btn-primary me-2" @click="editClick">Открыть</button> -->
             </table-body>
         </template>
         <template #empty>

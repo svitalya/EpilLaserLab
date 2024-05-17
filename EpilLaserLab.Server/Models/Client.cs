@@ -1,4 +1,6 @@
-﻿namespace EpilLaserLab.Server.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EpilLaserLab.Server.Models
 {
     public class Client
     {
@@ -8,10 +10,11 @@
 
         public string Phone { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
 
+        
         public ICollection<PurchasedSeasonTicket> PurchasedSeasonTickets { get; set; }
     }
 }

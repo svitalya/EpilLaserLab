@@ -17,7 +17,6 @@ namespace EpilLaserLab.Server.Controllers.Employees
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "root, admin")]
     public class MastersController(
         IMasterRepository masterRepository,
         IEmployeRepository employeRepository,
@@ -52,13 +51,11 @@ namespace EpilLaserLab.Server.Controllers.Employees
                 .Trim()
                 ?? "-1";
 
-            int userId = int.Parse(idStr);
-            var user = userRepository.GetById(userId);
-
-            if (user.Role.Name == "admin")
+            if(branchId is not null)
             {
-                querable = querable.Where(m => m.BranchId == adminRepository.GetByUser(user.UserId).BranchId).AsQueryable();
+                querable = querable.Where(m => m.BranchId == branchId).AsQueryable();
             }
+            
 
             if (functor.TryGetValue(order, out Func<Master, object?>? f) && f is not null)
             {

@@ -1,4 +1,6 @@
-﻿namespace EpilLaserLab.Server.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EpilLaserLab.Server.Models
 {
     public class Application
     {

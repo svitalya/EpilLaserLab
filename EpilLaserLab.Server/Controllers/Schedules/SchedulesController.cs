@@ -54,8 +54,10 @@ namespace EpilLaserLab.Server.Controllers.Schedules
                 querable = querable.Where(s => s.MasterId == masterId);
             }
 
+            var now = DateTime.Now.ToDateOnly().ToDateTime(new TimeOnly(0, 0, 0));
 
             var recs = querable.AsQueryable()
+                .Where(s => s.Date >= now)
                 .Skip(page * limit)
                 .Take(limit)
                 .Select(s => new ScheduleRecTableDto

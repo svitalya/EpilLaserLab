@@ -1,4 +1,5 @@
 ﻿using EpilLaserLab.Server.Data.Applications;
+using EpilLaserLab.Server.Data.Auths;
 using EpilLaserLab.Server.Data.Schedules;
 using EpilLaserLab.Server.Data.Services;
 using EpilLaserLab.Server.Dtos;
@@ -18,6 +19,7 @@ namespace EpilLaserLab.Server.Controllers
         IServiceRepository serviceRepository,
         IServicePricesRepository servicePricesRepository,
         IIntervalsRepository intervalsRepository,
+        IClientRepository clientRepository,
         ISchedulesRepository schedulesRepository) : ControllerBase
     {
 
@@ -109,22 +111,81 @@ namespace EpilLaserLab.Server.Controllers
             });
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            return Ok(new
+            {
+                Data = new
+                {
+                    Rec = applicationsRepository.GetQuerable()
+                        .Include(a => a.Client)
+                        .Include(a => a.ServicePrice)
+                            .ThenInclude(sp => sp.Service)
+                        .Include(a => a.ServicePrice)
+                            .ThenInclude(sp => sp.Type)
+                        .Include(a => a.Interval)
+                            .ThenInclude(i => i.Schedule)
+                                .ThenInclude(s => s.Master)
+                                    .ThenInclude(m => m.Branch)
+                        .Include(a => a.Interval)
+                            .ThenInclude(i => i.Schedule)
+                                .ThenInclude(s => s.Master)
+                                    .ThenInclude(m => m.Employee)
+                        .FirstOrDefault(a => a.ApplicationId == id),
+                },
+                Message = "OK"
+            });
+        }
+
         [HttpPost]
         public IActionResult Create(ApplicationCreateDto applicationCreateDto)
         {
             try
             {
-                var service = serviceRepository.Get(applicationCreateDto.ServiceId);
 
-                var servicePrice = servicePricesRepository.GetQueryable()
-                        .Where(sp => sp.TypeId == applicationCreateDto.TypeId
-                            && sp.ServiceId == applicationCreateDto.ServiceId)
-                        .OrderByDescending(sp => sp.DateTime)
-                        .FirstOrDefault();
+                Service? service;
+                ServicePrice? servicePrice;
+
+                if (applicationCreateDto.ServiceId is not null && applicationCreateDto.TypeId is not null)
+                {
+                    service = serviceRepository.Get(applicationCreateDto.ServiceId.Value);
+
+                    servicePrice = servicePricesRepository.GetQueryable()
+                            .Where(sp => sp.TypeId == applicationCreateDto.TypeId
+                                && sp.ServiceId == applicationCreateDto.ServiceId)
+                            .OrderByDescending(sp => sp.DateTime)
+                            .FirstOrDefault();
+                }
+                else
+                {
+                    servicePrice = servicePricesRepository.GetQueryable()
+                        .Include(sp => sp.Service)
+                        .FirstOrDefault(sp => sp.ServicePriceId == applicationCreateDto.PriceId);
+
+                    service = servicePrice?.Service;
+
+                }
+
+                if(applicationCreateDto.ClientId is null && applicationCreateDto.Client is not null)
+                {
+                    var client = clientRepository.GetQueryable()
+                        .FirstOrDefault(c => c.Phone == applicationCreateDto.Client.Phone);
+
+                    if(client is null)
+                    {
+                        clientRepository.Add(new Client() { Name = applicationCreateDto.Client.Name, Phone = applicationCreateDto.Client.Phone});
+                        client = clientRepository.GetQueryable()
+                            .FirstOrDefault(c => c.Phone == applicationCreateDto.Client.Phone);
+                    }
+
+                    applicationCreateDto.ClientId = client!.ClientId;
+
+                }
 
 
 
-                if (service is null || servicePrice is null) return BadRequest();
+                if (service is null || servicePrice is null || applicationCreateDto.ClientId is null) return BadRequest();
 
 
                 var timeStart = applicationCreateDto.TimeStart.GetMinuts();
@@ -136,9 +197,9 @@ namespace EpilLaserLab.Server.Controllers
 
                 Application application = new Application()
                 {
-                    ClientId = applicationCreateDto.ClientId,
+                    ClientId = applicationCreateDto.ClientId.Value,
                     Interval = interval,
-                    CategoryId = applicationCreateDto.CategoryId,
+                    CategoryId = applicationCreateDto.CategoryId ?? 1,
                     ServicePrice = servicePrice,
                     DateTimeCreated = DateTime.Now
                 };
@@ -174,16 +235,48 @@ namespace EpilLaserLab.Server.Controllers
                     return Ok(new { Message = "NOT FOUND"});
                 }
 
+                Service? service;
+                ServicePrice? servicePrice;
+                if(applicationCreateDto.ServiceId is not null && applicationCreateDto.TypeId is not null)
+                {
+                    service = serviceRepository.Get(applicationCreateDto.ServiceId.Value);
 
-                var service = serviceRepository.Get(applicationCreateDto.ServiceId);
+                    servicePrice = servicePricesRepository.GetQueryable()
+                            .Where(sp => sp.TypeId == applicationCreateDto.TypeId
+                                && sp.ServiceId == applicationCreateDto.ServiceId)
+                            .OrderByDescending(sp => sp.DateTime)
+                            .FirstOrDefault();
+                }
+                else
+                {
+                    servicePrice = servicePricesRepository.GetQueryable()
+                        .Include(sp => sp.Service)
+                        .FirstOrDefault(sp => sp.ServicePriceId == applicationCreateDto.PriceId);
 
-                var servicePrice = servicePricesRepository.GetQueryable()
-                        .Where(sp => sp.TypeId == applicationCreateDto.TypeId
-                            && sp.ServiceId == applicationCreateDto.ServiceId)
-                        .OrderByDescending(sp => sp.DateTime)
-                        .FirstOrDefault();
+                    service = servicePrice?.Service;
+                        
+                }
 
-                if (service is null || servicePrice is null) return BadRequest();
+
+                if (applicationCreateDto.ClientId is null && applicationCreateDto.Client is not null)
+                {
+                    var client = clientRepository.GetQueryable()
+                        .FirstOrDefault(c => c.Phone == applicationCreateDto.Client.Phone);
+
+                    if (client is null)
+                    {
+                        clientRepository.Add(new Client() { Name = applicationCreateDto.Client.Name, Phone = applicationCreateDto.Client.Phone });
+                        client = clientRepository.GetQueryable()
+                            .FirstOrDefault(c => c.Phone == applicationCreateDto.Client.Phone);
+                    }
+
+                    applicationCreateDto.ClientId = client!.ClientId;
+
+                }
+
+
+
+                if (service is null || servicePrice is null || applicationCreateDto.ClientId is null) return BadRequest();
 
                 bool isUpdateInterval = false;
                 Interval? interval = oldApplication.Interval;
@@ -201,9 +294,9 @@ namespace EpilLaserLab.Server.Controllers
                 Application newApplication = new Application()
                 {
                     ApplicationId = oldApplication.ApplicationId,
-                    ClientId = applicationCreateDto.ClientId,
+                    ClientId = applicationCreateDto.ClientId.Value,
                     Interval = interval,
-                    CategoryId = applicationCreateDto.CategoryId,
+                    CategoryId = applicationCreateDto.CategoryId ?? 1,
                     ServicePrice = servicePrice,
                     DateTimeCreated = DateTime.Now
                 };
