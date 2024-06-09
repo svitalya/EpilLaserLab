@@ -17,7 +17,7 @@ using System.Security.Claims;
 
 namespace EpilLaserLab.Server.Controllers
 {
-    [Route("api/auth")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController(
         IUserRepository _repository,
@@ -106,12 +106,7 @@ namespace EpilLaserLab.Server.Controllers
         static object? orderByRole(UserInfoDto u) => u.Role;
 
         [HttpGet("users")]
-        public IActionResult Users(
-            int page = 0,
-            int limit = 10,
-            string order = "id",
-            string sort = "asc",
-            string? role = null)
+        public IActionResult Users(int page = 0, int limit = 10, string order = "id", string sort = "asc", string? role = null)
         {
             Dictionary<string, Func<UserInfoDto, object?>> functor = [];
             functor.Add("id", orderById);

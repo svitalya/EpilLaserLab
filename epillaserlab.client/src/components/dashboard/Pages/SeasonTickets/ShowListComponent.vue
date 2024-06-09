@@ -81,7 +81,7 @@
 
             let id = getId(e);
 
-            await fetch(`https://localhost:7243/api/seasontickets/${id}`, {
+            await fetch(`/api/seasontickets/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             }).then(async responce => {
@@ -134,7 +134,7 @@
 
             var prms = new URLSearchParams(params);
 
-            await fetch(`https://localhost:7243/api/seasontickets?${prms}`, {
+            await fetch(`/api/seasontickets?${prms}`, {
                 headers: {'Content-Type': "application/json"},
                 credentials: "include"
             }).then(async responce => {

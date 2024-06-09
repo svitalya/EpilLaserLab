@@ -57,7 +57,7 @@
   export default defineComponent({
     components: {DataTable, TableBody, TableHead},
     async beforeCreate(){
-      await fetch("https://localhost:7243/api/masters?limit=9999", {
+      await fetch(`/api/masters?limit=9999`, {
         headers: {'Content-Type': "application/json"},
           credentials: "include"
       }).then(async responce => {
@@ -67,7 +67,7 @@
         }
       });
 
-      await fetch(`https://localhost:7243/api/schedules/${this.id}`, {
+      await fetch(`/api/schedules/${this.id}`, {
         headers: {'Content-Type': "application/json"},
           credentials: "include"
       }).then(async responce => {
@@ -78,7 +78,7 @@
         }
       });
 
-      await fetch(`https://localhost:7243/api/intervals/${this.id}`, {
+      await fetch(`/api/intervals/${this.id}`, {
         headers: {'Content-Type': "application/json"},
           credentials: "include"
       }).then(async responce => {
@@ -111,7 +111,7 @@
       });
 
       const setIntervals = async(e) => {
-        await fetch(`https://localhost:7243/api/intervals/${id}`, {
+        await fetch(`/api/intervals/${id}`, {
           method: "POST",
           headers: {'Content-Type': "application/json"},
           credentials: "include",
@@ -136,7 +136,7 @@
   
       const submitForm = async (e) => {
   
-        await fetch(`https://localhost:7243/api/schedules/${id}`, {
+        await fetch(`/api/schedules/${id}`, {
           method: "PUT",
           headers: {'Content-Type': "application/json"},
           credentials: "include",

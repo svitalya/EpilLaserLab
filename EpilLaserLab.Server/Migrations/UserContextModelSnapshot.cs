@@ -128,6 +128,13 @@ namespace EpilLaserLab.Server.Migrations
                         .IsUnique();
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            Name = "Создано пользователем"
+                        });
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.Client", b =>
@@ -414,56 +421,6 @@ namespace EpilLaserLab.Server.Migrations
                     b.ToTable("ServicePrices");
                 });
 
-            modelBuilder.Entity("EpilLaserLab.Server.Models.Status", b =>
-                {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("StatusId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Statuses");
-
-                    b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            Name = "Создана"
-                        });
-                });
-
-            modelBuilder.Entity("EpilLaserLab.Server.Models.Tag", b =>
-                {
-                    b.Property<int>("TagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("TagId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Tags");
-
-                    b.HasData(
-                        new
-                        {
-                            TagId = 1,
-                            Name = "Новый"
-                        });
-                });
-
             modelBuilder.Entity("EpilLaserLab.Server.Models.Type", b =>
                 {
                     b.Property<int>("TypeId")
@@ -480,6 +437,18 @@ namespace EpilLaserLab.Server.Migrations
                         .IsUnique();
 
                     b.ToTable("Types");
+
+                    b.HasData(
+                        new
+                        {
+                            TypeId = 1,
+                            Name = "Знакомство"
+                        },
+                        new
+                        {
+                            TypeId = 4,
+                            Name = "Стандартный"
+                        });
                 });
 
             modelBuilder.Entity("EpilLaserLab.Server.Models.User", b =>
@@ -520,7 +489,7 @@ namespace EpilLaserLab.Server.Migrations
                         {
                             UserId = 1,
                             Login = "Admin",
-                            PasswordHash = "$2a$11$1RD7xY0tH0ke7Xr7B44ZKeKHM1Oxn5ZFemRvEfarLfOlATu7/oMFe",
+                            PasswordHash = "$2a$11$mifR/K8TVeTfGSh5v80Tv..X4VRdPuw7l5LNnw8UafXq6d6NMwxki",
                             RoleId = 1
                         });
                 });

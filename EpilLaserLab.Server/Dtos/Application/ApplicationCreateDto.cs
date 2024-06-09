@@ -1,16 +1,10 @@
 ﻿namespace EpilLaserLab.Server.Dtos.Application
 {
-    public class CLientInApplicationDto
-    {
-        public string Name { get; set; }
-        public string Phone { get; set; }
-    }
-
     public class ApplicationCreateDto
     {
         public int? ClientId { get; set; }
 
-        public CLientInApplicationDto Client { get; set; }
+        public CLientInDto? Client { get; set; }
 
 
         public int? ServiceId { get; set; }

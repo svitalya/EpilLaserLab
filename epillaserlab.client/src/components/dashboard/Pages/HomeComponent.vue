@@ -115,7 +115,7 @@
 
             var prms = new URLSearchParams(params);
 
-            await fetch(`https://localhost:7243/api/applications?${prms}`, {
+            await fetch(`/api/applications?${prms}`, {
                 headers: {'Content-Type': "application/json"},
                 credentials: "include"
             }).then(async responce => {

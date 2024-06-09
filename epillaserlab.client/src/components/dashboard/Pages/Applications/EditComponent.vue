@@ -101,7 +101,7 @@ import { useToast } from 'vue-toastification';
 
 export default defineComponent({
   async beforeCreate() {
-    fetch("https://localhost:7243/api/clients?limit=1000", {
+    fetch(`/api/clients?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -111,7 +111,7 @@ export default defineComponent({
       this.data.clientId = recs[0].clientId
     });
 
-    fetch("https://localhost:7243/api/services?limit=1000", {
+    fetch(`/api/services?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -122,7 +122,7 @@ export default defineComponent({
       this.timeCost = await this.getTimeCostService();
     });
 
-    fetch("https://localhost:7243/api/types?limit=1000", {
+    fetch(`/api/types?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -132,7 +132,7 @@ export default defineComponent({
       this.data.typeId = recs[0].id  
     });
 
-    fetch("https://localhost:7243/api/categories?limit=1000", {
+    fetch(`/api/categories?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -143,7 +143,7 @@ export default defineComponent({
     });
 
 
-   fetch("https://localhost:7243/api/branches?limit=1000", {
+   fetch(`/api/branches?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -185,7 +185,7 @@ export default defineComponent({
     })
 
     const branchChange = async() => {
-      fetch(`https://localhost:7243/api/masters?limit=1000&branchId=${(data.branchId ?? -1)}`, {
+      fetch(`/api/masters?limit=1000&branchId=${(data.branchId ?? -1)}`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -207,7 +207,7 @@ export default defineComponent({
     };
 
     const changeMaster = async() => {
-      fetch(`https://localhost:7243/api/schedules?limit=1000&masterId=${(data.masterId ?? -1)}`, {
+      fetch(`/api/schedules?limit=1000&masterId=${(data.masterId ?? -1)}`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -228,7 +228,7 @@ export default defineComponent({
     }
 
     const changeSchedule = async() => {
-      fetch(`https://localhost:7243/api/intervals/${data.scheduleId ?? -1}?timeCost=${timeCost}`, {
+      fetch(`/api/intervals/${data.scheduleId ?? -1}?timeCost=${timeCost}`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -239,7 +239,7 @@ export default defineComponent({
 
     const getTimeCostService = async () =>{
       let servicesData = [];
-      await fetch("https://localhost:7243/api/services?limit=1000", {
+      await fetch(`/api/services?limit=1000`, {
         method: "GET",
         credentials: "include",
         headers: {'Content-Type': "application/json"}
@@ -256,7 +256,7 @@ export default defineComponent({
     }
 
     const clickBtn = async () => {
-      await fetch(`https://localhost:7243/api/applications`, {
+      await fetch(`/api/applications`, {
         method: "POST",
         credentials: "include",
         headers: {'Content-Type': "application/json"},

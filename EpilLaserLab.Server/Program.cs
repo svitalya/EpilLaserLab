@@ -9,6 +9,7 @@ using EpilLaserLab.Server.Data.SeasonTicket;
 using EpilLaserLab.Server.Data.Services;
 using EpilLaserLab.Server.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -33,8 +34,8 @@ builder.Services.AddDbContext<EpilLaserLabContext>(contextBuilder);
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IStatusRepository, StatusRepository>();
-builder.Services.AddScoped<ITagRepository, TagRepository>();
+//builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+//builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITypeRepository, TypeRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
@@ -52,7 +53,8 @@ builder.Services.AddScoped<IPurchasedSeasonTicketsRepository, PurchasedSeasonTic
 builder.Services.AddScoped<IApplicationsRepository, ApplicationsRepository>();
 
 builder.Services.AddScoped<ImageSaveService>();
-builder.Services.AddScoped<TestDocumentService>();
+builder.Services.AddScoped<DocumentService>();
+builder.Services.AddScoped<DumpSaveService>();
 
 builder.Services.AddControllers();
 
@@ -67,7 +69,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://localhost:5173");
+                          policy.WithOrigins("https://localhost:5174", "https://8571-5-142-199-171.ngrok-free.app");
                           policy.AllowAnyHeader();
                           policy.AllowAnyMethod();
                           policy.AllowCredentials();
@@ -107,10 +109,6 @@ app.MapGet("/api/accessdenied", async (HttpContext context) =>
     await context.Response.WriteAsync(json);
 });
 
-
-
 app.MapControllers();
-
-app.MapFallbackToFile("/index.html");
 
 app.Run();

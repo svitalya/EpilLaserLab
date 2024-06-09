@@ -39,7 +39,7 @@ import {defineComponent, ref} from 'vue';
 export default defineComponent({
     setup(){
         const navItems = ref({});
-        fetch("https://localhost:7243/api/dashboard/sidebar", {
+        fetch(`/api/dashboard/sidebar`, {
             method: "GET",
             headers: {'Content-Type': "application/json"},
             credentials: "include",  

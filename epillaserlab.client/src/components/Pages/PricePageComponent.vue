@@ -55,7 +55,9 @@ export default defineComponent({
     async selectPriceListHandler(priceList: string){
 
       try{
-        this.prices = (await (await fetch(`https://localhost:7243/api/prices/${priceList}`)).json()).recs;
+        //${window.location.hostname}
+        //${window.location.hostname}
+        this.prices = (await (await fetch(`/api/prices/${priceList}`)).json()).recs;
       }catch{
         return;
       }

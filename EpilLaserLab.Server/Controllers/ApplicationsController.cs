@@ -32,11 +32,7 @@ namespace EpilLaserLab.Server.Controllers
         object? orderByPrice(ApplicationRecTableDto a) => a.Price;
 
         [HttpGet]
-        public IActionResult GetList(
-            [FromQuery] int page = 0,
-            [FromQuery] int limit = 10,
-            [FromQuery] string order = "dateTime",
-            [FromQuery] string sort = "desc")
+        public IActionResult GetList([FromQuery] int page = 0, [FromQuery] int limit = 10, [FromQuery] string order = "dateTime", [FromQuery] string sort = "desc")
         {
             Dictionary<string, Func<ApplicationRecTableDto, object?>> functor = [];
 
@@ -224,7 +220,7 @@ namespace EpilLaserLab.Server.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult Create(int id, ApplicationCreateDto applicationCreateDto)
+        public IActionResult Update(int id, ApplicationCreateDto applicationCreateDto)
         {
             try
             {

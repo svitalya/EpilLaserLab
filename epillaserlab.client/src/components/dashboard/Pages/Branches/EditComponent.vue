@@ -2,7 +2,7 @@
   <div>
     <div class ="flex-column">
       <h1 class="row h3">
-        Добавить запись филиала
+        Изменить запись филиала
       </h1>
     </div>
   
@@ -45,7 +45,7 @@
     components: {DataTable, TableBody, TableHead},
     
     async beforeCreate(){
-      await fetch(`https://localhost:7243/api/branches/${this.id}`, {
+      await fetch(`/api/branches/${this.id}`, {
           method: "GET",
           headers: {'Content-Type': "application/json"},
           credentials: "include",
@@ -58,7 +58,7 @@
         }
 
         let rec = responceJson.rec;
-        this.dataImg.imgSrc = `https://localhost:7243/resources/images/${rec.photoPath}`;
+        this.dataImg.imgSrc = `/resources/images/${rec.photoPath}`;
         this.data.address = rec.address;
       });
 
@@ -102,7 +102,7 @@
   
   
       const submitForm = async (e) => {
-        await fetch(`https://localhost:7243/api/branches/${id}`, {
+        await fetch(`/api/branches/${id}`, {
           method: "PUT",
           headers: {'Content-Type': "application/json"},
           credentials: "include",
@@ -112,7 +112,7 @@
 
             
             if(result.message == "OK"){
-              toast.success("Запись успешно добавлена");
+              toast.success("Запись успешно изменена");
               router.push({name: "dashboard.branches"})
             }else if(result.message == "DUPLICATION"){
               toast.error("Дублирование записи");

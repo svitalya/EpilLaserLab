@@ -1,4 +1,5 @@
 ﻿using EpilLaserLab.Server.Data.Auths;
+using EpilLaserLab.Server.Dtos.Dashboard;
 using EpilLaserLab.Server.Dtos.References;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -9,19 +10,6 @@ using System.Security.Claims;
 
 namespace EpilLaserLab.Server.Controllers
 {
-
-    public class NavItem
-    {
-        public string? Svg { get; set; }
-        public string Text { get; set; } = string.Empty;
-
-        public string? Link { get; set; }
-
-        public object Params { get; set; }
-
-        public List<NavItem>? Dropdown {  get; set; }
-    }
-
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "root, admin")]
@@ -29,8 +17,6 @@ namespace EpilLaserLab.Server.Controllers
     {
         private Dictionary<string, string> _references = new()
         {
-            {"tags", "Теги"},
-            {"statuses", "Статусы"},
             {"categories", "Категории"},
             {"types", "Виды прайслистов"},
         };
@@ -43,7 +29,7 @@ namespace EpilLaserLab.Server.Controllers
 
         // GET: api/<DashboardController>
         [HttpGet("references")]
-        public IActionResult Get()
+        public IActionResult GetReferences()
         {
             var recs = _references.Select(kvp => new ReferenceDto
             {
@@ -57,7 +43,8 @@ namespace EpilLaserLab.Server.Controllers
 
 
         [HttpGet("sidebar")]
-        public IActionResult GetSideBar() {
+        public IActionResult GetSideBar()
+        {
             List<NavItem> rootNavItem = new List<NavItem>()
             {
                 new NavItem
@@ -101,6 +88,12 @@ namespace EpilLaserLab.Server.Controllers
                     Svg = "<path xmlns=\"http://www.w3.org/2000/svg\" d=\"M3 9.5H21M3 14.5H21M8 4.5V19.5M6.2 19.5H17.8C18.9201 19.5 19.4802 19.5 19.908 19.282C20.2843 19.0903 20.5903 18.7843 20.782 18.408C21 17.9802 21 17.4201 21 16.3V7.7C21 6.5799 21 6.01984 20.782 5.59202C20.5903 5.21569 20.2843 4.90973 19.908 4.71799C19.4802 4.5 18.9201 4.5 17.8 4.5H6.2C5.0799 4.5 4.51984 4.5 4.09202 4.71799C3.71569 4.90973 3.40973 5.21569 3.21799 5.59202C3 6.01984 3 6.57989 3 7.7V16.3C3 17.4201 3 17.9802 3.21799 18.408C3.40973 18.7843 3.71569 19.0903 4.09202 19.282C4.51984 19.5 5.07989 19.5 6.2 19.5Z\" stroke-width=\"2\"/>",
                     Text = "Расписание",
                     Link = "dashboard.schedules"
+                },
+                new NavItem
+                {
+                    Svg = "<path xmlns=\"http://www.w3.org/2000/svg\" d=\"M3 9.5H21M3 14.5H21M8 4.5V19.5M6.2 19.5H17.8C18.9201 19.5 19.4802 19.5 19.908 19.282C20.2843 19.0903 20.5903 18.7843 20.782 18.408C21 17.9802 21 17.4201 21 16.3V7.7C21 6.5799 21 6.01984 20.782 5.59202C20.5903 5.21569 20.2843 4.90973 19.908 4.71799C19.4802 4.5 18.9201 4.5 17.8 4.5H6.2C5.0799 4.5 4.51984 4.5 4.09202 4.71799C3.71569 4.90973 3.40973 5.21569 3.21799 5.59202C3 6.01984 3 6.57989 3 7.7V16.3C3 17.4201 3 17.9802 3.21799 18.408C3.40973 18.7843 3.71569 19.0903 4.09202 19.282C4.51984 19.5 5.07989 19.5 6.2 19.5Z\" stroke-width=\"2\"/>",
+                    Text = "Купленные абонименты",
+                    Link = "dashboard.purchased-season-tickets"
                 },
                 new NavItem
                 {

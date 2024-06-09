@@ -1,36 +1,36 @@
 <template >
-    <div class="row col-8">
-        <data-table :rows="tableData"
-              :pagination="pagination"
-              :sort="sort"
-              filter
-              striped
-              @loadData="loadData"
-              style="font-size: large !important;"
-              >
-      <template #thead>
-          <table-head sortable="name" @sorting="loadData" style="width: 70%;">Название</table-head>
-          <table-head>
+<div class="row col-8">
+    <data-table :rows="tableData"
+            :pagination="pagination"
+            :sort="sort"
+            filter
+            striped
+            @loadData="loadData"
+            style="font-size: large !important;"
+            >
+        <template #thead>
+            <table-head sortable="name" @sorting="loadData" style="width: 70%;">Название</table-head>
+            <table-head>
             <router-link
                 :to="{name: 'dashboard.reference.add', params: {referencename: refName}}"
                 tag="button" type="button" class="btn btn-success" >Добавить</router-link>
         </table-head>
-      </template>
+        </template>
 
-      <template #tbody="{row}">
+        <template #tbody="{row}">
         <table-body v-text="row.name" style="width: 70%"/>
         <table-body :data-id="row.id">
             <button type="button" class="btn btn-primary me-2" @click="editClick">ИЗМЕНИТЬ</button>
             <button type="button" class="btn btn-danger" @click="delClick">УДАЛИТЬ</button>
         </table-body>
-      </template>
-      <template #empty>
+        </template>
+        <template #empty>
             <TableBodyCell class="d-flex justify-content-center" colspan="2">
                 Нет записей
             </TableBodyCell>
         </template>
-  </data-table>
-    </div>
+    </data-table>
+</div>
 
 </template>
 
@@ -76,7 +76,7 @@
             if(!isDel) return;
 
             let id = getId(e);
-            await fetch(`https://localhost:7243/api/${refName}/${id}`, {
+            await fetch(`/api/${refName}/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             }).then(async responce => {
@@ -129,7 +129,7 @@
 
             var prms = new URLSearchParams(params);
 
-            await fetch(`https://localhost:7243/api/${refName}?${prms}`, {
+            await fetch(`/api/${refName}?${prms}`, {
                 headers: {'Content-Type': "application/json"},
                 credentials: "include"
             }).then(async responce => {

@@ -31,7 +31,7 @@ export default defineComponent({
         return toast.info("Введите значение");
       }
 
-      await fetch(`https://localhost:7243/api/${refName}`, {
+      await fetch(`/api/${refName}`, {
         method: "POST",
         headers: {'Content-Type': "application/json"},
         credentials: "include",

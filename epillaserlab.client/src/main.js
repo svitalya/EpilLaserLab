@@ -27,6 +27,23 @@ const router = createRouter({
             },
             children: [
                 {
+                    'path': '/dashboard/purchased-season-tickets',
+                    'name': 'dashboard.purchased-season-tickets',
+                    component: () => import('./components/dashboard/Pages/PurchasedSeasonTickets/ShowListComponent.vue')
+                },
+                {
+                    'path': '/dashboard/purchased-season-tickets/add',
+                    'name': 'dashboard.purchased-season-tickets.add',
+                    component: () => import('./components/dashboard/Pages/PurchasedSeasonTickets/AddComponent.vue')
+                },
+
+                {
+                    'path': '/dashboard/purchased-season-tickets/edit/:id',
+                    'name': 'dashboard.purchased-season-tickets.edit',
+                    component: () => import('./components/dashboard/Pages/PurchasedSeasonTickets/EditComponent.vue')
+                },
+
+                {
                     'path': '/dashboard/home',
                     'name': 'dashboard.home',
                     component: () => import('./components/dashboard/Pages/HomeComponent.vue')

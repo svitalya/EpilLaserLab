@@ -77,7 +77,7 @@
   
   
       const submitForm = async (e) => {
-        await fetch(`https://localhost:7243/api/branches`, {
+        await fetch(`/api/branches`, {
           method: "POST",
           headers: {'Content-Type': "application/json"},
           credentials: "include",

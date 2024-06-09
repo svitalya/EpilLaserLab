@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EpilLaserLab.Server.Models
 {
@@ -17,6 +18,7 @@ namespace EpilLaserLab.Server.Models
 
         public Service Service { get; set; }
 
+        [JsonIgnore]
         public ICollection<SeasonTicketPrice> SeasonTicketPrices { get; set; }
     }
 }

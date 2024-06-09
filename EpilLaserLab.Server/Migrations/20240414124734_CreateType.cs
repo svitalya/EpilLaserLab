@@ -41,7 +41,7 @@ namespace EpilLaserLab.Server.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Type_Name",
-                table: "Type",
+                table: "Types",
                 column: "Name",
                 unique: true);
         }

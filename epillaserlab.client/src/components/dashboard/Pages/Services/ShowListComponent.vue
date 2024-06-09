@@ -79,7 +79,7 @@
 
             let id = getId(e);
 
-            await fetch(`https://localhost:7243/api/services/${id}`, {
+            await fetch(`/api/services/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             }).then(async responce => {
@@ -132,7 +132,7 @@
 
             var prms = new URLSearchParams(params);
 
-            await fetch(`https://localhost:7243/api/services?${prms}`, {
+            await fetch(`/api/services?${prms}`, {
                 headers: {'Content-Type': "application/json"},
                 credentials: "include"
             }).then(async responce => {

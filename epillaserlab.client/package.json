@@ -11,9 +11,13 @@
   },
   "dependencies": {
     "@jobinsjp/vue3-datatable": "^1.0.15",
+    "@types/file-saver": "^2.0.7",
     "axios": "^1.6.8",
+    "file-saver": "^2.0.5",
     "ts-semaphore": "^1.0.0",
     "vite-plugin-encoding": "^1.0.0",
+    "vite-plugin-proxy": "^0.5.0",
+    "vite-plugin-redirect": "^0.2.1",
     "vue": "^3.4.21",
     "vue-good-table": "^2.21.11",
     "vue-table-dynamic": "^0.4.10",

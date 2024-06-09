@@ -92,6 +92,10 @@ export default {
 
 <style>
 
+body{
+  overflow: hidden;
+}
+
 .full-screen-slider {
   overflow: none;
   scroll-behavior: smooth;

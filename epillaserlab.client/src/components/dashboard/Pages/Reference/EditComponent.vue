@@ -18,7 +18,7 @@ import { useToast } from "vue-toastification";
 import { defineComponent } from 'vue';
 export default defineComponent({
   async beforeCreate() {
-    const response = await fetch(`https://localhost:7243/api/${this.refName}/${this.idRec}`, {
+    const response = await fetch(`/api/${this.refName}/${this.idRec}`, {
         method: "GET",
         headers: {'Content-Type': "application/json"},
         credentials: "include"
@@ -51,7 +51,7 @@ export default defineComponent({
         return toast.info("Введите новое значение");
       }
 
-      await fetch(`https://localhost:7243/api/${refName}/${idRec}`, {
+      await fetch(`/api/${refName}/${idRec}`, {
         method: "PUT",
         headers: {'Content-Type': "application/json"},
         credentials: "include",

@@ -77,7 +77,7 @@ import DataTable from "../../../../lib/DataTable/DataTable.vue";
 export default defineComponent({
   components: {DataTable, TableBody, TableHead},
   beforeCreate() {
-    fetch("https://localhost:7243/api/branches?"
+    fetch(`/api/branches?`
       +"page=0&limit=999&order=name&sort=asc", {
         headers: {'Content-Type': "application/json"},
         credentials: "include",
@@ -130,7 +130,7 @@ export default defineComponent({
 
 
     const submitForm = async (e) => {
-      await fetch(`https://localhost:7243/api/masters`, {
+      await fetch(`/api/masters`, {
         method: "POST",
         headers: {'Content-Type': "application/json"},
         credentials: "include",

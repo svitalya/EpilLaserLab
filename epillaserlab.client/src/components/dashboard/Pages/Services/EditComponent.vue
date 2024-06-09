@@ -74,7 +74,7 @@
   export default defineComponent({
     components: {DataTable, TableBody, TableHead},
     beforeCreate(){
-      fetch(`https://localhost:7243/api/services/${this.id}`, {
+      fetch(`/api/services/${this.id}`, {
             headers: {'Content-Type': "application/json"},
             credentials: "include"
         }).then(async responce => {
@@ -125,7 +125,7 @@
       
       const tableData = ref([])
       const loadData = async (query) => {
-        await fetch(`https://localhost:7243/api/types`, {
+        await fetch(`/api/types`, {
             headers: {'Content-Type': "application/json"},
             credentials: "include"
         }).then(async responce => {
@@ -151,7 +151,7 @@
             }   
         });
 
-        await fetch(`https://localhost:7243/api/services/${id}`, {
+        await fetch(`/api/services/${id}`, {
           method: "PUT",
           headers: {'Content-Type': "application/json"},
           credentials: "include",

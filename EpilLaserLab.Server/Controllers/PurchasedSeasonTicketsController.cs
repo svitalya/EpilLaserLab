@@ -1,5 +1,6 @@
-﻿using EpilLaserLab.Server.Data.SeasonTicket;
-using EpilLaserLab.Server.Dtos;
+﻿using EpilLaserLab.Server.Data.Auths;
+using EpilLaserLab.Server.Data.SeasonTicket;
+using EpilLaserLab.Server.Dtos.PurchasedSeasonTicket;
 using EpilLaserLab.Server.Helpers;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace EpilLaserLab.Server.Controllers
     [ApiController]
     public class PurchasedSeasonTicketsController(
         IPurchasedSeasonTicketsRepository purchasedSeasonTicketsRepository,
+        IClientRepository clientRepository,
         ISeasonTicketPriceRepository seasonTicketPriceRepository) : ControllerBase
     {
 
@@ -39,8 +41,8 @@ namespace EpilLaserLab.Server.Controllers
                 .Select(pst => new PurchasedSeasonTicketDto
                 {
                     PurchasedSeasonTicketId = pst.PurchasedSeasonTicketId,
-                    Name = $"{pst.SeasonTicketPrice.SeasonTicket.Service.Name}:{pst.SeasonTicketPrice.SeasonTicket.Sessions}",
-                    Client = $"{pst.Client.Name}",
+                    Name = pst.SeasonTicketPrice.SeasonTicket.Service.Name,
+                    Client = pst.Client.Name,
                     Remains = pst.Remains,
                     DateOfPurchased = pst.DateOfPurchased,
                     DateOfCombustion = pst.DateOfCombustion,
@@ -78,6 +80,19 @@ namespace EpilLaserLab.Server.Controllers
             });
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var purchasedSeasonTicket = purchasedSeasonTicketsRepository.Get(id);
+
+            if (purchasedSeasonTicket is null)
+            {
+                return Ok(new { Message = "NOT FOUND" });
+            }
+
+            return Ok(new { Message = "OK", Rec = purchasedSeasonTicket});
+        }
+
         [HttpPost]
         public IActionResult Create(PurchasedSeasonTicketCreateDto dto)
         {
@@ -87,11 +102,42 @@ namespace EpilLaserLab.Server.Controllers
                     .Include(stp => stp.SeasonTicket)
                     .Single(stp => stp.SeasonTicketPriceId == dto.SeasonTicketPriceId);
 
+                int clientId = -1;
+                if(dto.Client is not null)
+                {
+                    var getClientId = () => clientRepository
+                        .GetQueryable()
+                        .Where(c => c.Phone == dto.Client.Phone)
+                        .FirstOrDefault()?.ClientId ?? null;
+
+                    int? searchedClientId = getClientId();
+
+                    if (searchedClientId is null)
+                    {
+                        clientRepository.Add(new Client() { Name = dto.Client.Name, Phone = dto.Client.Phone });
+                        clientId = getClientId()!.Value;
+                    }
+                    else
+                    {
+                        clientId = searchedClientId.Value;
+                    }
+
+                    
+                }
+                else if(dto.ClientId is not null)
+                {
+                    clientId = dto.ClientId.Value;
+                }
+                else
+                {
+                    throw new Exception("Ошибка:");
+                }
+
 
                 PurchasedSeasonTicket purchasedSeasonTicket = new PurchasedSeasonTicket()
                 {
                     SeasonTicketPriceId = dto.SeasonTicketPriceId,
-                    ClientId = dto.ClientId,
+                    ClientId = clientId,
                     Remains = seasonTicketPrice.SeasonTicket.Sessions,
                     DateOfPurchased = Utils.NowDate(),
                     DateOfCombustion = Utils.NowDate().AddDays(seasonTicketPrice.SeasonTicket.ValidityPeriod+1),
@@ -113,6 +159,107 @@ namespace EpilLaserLab.Server.Controllers
             {
                 return BadRequest(new { ex.Message });
             }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, PurchasedSeasonTicketCreateDto dto)
+        {
+            try
+            {
+
+                var oldPurchasedSeasonTicket = purchasedSeasonTicketsRepository.Get(id);
+
+                if(oldPurchasedSeasonTicket is null)
+                {
+                    return Ok(new { Message = "NOT FOUND" });
+                }
+
+                if (!purchasedSeasonTicketsRepository.AccessDelete(oldPurchasedSeasonTicket))
+                {
+                    return Ok(new { Message = "BLOCK" });
+                }
+
+                var seasonTicketPrice = seasonTicketPriceRepository.GetQueryable()
+                    .Include(stp => stp.SeasonTicket)
+                    .Single(stp => stp.SeasonTicketPriceId == dto.SeasonTicketPriceId);
+
+                int clientId = -1;
+                if (dto.Client is not null)
+                {
+                    var getClientId = () => clientRepository
+                        .GetQueryable()
+                        .Where(c => c.Phone == dto.Client.Phone)
+                        .FirstOrDefault()?.ClientId ?? null;
+
+                    int? searchedClientId = getClientId();
+
+                    if (searchedClientId is null)
+                    {
+                        clientRepository.Add(new Client() { Name = dto.Client.Name, Phone = dto.Client.Phone });
+                        clientId = getClientId()!.Value;
+                    }
+                    else
+                    {
+                        clientId = searchedClientId.Value;
+                    }
+
+
+                }
+                else if (dto.ClientId is not null)
+                {
+                    clientId = dto.ClientId.Value;
+                }
+                else
+                {
+                    throw new Exception("Ошибка:");
+                }
+
+
+                PurchasedSeasonTicket purchasedSeasonTicket = new PurchasedSeasonTicket()
+                {
+                    PurchasedSeasonTicketId = oldPurchasedSeasonTicket.PurchasedSeasonTicketId,
+                    SeasonTicketPriceId = dto.SeasonTicketPriceId,
+                    ClientId = clientId,
+                    Remains = seasonTicketPrice.SeasonTicket.Sessions,
+                    DateOfPurchased = Utils.NowDate(),
+                    DateOfCombustion = Utils.NowDate().AddDays(seasonTicketPrice.SeasonTicket.ValidityPeriod + 1),
+
+                };
+
+
+                if (!(purchasedSeasonTicketsRepository.CheckForDuplication(purchasedSeasonTicket)
+                    && purchasedSeasonTicketsRepository.Update(oldPurchasedSeasonTicket, purchasedSeasonTicket)))
+                {
+
+                    return Ok(new { Message = "DUPLICATION" });
+                }
+
+                return Ok(new { Message = "OK" });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var purchasedSeasonTicket = purchasedSeasonTicketsRepository.Get(id);
+
+            if (purchasedSeasonTicket is null)
+            {
+                return Ok(new { Message = "NOT FOUND" });
+            }
+
+            if (purchasedSeasonTicketsRepository.AccessDelete(purchasedSeasonTicket)
+                && purchasedSeasonTicketsRepository.Delete(purchasedSeasonTicket))
+            {
+                return Ok(new { Message = "OK" });
+            }
+
+            return Ok(new { Message = "BLOCK"});
         }
     }
 }

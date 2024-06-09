@@ -35,7 +35,7 @@ export default defineComponent({
         const router = useRouter();
         const toast = useToast();
         const logoutBtnClic = async () => {
-            const response = await fetch("https://localhost:7243/api/auth/logout", {
+            const response = await fetch(`/api/auth/logout`, {
                 method: "POST",
                 credentials: "include"
             });
@@ -46,14 +46,14 @@ export default defineComponent({
 
     async beforeCreate(){
         
-        fetch("https://localhost:7243/api/dashboard", {
+        fetch(`/api/dashboard`, {
             method: "GET",
             headers: {'Content-Type': "application/json"},
             credentials: "include"
         }).then(async response => {
             let responceJson = await response.json();
             if(responceJson.message == "OK"){     
-                fetch("https://localhost:7243/api/auth/user", {
+                fetch(`/api/auth/user`, {
                     method: "GET",
                     headers: {'Content-Type': "application/json"},
                     credentials: "include"
@@ -63,7 +63,7 @@ export default defineComponent({
 
                     if(responceJson.user.admin){
                         this.title = `EpilLaserLab - ${responceJson.user.admin.branch.address}`
-                        this.imgSrc = `https://localhost:7243/resources/images/${responceJson.user.admin.branch.photoPath}`
+                        this.imgSrc = `/resources/images/${responceJson.user.admin.branch.photoPath}`
                     }
                     
                 });

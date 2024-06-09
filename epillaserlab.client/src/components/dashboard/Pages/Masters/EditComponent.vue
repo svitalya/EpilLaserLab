@@ -2,7 +2,7 @@
   <div>
     <div class ="flex-column">
       <h1 class="row h3">
-        Добавить запись сотрудника
+        Изменить запись сотрудника
       </h1>
     </div>
   
@@ -77,7 +77,7 @@
   export default defineComponent({
     components: {DataTable, TableBody, TableHead},
     async beforeCreate() {
-      await fetch("https://localhost:7243/api/branches?"
+      await fetch(`/api/branches?`
         +"page=0&limit=999&order=name&sort=asc", {
           headers: {'Content-Type': "application/json"},
           credentials: "include",
@@ -88,7 +88,7 @@
           }
       });
 
-      await fetch(`https://localhost:7243/api/masters/${this.id}`,{
+      await fetch(`/api/masters/${this.id}`,{
           headers: {'Content-Type': "application/json"},
           credentials: "include",
         }).then(async responce => {
@@ -102,7 +102,7 @@
             this.data.employee.patronymic = rec.employee.patronymic;
             this.data.employee.isWork = rec.employee.isWork;
 
-            this.imageSrc = `https://localhost:7243/resources/images/${rec.photoPath}`;
+            this.imageSrc = `/resources/images/${rec.photoPath}`;
           }
       });
 
@@ -152,7 +152,7 @@
   
   
       const submitForm = async (e) => {
-        await fetch(`https://localhost:7243/api/masters/${id}`, {
+        await fetch(`/api/masters/${id}`, {
           method: "PUT",
           headers: {'Content-Type': "application/json"},
           credentials: "include",

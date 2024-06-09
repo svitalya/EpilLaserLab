@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     loadBranches() {
-      const apiUrl = 'https://localhost:7243/api/branches?limit=9999';
+      const apiUrl = `/api/branches?limit=9999`;
       fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
@@ -80,7 +80,7 @@ export default {
     },
     async register() {
 
-      const apiUrl = 'https://localhost:7243/api/auth/register/admins';
+      const apiUrl = `/api/auth/register/admins`;
       const data = {
         branchId: this.branchId,
         surname: this.surname,

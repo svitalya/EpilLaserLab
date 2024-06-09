@@ -1,4 +1,6 @@
-﻿namespace EpilLaserLab.Server.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EpilLaserLab.Server.Models
 {
     public class PurchasedSeasonTicket
     {
@@ -15,6 +17,7 @@
         public DateTime DateOfPurchased { get; set; }
         public DateTime DateOfCombustion {  get; set; }
 
+        [JsonIgnore]
         public ICollection<Application> Applications { get; set; } 
     }
 }

@@ -1,8 +1,8 @@
-﻿namespace EpilLaserLab.Server.Models
-{
-    public class Status
-    {
-        public int StatusId { get; set; }
-        public string Name { get; set; }
-    }
-}
+﻿//namespace EpilLaserLab.Server.Models
+//{
+//    public class Status
+//    {
+//        public int StatusId { get; set; }
+//        public string Name { get; set; }
+//    }
+//}

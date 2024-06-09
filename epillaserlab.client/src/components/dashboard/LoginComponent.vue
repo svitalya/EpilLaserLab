@@ -52,7 +52,7 @@ export default defineComponent({
         const toast = useToast();
 
         const submit = async () => {
-            fetch("https://localhost:7243/api/auth/login", {
+            fetch(`/api/auth/login`, {
                 method: "POST",
                 headers: {'Content-Type': "application/json"},
                 credentials: "include",
@@ -60,7 +60,7 @@ export default defineComponent({
             }).then(async response => {
                 let responceJson = await response.json();
                 if(responceJson.message == "OK"){
-                    fetch("https://localhost:7243/api/dashboard", {
+                    fetch(`/api/dashboard`, {
                         method: "GET",
                         headers: {'Content-Type': "application/json"},
                         credentials: "include"

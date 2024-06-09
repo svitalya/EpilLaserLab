@@ -86,7 +86,7 @@ export default defineComponent({
     });
     const tableData = ref([])
     const loadData = async (query) => {
-      await fetch(`https://localhost:7243/api/types`, {
+      await fetch(`/api/types`, {
           headers: {'Content-Type': "application/json"},
           credentials: "include"
       }).then(async responce => {
@@ -113,7 +113,7 @@ export default defineComponent({
       });
 
 
-      await fetch(`https://localhost:7243/api/services`, {
+      await fetch(`/api/services`, {
         method: "POST",
         headers: {'Content-Type': "application/json"},
         credentials: "include",

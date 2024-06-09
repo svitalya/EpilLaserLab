@@ -9,13 +9,10 @@ public class EpilLaserLabContext : DbContext
     {
 
     }
-
-    public DbSet<Models.User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
-    public DbSet<Status> Statuses { get; set; }
-    public DbSet<Tag> Tags { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Models.Type> Types { get; set; }
+    public DbSet<Models.User> Users { get; set; }
     public DbSet<Service> Services { get; set; }
     public DbSet<ServicePrice> ServicePrices { get; set; }
     public DbSet<Models.SeasonTicket> SeasonTickets { get; set; }
@@ -55,26 +52,29 @@ public class EpilLaserLabContext : DbContext
 
         });
 
-        modelBuilder.Entity<Status>(entity =>
-        {
-            entity.HasIndex(e => e.Name).IsUnique();
-            entity.HasData(new Status() { StatusId = 1, Name = "Создана" });
-        });
+        //modelBuilder.Entity<Status>(entity =>
+        //{
+        //    entity.HasIndex(e => e.Name).IsUnique();
+        //    entity.HasData(new Status() { StatusId = 1, Name = "Создана" });
+        //});
 
-        modelBuilder.Entity<Tag>(entity =>
-        {
-            entity.HasIndex(e => e.Name).IsUnique();
-            entity.HasData(new Tag() { TagId = 1, Name = "Новый" });
-        });
+        //modelBuilder.Entity<Tag>(entity =>
+        //{
+        //    entity.HasIndex(e => e.Name).IsUnique();
+        //    entity.HasData(new Tag() { TagId = 1, Name = "Новый" });
+        //});
 
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasIndex(e => e.Name).IsUnique();
+            entity.HasData(new Category() { CategoryId=1, Name= "Создано пользователем" });
         });
 
         modelBuilder.Entity<Models.Type>(entity =>
         {
             entity.HasIndex(e => e.Name).IsUnique();
+            entity.HasData(new Models.Type() { TypeId = 1, Name = "Знакомство" });
+            entity.HasData(new Models.Type() { TypeId = 4, Name = "Стандартный" });
         });
 
         modelBuilder.Entity<Service>(entity =>

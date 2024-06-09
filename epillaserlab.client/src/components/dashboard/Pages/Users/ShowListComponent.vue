@@ -86,7 +86,7 @@ export default defineComponent({
 
       var prms = new URLSearchParams(params);
 
-      await fetch(`https://localhost:7243/api/auth/users?${prms}`, {
+      await fetch(`/api/auth/users?${prms}`, {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       })

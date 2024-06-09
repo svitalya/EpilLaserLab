@@ -10,10 +10,33 @@
 
     <div class="row form-group mt-3">
       <label class="h5">Клиент</label>
-      <div class="col-12">
+      <div class="col-8" v-if="clientSelected.val">
         <select class="form-control" v-model="data.clientId">
           <option v-for="client in clientsData" :value="client.clientId">{{client.name}}</option>
         </select>
+      </div>
+      <div class="col-8" v-else>
+        <div class="row">
+          <label class="h5">Введите имя</label>
+          <div class="col-12">
+            <input type="text" v-model="data.client.name" class="form-control"/>
+          </div>
+        </div>
+        <div class="row">
+          <label class="h5">Введите телефон</label>
+          <div class="col-12">
+            <input type="text" v-model="data.client.phone" class="form-control"/>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-4">
+        <button type="button" class="btn btn-secondary" @click="plusMinusBtnClickHandler">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path v-if="clientSelected.val" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+            <path v-else d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"></path>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -80,9 +103,9 @@
 
     <div class="row form-group mt-3">
       <label class="h5">Введите время</label>
-        <div class="col-12">
-          <input type="text" v-model="data.timeStart" class="form-control"/>
-        </div>
+      <div class="col-12">
+        <input type="text" v-model="data.timeStart" class="form-control"/>
+      </div>
     </div>
 
   
@@ -101,7 +124,7 @@ import { useToast } from 'vue-toastification';
 
 export default defineComponent({
   async beforeCreate() {
-    fetch("https://localhost:7243/api/clients?limit=1000", {
+    fetch(`/api/clients?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -111,7 +134,7 @@ export default defineComponent({
       this.data.clientId = recs[0].clientId
     });
 
-    fetch("https://localhost:7243/api/services?limit=1000", {
+    fetch(`/api/services?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -122,7 +145,7 @@ export default defineComponent({
       this.timeCost = await this.getTimeCostService();
     });
 
-    fetch("https://localhost:7243/api/types?limit=1000", {
+    fetch(`/api/types?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -132,7 +155,7 @@ export default defineComponent({
       this.data.typeId = recs[0].id  
     });
 
-    fetch("https://localhost:7243/api/categories?limit=1000", {
+    fetch(`/api/categories?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -143,7 +166,7 @@ export default defineComponent({
     });
 
 
-   fetch("https://localhost:7243/api/branches?limit=1000", {
+   fetch(`/api/branches?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -181,11 +204,19 @@ export default defineComponent({
       branchId: null,
       masterId: null,
       scheduleId: null,
-      timeStart: null
+      timeStart: null,
+      client: {
+        name: null,
+        phone: null
+      }
     })
 
+    const clientSelected = reactive({val: true});
+
+    const plusMinusBtnClickHandler = () => clientSelected.val = !clientSelected.val;
+
     const branchChange = async() => {
-      fetch(`https://localhost:7243/api/masters?limit=1000&branchId=${(data.branchId ?? -1)}`, {
+      fetch(`/api/masters?limit=1000&branchId=${(data.branchId ?? -1)}`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -207,7 +238,7 @@ export default defineComponent({
     };
 
     const changeMaster = async() => {
-      fetch(`https://localhost:7243/api/schedules?limit=1000&masterId=${(data.masterId ?? -1)}`, {
+      fetch(`/api/schedules?limit=1000&masterId=${(data.masterId ?? -1)}`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -228,7 +259,7 @@ export default defineComponent({
     }
 
     const changeSchedule = async() => {
-      fetch(`https://localhost:7243/api/intervals/${data.scheduleId ?? -1}?timeCost=${timeCost}`, {
+      fetch(`/api/intervals/${data.scheduleId ?? -1}?timeCost=${timeCost}`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -239,7 +270,7 @@ export default defineComponent({
 
     const getTimeCostService = async () =>{
       let servicesData = [];
-      await fetch("https://localhost:7243/api/services?limit=1000", {
+      await fetch(`/api/services?limit=1000`, {
         method: "GET",
         credentials: "include",
         headers: {'Content-Type': "application/json"}
@@ -256,7 +287,14 @@ export default defineComponent({
     }
 
     const clickBtn = async () => {
-      await fetch(`https://localhost:7243/api/applications`, {
+      if(data.client.name && data.client.phone){
+        data.clientId = null;
+      }else{
+        data.client = null;
+      }
+
+      console.log(data.clientId);
+      await fetch(`/api/applications`, {
         method: "POST",
         credentials: "include",
         headers: {'Content-Type': "application/json"},
@@ -303,7 +341,9 @@ export default defineComponent({
       timeCost,
       getTimeCostService,
       changeService,
-      clickBtn
+      clickBtn, 
+      clientSelected,
+      plusMinusBtnClickHandler
     }
   }
 });

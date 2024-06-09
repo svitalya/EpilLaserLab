@@ -2,7 +2,7 @@
   <div>
     <div class ="flex-column">
       <h1 class="row h3">
-        Изменить запись услуги
+        Изменить запись абонемента
       </h1>
     </div>
   
@@ -60,7 +60,7 @@
     async beforeCreate(){
 
 
-      await fetch("https://localhost:7243/api/services?"
+      await fetch(`/api/services?`
         +"page=0&limit=999&order=name&sort=asc", {
           headers: {'Content-Type': "application/json"},
           credentials: "include",
@@ -74,7 +74,7 @@
           }
       });
 
-      await fetch(`https://localhost:7243/api/seasontickets/${this.id}`, {
+      await fetch(`/api/seasontickets/${this.id}`, {
           headers: {'Content-Type': "application/json"},
           credentials: "include",
         }).then(async responce => {
@@ -110,7 +110,7 @@
   
   
       const submitForm = async (e) => {
-        await fetch(`https://localhost:7243/api/seasontickets/${id}`, {
+        await fetch(`/api/seasontickets/${id}`, {
           method: "PUT",
           headers: {'Content-Type': "application/json"},
           credentials: "include",

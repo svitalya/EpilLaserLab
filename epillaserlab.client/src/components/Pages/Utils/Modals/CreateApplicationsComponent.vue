@@ -10,7 +10,7 @@
             <span class="row-header">Адрес</span>
             <div class="select-box" :ref="el => !!el ? initSelectBox(el as HTMLElement, selectBranch) : undefined">
               <div :class="{'select-item': true, 'active': index==0}" v-for="(branch, index) in branches" :key="branch.branchId" :data-id="branch.branchId">
-                <div class="image-container"><img class="image" :src="`https://localhost:7243/resources/images/${branch.photoPath}`"></div>
+                <div class="image-container"><img class="image" :src="`/resources/images/${branch.photoPath}`"></div>
                 <div class="text">{{branch.address}}</div> 
               </div>
             </div>
@@ -19,7 +19,7 @@
             <span class="row-header">Мастер</span>
             <div class="select-box" :ref="el => !!el ? initSelectBox(el as HTMLElement, selectMaster) : undefined">
               <div :class="{'select-item': true, 'active': index==0}" v-for="(master, index) in masters" :key="master.masterId" :data-id="master.masterId">
-                <div class="image-container"><img class="image" :src="`https://localhost:7243/resources/images/${master.photoPath}`"></div>
+                <div class="image-container"><img class="image" :src="`/resources/images/${master.photoPath}`"></div>
                 <div class="text">{{master.fio}}</div> 
               </div>
             </div>
@@ -82,6 +82,7 @@ export default defineComponent({
   data(){
     return {
       modalEl: {},
+      hostname: window.location.hostname,
       data:{
         priceId: this.priceId,
         branchId: null,
@@ -107,7 +108,7 @@ export default defineComponent({
   },
   methods: {
     getBranches(){
-      fetch("https://localhost:7243/api/branches?limit=1000", {
+      fetch(`/api/branches?limit=1000`, {
         method: "GET",
         credentials: "include",
         headers: {'Content-Type': "application/json"}
@@ -127,7 +128,7 @@ export default defineComponent({
 
     async getMasters(){
       if(!!this.data.branchId){
-        await fetch(`https://localhost:7243/api/masters?limit=1000&branchId=${(this.data.branchId ?? -1)}`, {
+        await fetch(`/api/masters?limit=1000&branchId=${(this.data.branchId ?? -1)}`, {
           method: "GET",
           credentials: "include",
           headers: {'Content-Type': "application/json"}
@@ -159,7 +160,7 @@ export default defineComponent({
     async getSchedules(){
       if(!!this.data.masterId){
 
-        await fetch(`https://localhost:7243/api/schedules?limit=1000&masterId=${(this.data.masterId ?? -1)}`, {
+        await fetch(`/api/schedules?limit=1000&masterId=${(this.data.masterId ?? -1)}`, {
           method: "GET",
           credentials: "include",
           headers: {'Content-Type': "application/json"}
@@ -188,7 +189,7 @@ export default defineComponent({
 
     async getTimeIntervals(){
       if(!!this.data.scheduleId){
-        await fetch(`https://localhost:7243/api/intervals/${this.data.scheduleId}/separate?timeCost=${(this.timeCost)}`, {
+        await fetch(`/api/intervals/${this.data.scheduleId}/separate?timeCost=${(this.timeCost)}`, {
           method: "GET",
           credentials: "include",
           headers: {'Content-Type': "application/json"}
@@ -217,7 +218,7 @@ export default defineComponent({
     },
 
     async clickButtonHandler(){
-      await fetch(`https://localhost:7243/api/applications/`, {
+      await fetch(`/api/applications/`, {
           method: "POST",
           credentials: "include",
           headers: {'Content-Type': "application/json"},
@@ -226,7 +227,7 @@ export default defineComponent({
         }).then(async responce => {
           let toast = useToast();
           if((await responce.json()).message == 'OK'){
-            toast.success("Регистрация новой заявки прошло успешно");
+            toast.success("Заявка зарегистрирована");
             this.$emit('closeModal');
           }else{
             toast.success("Ошибка при регистрации заявки");

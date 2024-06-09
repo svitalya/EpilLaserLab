@@ -1,54 +1,48 @@
-﻿using EpilLaserLab.Server.Data.Applications;
-using EpilLaserLab.Server.Data.SeasonTicket;
+﻿using EpilLaserLab.Server.Data.SeasonTicket;
 using EpilLaserLab.Server.Helpers;
-using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Office.Interop.Excel;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http.Headers;
 
-namespace EpilLaserLab.Server.Controllers
+namespace EpilLaserLab.Server.Controllers;
+[Route("[controller]")]
+public class ResourcesController(
+    ImageSaveService imageSaveService,
+    DumpSaveService dumpSaveService) : ControllerBase
 {
-    [Route("[controller]")]
-    public class ResourcesController(
-        ImageSaveService imageSaveService) : ControllerBase
+
+    [HttpGet("images/{name}")]
+    public IActionResult GetImage(string name)
     {
+        Stream stream = imageSaveService.GetImage(name);
 
-        private readonly ImageSaveService _imageSaveService = imageSaveService;
+        if (stream == null)
+            return NotFound();
 
-        [HttpGet("images/{name}")]
-        public IActionResult GetImage(string name)
-        {
-            Stream stream = _imageSaveService.GetImage(name);
-
-            if (stream == null)
-                return NotFound(); // returns a NotFoundResult with Status404NotFound response.
-
-            return File(stream, "image/jpeg", name); // returns a FileStreamResult
-        }
+        return File(stream, "image/jpeg", name);
+    }
+    [HttpGet("docs/{name}")]
+    public IActionResult GetDoc(string name)
+    {
+        throw new NotImplementedException();
     }
 
-    [Route("api/[controller]")]
-    public class DocumentController(
-        TestDocumentService testDocumentService,
-        IApplicationsRepository applicationsRepository
-        ) : ControllerBase
+    [HttpGet("dumps/{name}")]
+    public IActionResult GetDump(string name)
     {
+        Stream stream = dumpSaveService.GetDump(name);
 
+        if (stream == null)
+            return NotFound();
 
-        [HttpGet("test")]
-        public IActionResult GetImage(string name)
-        {
-            ICollection<Application> applications = applicationsRepository.GetQuerable().ToArray();
-                            
+        var result = File(stream, "application/force-download", name);
 
-            Stream stream = testDocumentService.GetDocument(applications);
-
-            if (stream == null)
-                return NotFound(); // returns a NotFoundResult with Status404NotFound response.
-
-            return File(stream, "application/pdf", name); // returns a FileStreamResult
-        }
+        return result;
     }
 }

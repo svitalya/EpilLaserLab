@@ -2,7 +2,7 @@
 <div>
   <div class ="flex-column">
     <h1 class="row h3">
-      Добавить запись услуги
+      Добавить запись абонемента
     </h1>
   </div>
 
@@ -58,7 +58,7 @@ export default defineComponent({
   components: {DataTable, TableBody, TableHead},
 
   beforeCreate(){
-    fetch("https://localhost:7243/api/services?"
+    fetch(`/api/services?`
       +"page=0&limit=999&order=name&sort=asc", {
         headers: {'Content-Type': "application/json"},
         credentials: "include",
@@ -89,7 +89,7 @@ export default defineComponent({
 
 
     const submitForm = async (e) => {
-      await fetch(`https://localhost:7243/api/seasontickets`, {
+      await fetch(`/api/seasontickets`, {
         method: "POST",
         headers: {'Content-Type': "application/json"},
         credentials: "include",

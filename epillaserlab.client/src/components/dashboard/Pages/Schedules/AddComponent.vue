@@ -47,7 +47,7 @@ import DataTable from "../../../../lib/DataTable/DataTable.vue";
 export default defineComponent({
   components: {DataTable, TableBody, TableHead},
   async beforeCreate(){
-    await fetch("https://localhost:7243/api/masters?limit=9999", {
+    await fetch(`/api/masters?limit=9999`, {
       headers: {'Content-Type': "application/json"},
         credentials: "include"
     }).then(async responce => {
@@ -76,7 +76,7 @@ export default defineComponent({
 
     const submitForm = async (e) => {
 
-      await fetch(`https://localhost:7243/api/schedules`, {
+      await fetch(`/api/schedules`, {
         method: "POST",
         headers: {'Content-Type': "application/json"},
         credentials: "include",

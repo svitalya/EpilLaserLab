@@ -1,5 +1,5 @@
 <template>
-<button type="button" class="btn btn-primary" @click="testDocButtonClick">Документ</button> 
+<button type="button" class="btn btn-primary" @click="DocButtonClick">Документ</button> 
 </template>
 
 <script>
@@ -7,11 +7,11 @@ import {defineComponent} from "vue"
 
 export default defineComponent({
   setup(){
-    const testDocButtonClick = () => {
-      window.open("https://localhost:7243/api/document/test", '_blank');
+    const DocButtonClick = () => {
+      window.open(`/api/document/test`, '_blank');
     }
 
-    return {testDocButtonClick}
+    return {DocButtonClick}
   }
 })
 </script>

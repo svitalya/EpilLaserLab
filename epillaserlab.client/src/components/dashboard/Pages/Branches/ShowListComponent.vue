@@ -19,7 +19,7 @@
         </template>
 
         <template #tbody="{row}">
-            <table-body><img :src="`https://localhost:7243/resources/images/${row.photoPath}`" width="150px" height="150px"></table-body>
+            <table-body><img :src="`/resources/images/${row.photoPath}`" width="150px" height="150px"></table-body>
             <table-body v-text="row.address"/>
             
             <table-body :data-id="row.branchId">
@@ -56,6 +56,7 @@
             const router = useRouter();
 
             const toast = useToast();
+            const hostname = window.location.hostname;
 
 
           const tableData = ref([])
@@ -78,7 +79,7 @@
 
             let id = getId(e);
 
-            await fetch(`https://localhost:7243/api/branches/${id}`, {
+            await fetch(`/api/branches/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             }).then(async responce => {
@@ -131,7 +132,7 @@
 
             var prms = new URLSearchParams(params);
 
-            await fetch(`https://localhost:7243/api/branches?${prms}`, {
+            await fetch(`/api/branches?${prms}`, {
                 headers: {'Content-Type': "application/json"},
                 credentials: "include"
             }).then(async responce => {
@@ -155,7 +156,7 @@
           }
 
 
-          return { tableData, pagination, loadData, sort, delClick, editClick}
+          return { tableData, pagination, loadData, sort, delClick, editClick, hostname}
       },
   })
 
