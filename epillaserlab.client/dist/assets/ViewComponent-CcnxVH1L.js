@@ -1,0 +1,1 @@
+import{_ as e,d as c,o as s,c as r}from"./index-BSdrrqya.js";const p=c({setup(){return{DocButtonClick:()=>{window.open("/api/document/test","_blank")}}}});function i(t,o,a,u,l,d){return s(),r("button",{type:"button",class:"btn btn-primary",onClick:o[0]||(o[0]=(...n)=>t.DocButtonClick&&t.DocButtonClick(...n))},"Документ")}const m=e(p,[["render",i]]);export{m as default};
