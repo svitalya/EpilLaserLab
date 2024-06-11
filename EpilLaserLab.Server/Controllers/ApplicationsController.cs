@@ -180,7 +180,6 @@ namespace EpilLaserLab.Server.Controllers
                 }
 
 
-
                 if (service is null || servicePrice is null || applicationCreateDto.ClientId is null) return BadRequest();
 
 

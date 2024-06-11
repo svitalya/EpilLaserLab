@@ -16,5 +16,8 @@ namespace EpilLaserLab.Server.Models
 
         [JsonIgnore]
         public ICollection<PurchasedSeasonTicket> PurchasedSeasonTickets { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Application> Applications { get; set; }
     }
 }

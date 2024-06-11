@@ -133,6 +133,7 @@ public class EpilLaserLabContext : DbContext
             entity.HasOne(e => e.User)
                 .WithOne(e => e.Client);
 
+
             entity.HasIndex(e => e.Phone).IsUnique();
         });
 
@@ -161,6 +162,9 @@ public class EpilLaserLabContext : DbContext
         {
             entity.HasOne(e => e.Interval)
                 .WithOne(e => e.Application);
+            
+            entity.HasOne(e => e.Client)
+                .WithMany(e => e.Applications);
 
             entity.HasOne(e => e.PurchasedSeasonTicket)
                 .WithMany(e => e.Applications);
