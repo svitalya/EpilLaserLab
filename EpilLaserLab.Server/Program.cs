@@ -69,7 +69,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://localhost:5174", "https://8571-5-142-199-171.ngrok-free.app", "http://epillaserlab.ru");
+                          policy.WithOrigins("https://localhost:5174", "https://8571-5-142-199-171.ngrok-free.app", "http://epillaserlab.ru", "https://epillaserlab.ru");
                           policy.AllowAnyHeader();
                           policy.AllowAnyMethod();
                           policy.AllowCredentials();
