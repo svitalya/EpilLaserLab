@@ -60,14 +60,7 @@ namespace EpilLaserLab.Server.Controllers
         [HttpGet("user")]
         public IActionResult UserInfo()
         {
-            string idStr = HttpContext.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?
-                .ToString()
-                .Split(':')[2]
-                .Trim()
-                ?? "-1";
-
-            int userId = int.Parse(idStr);
-            var user = _repository.GetById(userId);
+            var user = _repository.GetAuth(HttpContext);
 
             if (user is null)
             {

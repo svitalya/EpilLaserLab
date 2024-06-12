@@ -1,8 +1,8 @@
 <template>
 <div>
   <button type="button" class="btn btn-primary" @click="docButtonClick" data-type="returnability">Возвращаемость</button> 
-  <button type="button" class="btn btn-primary" @click="docButtonClick" data-type="returnability">Продажи по сотрудникам</button> 
-  <button type="button" class="btn btn-primary" @click="docButtonClick" data-type="returnability">Продажи по услугам</button> 
+  <!-- <button type="button" class="btn btn-primary" @click="docButtonClick" data-type="salesbyemployees">Продажи по сотрудникам</button> 
+  <button type="button" class="btn btn-primary" @click="docButtonClick" data-type="salesbyservices">Продажи по услугам</button>  -->
 </div>
 
 </template>

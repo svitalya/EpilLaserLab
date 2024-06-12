@@ -8,6 +8,8 @@ namespace EpilLaserLab.Server.Data.Auths
         User? GetByLogin(string login);
         User? GetById(int id);
 
+        User? GetAuth(HttpContext context);
+
         IQueryable<User> GetQuerable(); 
 
         ICollection<User> GetAll();
