@@ -94,7 +94,6 @@ public class DocumentService
     }
 }
 
-
 public class DocumentData
 {
     public required string Title { get; set; }

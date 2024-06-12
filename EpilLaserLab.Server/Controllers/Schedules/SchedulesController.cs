@@ -42,13 +42,7 @@ namespace EpilLaserLab.Server.Controllers.Schedules
                 ).AsQueryable();
             }
 
-            int maxRecs = querable.Count();
-
-            if (page + 1 * limit > maxRecs)
-            {
-                page = 0;
-            }
-
+            
             if(masterId is not null)
             {
                 querable = querable.Where(s => s.MasterId == masterId);
@@ -58,8 +52,6 @@ namespace EpilLaserLab.Server.Controllers.Schedules
 
             var recs = querable.AsQueryable()
                 .Where(s => s.Date >= now)
-                .Skip(page * limit)
-                .Take(limit)
                 .Select(s => new ScheduleRecTableDto
                 {
                     ScheduleId = s.ScheduleId,
@@ -67,14 +59,22 @@ namespace EpilLaserLab.Server.Controllers.Schedules
                     Date = s.Date,
                     Master = new MasterRecTableDto() { FIO = s.Master.Employee.FIO }
                 })
-                .ToArray();
+                .AsQueryable();
 
+            int maxRecs = recs.Count();
+            if (page + 1 * limit > maxRecs)
+            {
+                page = 0;
+            }
+
+            recs = recs.Skip(page * limit)
+                .Take(limit);
 
             return Ok(new
             {
                 Data = new
                 {
-                    Recs = recs,
+                    Recs = recs.ToArray(),
                     Page = page,
                     Max = maxRecs
                 },

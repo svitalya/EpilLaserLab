@@ -13,6 +13,7 @@ namespace EpilLaserLab.Server.Controllers;
 [Route("[controller]")]
 public class ResourcesController(
     ImageSaveService imageSaveService,
+    DocumentService documentService,
     DumpSaveService dumpSaveService) : ControllerBase
 {
 
@@ -29,7 +30,12 @@ public class ResourcesController(
     [HttpGet("docs/{name}")]
     public IActionResult GetDoc(string name)
     {
-        throw new NotImplementedException();
+        Stream stream = documentService.GetDocument(name);
+
+        if (stream == null)
+            return NotFound();
+
+        return File(stream, "application/force-download", name);
     }
 
     [HttpGet("dumps/{name}")]

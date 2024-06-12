@@ -27,7 +27,7 @@ public class DBController(EpilLaserLabContext context,
 
         if (fileName is null) return BadRequest();
 
-        string fileURl = $"https://{Request.Host}/resources/dumps/{fileName}";
+        string fileURl = $"{Request.Scheme}://{Request.Host}/resources/dumps/{fileName}";
         return Ok(new { Message = "OK", Dump = fileURl });
 
     }
