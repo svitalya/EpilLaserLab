@@ -115,7 +115,7 @@ export default defineComponent({
                 let result = await response.json();
                 if(result.message == "OK"){
                     toast.success("Вход выполнен");
-                    router.push({name: "home"});
+                    await router.push({name: "home"});
                 }else if(result.message == "INVALID CREDENTIALS"){
                     toast.warning("Пользователя с таким логином и паролем нет");
                 }
