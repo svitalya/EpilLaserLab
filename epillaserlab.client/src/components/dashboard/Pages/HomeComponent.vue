@@ -15,8 +15,8 @@
             <table-head sortable="master" @sorting="loadData">Мастер</table-head>
             <table-head sortable="client" @sorting="loadData">Клиент</table-head>
             <table-head sortable="dateTime" @sorting="loadData">Дата и время</table-head>
-            <table-head sortable="dateTime" @sorting="loadData">Услуга</table-head>
-            <table-head sortable="dateTime" @sorting="loadData">Цена</table-head>
+            <table-head sortable="service" @sorting="loadData">Услуга</table-head>
+            <table-head sortable="price" @sorting="loadData">Цена</table-head>
             <table-head style="width: 7%">
                 <router-link
                     :to="{name: 'dashboard.applications.add'}"

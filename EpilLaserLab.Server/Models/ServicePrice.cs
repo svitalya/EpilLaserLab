@@ -22,6 +22,6 @@ namespace EpilLaserLab.Server.Models
         public virtual Service Service { get; set; }
         public virtual Type Type { get; set; }
 
-
+        public ICollection<Application> Applications { get; set; } = new HashSet<Application>();
     }
 }

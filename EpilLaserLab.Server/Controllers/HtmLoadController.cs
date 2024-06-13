@@ -27,6 +27,17 @@ public class HtmLoadController : Controller
         };
     }
 
+    [HttpGet("/dashboard-login")]
+    public ContentResult GetDashboardLoginClient()
+    {
+
+        return new ContentResult
+        {
+            ContentType = "text/html",
+            Content = System.IO.File.ReadAllText("../epillaserlab.client/dist/index.html")
+        };
+    }
+
     [HttpGet("/assets/{filename}.js")]
     public ContentResult GetJSClient(string fileName)
     {
@@ -53,5 +64,11 @@ public class HtmLoadController : Controller
     public IActionResult GetPNGClient(string fileName)
     {
         return File(System.IO.File.OpenRead($"../epillaserlab.client/dist/assets/{fileName}.png"), "image/png", fileName);
+    }
+
+    [HttpGet("/favicon.ico")]
+    public IActionResult GetFaviconIcoClient(string fileName)
+    {
+        return File(System.IO.File.OpenRead($"../epillaserlab.client/dist/favicon.ico"), "image/x-icon", fileName);
     }
 }

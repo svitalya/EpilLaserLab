@@ -9,6 +9,7 @@ using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace EpilLaserLab.Server.Controllers
 {
@@ -32,7 +33,11 @@ namespace EpilLaserLab.Server.Controllers
         object? orderByPrice(ApplicationRecTableDto a) => a.Price;
 
         [HttpGet]
-        public IActionResult GetList([FromQuery] int page = 0, [FromQuery] int limit = 10, [FromQuery] string order = "dateTime", [FromQuery] string sort = "desc")
+        public IActionResult GetList([FromQuery] int page = 0,
+            [FromQuery] int limit = 10,
+            [FromQuery] string order = "dateTime",
+            [FromQuery] int? clientId = null,
+            [FromQuery] string sort = "desc")
         {
             Dictionary<string, Func<ApplicationRecTableDto, object?>> functor = [];
 
@@ -44,7 +49,7 @@ namespace EpilLaserLab.Server.Controllers
             functor.Add("service", orderByService);
             functor.Add("price", orderByPrice);
 
-            var querable = applicationsRepository.GetQuerable()
+            var request = applicationsRepository.GetQuerable()
                 .Include(a => a.Client)
                 .Include(a => a.ServicePrice)
                     .ThenInclude(sp => sp.Service)
@@ -58,7 +63,16 @@ namespace EpilLaserLab.Server.Controllers
                     .ThenInclude(i => i.Schedule)
                         .ThenInclude(s => s.Master)
                             .ThenInclude(m => m.Employee)
-                .Select(a => new ApplicationRecTableDto
+                .AsQueryable();
+
+            if (clientId is not null)
+            {
+                request = request.Where(a => a.ClientId == clientId).AsQueryable();
+            }
+
+
+
+            var querable = request.Select(a => new ApplicationRecTableDto
                 {
                     ApplicationId = a.ApplicationId,
                     Branch = a.Interval.Schedule.Master.Branch.Address,
@@ -69,6 +83,8 @@ namespace EpilLaserLab.Server.Controllers
                     Price = a.ServicePrice.Price.ToString("C")
                 })
                 .AsQueryable();
+
+
 
             Func<ApplicationRecTableDto, object?>? f;
             if (!functor.TryGetValue(order, out f) || f is null)

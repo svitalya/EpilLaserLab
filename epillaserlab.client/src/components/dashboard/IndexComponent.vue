@@ -1,6 +1,6 @@
 <template>
     <div class="flex-container">
-        <div style="width: 80%" >
+        <div class="justify-content-center" style="width: 95%">
             <headerComponent></headerComponent>
             <div class="container-fluid">
                 <div class="row">

@@ -45,7 +45,7 @@ export default defineComponent({
 <style>
 #helperModal{
   position: absolute;
-
+  z-index: 9999;
 
   *, ::after, ::before {
     box-sizing: content-box;

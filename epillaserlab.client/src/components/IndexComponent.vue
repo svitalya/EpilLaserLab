@@ -13,17 +13,20 @@
       v-for="componentData in components"
       :is="componentData.component"
       :id="componentData.id"
-      :ref="async (el) => componentData.page.value = el.$el"
+      :ref="async (el) => componentData.page = el.$el"
       :show-menu="showMenu"
+      :key="JSON.stringify(componentData)"
       class="full-screen-component"></component>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, onMounted, Ref} from 'vue'
+import { ref, onMounted, Ref, reactive} from 'vue'
 import MainPageComponent  from './Pages/MainPageComponent.vue'
 import PricePageComponent  from './Pages/PricePageComponent.vue'
+import CabinetPageComponent  from './Pages/CabinetPageComponent.vue'
 import HelpComponent from './Pages/Utils/Modals/HelpComponent.vue'
+import UserStore from './Pages/Utils/UserStore'
 
 interface Component {
   page: Ref<HTMLElement | null>
@@ -35,15 +38,23 @@ export default {
   components:{
     'help': HelpComponent
   },
+  async mounted() {
+    let isClient = UserStore.isClient(await UserStore.user());
+
+    if(isClient){
+      const cabinetPage = ref<HTMLElement | null>(null);
+      this.components.push({page: cabinetPage, id: "cabinet", component: CabinetPageComponent})
+    }
+  },
   setup() {
     const showMenu = ref(false);
     const mainPage = ref<HTMLElement | null>(null);
     const pricePage = ref<HTMLElement | null>(null);
-
-    const components: Component[] = [
+  
+    const components = reactive<Component[]>( [
       {page: mainPage, id: "main", component: MainPageComponent},
-      {page: pricePage, id: "price", component: PricePageComponent}
-    ]
+      {page: pricePage, id: "price", component: PricePageComponent},
+    ]);
 
     const currentIndex = ref(0)
 
@@ -71,7 +82,7 @@ export default {
     }
 
     const scrollToComponent = () => { 
-        components[currentIndex.value].page.value.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+        components[currentIndex.value].page.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     }
 
     onMounted(() => {       

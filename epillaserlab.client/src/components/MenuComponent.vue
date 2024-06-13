@@ -19,7 +19,6 @@
             </defs>
           </svg>
         </li>
-
         <li :hide="hideIcon && hideText" @click="$emit('scrollToComponent', 'main')" :class="{'active': pageId == 'main'}">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" :hide="hideIcon">
             <g clip-path="url(#clip0_231_139)">
@@ -39,33 +38,48 @@
           </svg>
           <a :hide="hideText">Услуги</a>
         </li>
-        <!-- <li :hide="hideIcon && hideText"  @click="$emit('scrollToComponent', 'price')" :class="{'active': pageId == 'main'}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="31" viewBox="0 0 30 31" :hide="hideIcon">
-            <g clip-path="url(#clip0_231_160)">
-            <path d="M15 14.7786C16.8233 14.7786 18.5719 14.0255 19.8612 12.6851C21.1505 11.3448 21.8748 9.5268 21.8748 7.6312C21.8748 5.73561 21.1505 3.91765 19.8612 2.57727C18.5719 1.23688 16.8233 0.483856 15 0.483856C13.1767 0.483856 11.4281 1.23688 10.1388 2.57727C8.84953 3.91765 8.12523 5.73561 8.12523 7.6312C8.12523 9.5268 8.84953 11.3448 10.1388 12.6851C11.4281 14.0255 13.1767 14.7786 15 14.7786ZM15 17.9188C5.85955 17.9188 0 23.1628 0 25.7161V30.4839H30V25.7161C30 22.6284 24.4527 17.9188 15 17.9188Z"/>
-            </g>
-            <defs>
-            <clipPath id="clip0_231_160">
-            <rect width="30" height="30" fill="white" transform="translate(0 0.485321)"/>
-            </clipPath>
-            </defs>
+
+        <li :hide="hideIcon && hideText" v-if="!user.isClient" :key="!user.isClient ? 'yes' : 'no'" @click="openLoginForm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" :hide="hideIcon">
+            <path xmlns="http://www.w3.org/2000/svg" d="M15 14.2947C16.8233 14.2947 18.5719 13.5417 19.8612 12.2013C21.1505 10.8609 21.8748 9.04294 21.8748 7.14735C21.8748 5.25175 21.1505 3.4338 19.8612 2.09341C18.5719 0.753022 16.8233 0 15 0C13.1767 0 11.4281 0.753022 10.1388 2.09341C8.84953 3.4338 8.12523 5.25175 8.12523 7.14735C8.12523 9.04294 8.84953 10.8609 10.1388 12.2013C11.4281 13.5417 13.1767 14.2947 15 14.2947ZM15 17.4349C5.85955 17.4349 0 22.679 0 25.2323V30H30V25.2323C30 22.1445 24.4527 17.4349 15 17.4349Z" fill="#F7EFB2"/>
           </svg>
-          <a :hide="hideText">Кабинет</a>
-        </li> -->
+          <a :hide="hideText">Вход</a>
+        </li>
+        <template v-else>
+          <li :hide="hideIcon && hideText" @click="$emit('scrollToComponent', 'cabinet')" :class="{'active': pageId == 'cabinet'}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" :hide="hideIcon">
+              <path xmlns="http://www.w3.org/2000/svg" d="M15 14.2947C16.8233 14.2947 18.5719 13.5417 19.8612 12.2013C21.1505 10.8609 21.8748 9.04294 21.8748 7.14735C21.8748 5.25175 21.1505 3.4338 19.8612 2.09341C18.5719 0.753022 16.8233 0 15 0C13.1767 0 11.4281 0.753022 10.1388 2.09341C8.84953 3.4338 8.12523 5.25175 8.12523 7.14735C8.12523 9.04294 8.84953 10.8609 10.1388 12.2013C11.4281 13.5417 13.1767 14.2947 15 14.2947ZM15 17.4349C5.85955 17.4349 0 22.679 0 25.2323V30H30V25.2323C30 22.1445 24.4527 17.4349 15 17.4349Z"/>
+            </svg>
+            <a :hide="hideText">Кабинет</a>
+          </li>
+          <li :hide="hideIcon && hideText" @click="logout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" :hide="hideIcon">
+              <path xmlns="http://www.w3.org/2000/svg" d="M16.8755 21.5632V25.3133C16.8755 26.5565 16.3816 27.7488 15.5025 28.6279C14.6234 29.507 13.4311 30.0009 12.1879 30.0009H4.68764C3.4444 30.0009 2.25208 29.507 1.37298 28.6279C0.493875 27.7488 0 26.5565 0 25.3133V4.68764C0 3.4444 0.493875 2.25208 1.37298 1.37298C2.25208 0.493875 3.4444 0 4.68764 0L12.1879 0C13.4311 0 14.6234 0.493875 15.5025 1.37298C16.3816 2.25208 16.8755 3.4444 16.8755 4.68764V8.43776C16.8755 8.6864 16.7767 8.92487 16.6009 9.10069C16.4251 9.27651 16.1866 9.37529 15.938 9.37529C15.6893 9.37529 15.4509 9.27651 15.2751 9.10069C15.0992 8.92487 15.0005 8.6864 15.0005 8.43776V4.68764C15.0005 3.9417 14.7041 3.22631 14.1767 2.69884C13.6492 2.17138 12.9338 1.87506 12.1879 1.87506H4.68764C3.9417 1.87506 3.22631 2.17138 2.69885 2.69884C2.17138 3.22631 1.87506 3.9417 1.87506 4.68764V25.3133C1.87506 26.0592 2.17138 26.7746 2.69885 27.3021C3.22631 27.8295 3.9417 28.1259 4.68764 28.1259H12.1879C12.9338 28.1259 13.6492 27.8295 14.1767 27.3021C14.7041 26.7746 15.0005 26.0592 15.0005 25.3133V21.5632C15.0005 21.3145 15.0992 21.076 15.2751 20.9002C15.4509 20.7244 15.6893 20.6256 15.938 20.6256C16.1866 20.6256 16.4251 20.7244 16.6009 20.9002C16.7767 21.076 16.8755 21.3145 16.8755 21.5632ZM29.9297 14.4211C30.0234 14.1915 30.0234 13.9343 29.9297 13.7048C29.8816 13.5908 29.8122 13.4871 29.7253 13.3992L22.2251 5.89893C22.138 5.81162 22.0345 5.74235 21.9206 5.69509C21.8067 5.64782 21.6846 5.6235 21.5613 5.6235C21.438 5.6235 21.3159 5.64782 21.202 5.69509C21.0881 5.74235 20.9846 5.81162 20.8975 5.89893C20.8102 5.98602 20.7409 6.08948 20.6937 6.20338C20.6464 6.31728 20.6221 6.43938 20.6221 6.5627C20.6221 6.68602 20.6464 6.80812 20.6937 6.92202C20.7409 7.03592 20.8102 7.13938 20.8975 7.22647L26.8002 13.1254H8.43776C8.18911 13.1254 7.95064 13.2242 7.77482 13.4C7.599 13.5758 7.50023 13.8143 7.50023 14.0629C7.50023 14.3116 7.599 14.55 7.77482 14.7259C7.95064 14.9017 8.18911 15.0005 8.43776 15.0005H26.8002L20.8994 20.8994C20.8121 20.9865 20.7428 21.0899 20.6955 21.2038C20.6483 21.3177 20.624 21.4398 20.624 21.5632C20.624 21.6865 20.6483 21.8086 20.6955 21.9225C20.7428 22.0364 20.8121 22.1398 20.8994 22.2269C20.9866 22.3139 21.0901 22.3829 21.204 22.4299C21.3179 22.4768 21.44 22.5009 21.5632 22.5007C21.6864 22.5009 21.8084 22.4768 21.9223 22.4299C22.0362 22.3829 22.1397 22.3139 22.2269 22.2269L29.7272 14.7267C29.8134 14.6386 29.8822 14.5349 29.9297 14.4211Z"/>
+            </svg>
+            <a :hide="hideText">Выход</a>
+          </li>
+        </template>
       </ul>
     </div>
     <div class="menu horizontal" v-if="!vertical">
       <ul>
         <li @click="$emit('scrollToComponent', 'main')"><a :class="{'active': pageId == 'main'}">Главная</a></li>
         <li @click="$emit('scrollToComponent', 'price')"><a :class="{'active': pageId == 'price'}">Услуги</a></li>
-        <!-- <li @click="$emit('scrollToComponent', 'cabinet')"><a :class="{'active': pageId == 'cabinet'}">Кабинет</a></li> -->
+        <li v-if="!user.isClient" :key="!user.isClient ? 'yes' : 'no'" @click="openLoginForm"><a>Вход</a></li>
+        <template v-else>
+          <li @click="$emit('scrollToComponent', 'cabinet')"><a :class="{'active': pageId == 'cabinet'}">Кабинет</a></li>
+          <li @click="logout"><a>Выход</a></li>
+        </template>
       </ul>
     </div>
   </div>
 </template>
 <script lang="ts">
 
-import { defineComponent, ref} from "vue";
+import { defineComponent, reactive, ref} from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import UserStore from "./Pages/Utils/UserStore";
 
 export default defineComponent({
   name: "men",
@@ -74,7 +88,9 @@ export default defineComponent({
     vertical: {type: Boolean, required: true},
     pageId: {type: String, required: true}
   },
-
+  async mounted(){
+    this.user.isClient = UserStore.isClient(await UserStore.user());
+  },
   watch: { 
     show: function(newVal, oldVal) { // watch it
       
@@ -86,11 +102,30 @@ export default defineComponent({
     const short = ref(false);
     const hideText = ref(true);
     const hideIcon = ref(true);
+    const router = useRouter();
+    const user = reactive({isClient: false});
+    const toast = useToast();
 
-    return {short, hideText, hideIcon}
+    const openLoginForm = () => {
+      router.push({name: 'login'});
+    }
+
+    const logout = () => {
+      fetch('api/auth/logout', {
+        method: "POST",
+        headers: {'Content-Type': "application/json"},
+        credentials: "include",
+      }).then( async r => {
+        toast.success("Выход выполнен");
+        user.isClient = false;
+      })
+    }
+
+    return {short, hideText, hideIcon, openLoginForm, UserStore, user, logout}
   },
 
   methods:{
+
     click(_: MouseEvent|null = null, show: boolean|undefined = undefined){
       if(show == undefined){
         this.$emit('shortCloseClick', this.pageId);
@@ -187,11 +222,11 @@ export default defineComponent({
 }
 
 .menu.vertical ul li[hide="false"]:nth-child(2){
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .menu.vertical ul li[hide="false"]:not(:last-child){
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .menu.vertical ul li[hide="true"]{

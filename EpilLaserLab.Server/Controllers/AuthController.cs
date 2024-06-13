@@ -164,7 +164,6 @@ namespace EpilLaserLab.Server.Controllers
                 User = RegisterUser(dto),
             };
 
-         
             _clientRepository.Add(client);
 
             return Ok(new {Message = "OK"});

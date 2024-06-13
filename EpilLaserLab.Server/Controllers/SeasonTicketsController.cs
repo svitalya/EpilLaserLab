@@ -26,6 +26,7 @@ namespace EpilLaserLab.Server.Controllers
         static object? orderByService(SeasonTicketDto s) => s.Service?.Name;
         static object? orderBySessions(SeasonTicketDto s) => s.Sessions;
         static object? orderByValidityPeriod(SeasonTicketDto s) => s.ValidityPeriod;
+        static object? orderByPrice(SeasonTicketDto s) => s.Price;
 
         [HttpGet]
         public IActionResult GetList(int page = 0, int limit = 10, string order = "id", string sort = "asc")
@@ -35,7 +36,7 @@ namespace EpilLaserLab.Server.Controllers
             functor.Add("service", orderByService);
             functor.Add("sessions", orderBySessions);
             functor.Add("validityPeriod", orderByValidityPeriod);
-            functor.Add("price", orderByValidityPeriod);
+            functor.Add("price", orderByPrice);
 
             var querable = _seasonTicketRepository.GetQuerable()
                 .Include(st => st.Service)

@@ -12,6 +12,7 @@ namespace EpilLaserLab.Server.Models
 
         public int? UserId { get; set; }
 
+        [JsonIgnore]
         public User? User { get; set; }
 
         [JsonIgnore]

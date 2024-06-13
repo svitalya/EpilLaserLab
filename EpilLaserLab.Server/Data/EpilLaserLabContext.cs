@@ -89,6 +89,9 @@ public class EpilLaserLabContext : DbContext
 
             entity.HasOne(e => e.Type)
                 .WithMany(e => e.ServicePrices);
+
+            entity.HasMany(e => e.Applications)
+                .WithOne(a => a.ServicePrice);
         });
 
         modelBuilder.Entity<Models.SeasonTicket>(entity =>

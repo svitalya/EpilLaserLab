@@ -8,7 +8,7 @@
       <div class="simple-modal-content">
           <div class="modal-row">
             <span class="row-header">Адрес</span>
-            <div class="select-box" :ref="el => !!el ? initSelectBox(el as HTMLElement, selectBranch) : undefined">
+            <div class="select-box" id="select-box-address">
               <div :class="{'select-item': true, 'active': index==0}" v-for="(branch, index) in branches" :key="branch.branchId" :data-id="branch.branchId">
                 <div class="image-container"><img class="image" :src="`/resources/images/${branch.photoPath}`"></div>
                 <div class="text">{{branch.address}}</div> 
@@ -17,7 +17,7 @@
           </div>     
           <div class="modal-row">
             <span class="row-header">Мастер</span>
-            <div class="select-box" :ref="el => !!el ? initSelectBox(el as HTMLElement, selectMaster) : undefined">
+            <div class="select-box" id="select-box-masters">
               <div :class="{'select-item': true, 'active': index==0}" v-for="(master, index) in masters" :key="master.masterId" :data-id="master.masterId">
                 <div class="image-container"><img class="image" :src="`/resources/images/${master.photoPath}`"></div>
                 <div class="text">{{master.fio}}</div> 
@@ -26,7 +26,7 @@
           </div> 
           <div class="modal-row">
             <span class="row-header">Дата</span>
-            <div class="select-box" :ref="el => !!el ? initSelectBox(el as HTMLElement, selectSchedule) : undefined">
+            <div class="select-box" id="select-box-schedule">
               <div :class="{'select-item': true, 'minimize':true, 'active': index==0}" v-for="(schedul, index) in scheduls" :key="schedul.scheduleId" :data-id="schedul.scheduleId">
                 <div class="text center">{{schedul.dateShortString}}</div>
               </div>
@@ -34,7 +34,7 @@
           </div>
           <div class="modal-row">
             <span class="row-header">Время</span>
-            <div class="select-box" :ref="el => !!el ? initSelectBox(el as HTMLElement, selectIntervale, false) : undefined">
+            <div class="select-box" id="select-box-intervals">
               <div :class="{'select-item': true, 'minimize':true, 'active': index==0}" v-for="(interval, index) in intervals" :key="interval" :data-id="interval">
                 <div class="text center">{{ interval }}</div>
               </div>
@@ -79,6 +79,7 @@ export default defineComponent({
     priceId: {type: Number, required: true},
   },
 
+
   data(){
     return {
       modalEl: {},
@@ -103,12 +104,17 @@ export default defineComponent({
     }
   },
 
-  mounted(){
-    this.getBranches();
+  async mounted(){
+    await this.getBranches();
+
+    this.initSelectBox(window.document.getElementById("select-box-address"), this.selectBranch) 
+    this.initSelectBox(window.document.getElementById("select-box-masters"), this.selectMaster)
+    this.initSelectBox(window.document.getElementById("select-box-schedule"), this.selectSchedule) 
+    this.initSelectBox(window.document.getElementById("select-box-intervals"), this.selectIntervale, false) 
   },
   methods: {
-    getBranches(){
-      fetch(`/api/branches?limit=1000`, {
+    async getBranches(){
+      await fetch(`/api/branches?limit=1000`, {
         method: "GET",
         credentials: "include",
         headers: {'Content-Type': "application/json"}
@@ -238,7 +244,8 @@ export default defineComponent({
 
     initSelectBox(el: HTMLElement, callback: SelectChangedCallbackFunction|SelectChangedCallbackFunctionWithString = null, valIsNum:Boolean = true){
       var items = el.querySelectorAll('.select-item');
-
+      console.log("sdfsdfsdf");
+      
       const selected = async (e) => {
         let localEl = e.target as HTMLElement;
 
@@ -272,6 +279,8 @@ export default defineComponent({
 <style>
 
 #createAppModal{
+  z-index: 999;
+
   *, ::after, ::before {
     box-sizing: content-box;
   }

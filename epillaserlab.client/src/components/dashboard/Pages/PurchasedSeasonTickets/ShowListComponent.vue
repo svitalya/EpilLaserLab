@@ -86,7 +86,7 @@ export default defineComponent({
 
           const loadData = async (query) => {
         
-            let page, limit, sortDirection, searchInfo;
+            let page, limit, sortDirection, order;
 
             sortDirection = sort.value["sort"]
 
@@ -94,26 +94,30 @@ export default defineComponent({
                 page = pagination.value["page"];
                 limit = pagination.value["limit"];
                 
-                if(sortDirection == 'asc'){
+                sortDirection = sortDirection == 'asc' ? 'desc' : 'asc';
+                
+                order = query.split(':')[0];
+                console.log(order);
+
+                if(order !== sort.value["order"]){
                     sortDirection = 'desc';
-                }else{
-                    sortDirection = 'asc';
                 }
 
             }else if(typeof(query) == typeof({})){
                 page = (query.page - 1) < 0 ? 0 : query.page - 1;
                 limit = query.per_page;
-                searchInfo = query.search;
+                order = sort.value["order"];
             }else{
                 page = pagination.value["page"];
                 limit = pagination.value["limit"];
+                order = sort.value["order"];
             }
 
             let params = {
                     page: page,
                     limit: limit,
                     sort: sortDirection,
-                    search: searchInfo
+                    order: order
             }
 
             var prms = new URLSearchParams(params);
@@ -131,7 +135,7 @@ export default defineComponent({
 
                     tableData.value = recs
                     pagination.value = { ...pagination.value, page: page, total: max, limit: limit}
-                    sort.value = { ...sort.value, sort: sortDirection};
+                    sort.value = { ...sort.value, sort: sortDirection, order: order};
                 }else{
                     tableData.value = [];
                     pagination.value = { ...pagination.value, page: 0, total: 0, limit: limit}
