@@ -110,7 +110,7 @@ export default defineComponent({
                 method: "POST",
                 headers: {'Content-Type': "application/json"},
                 credentials: "include",
-                body: JSON.stringify(dataRegister)
+                body: JSON.stringify(dataLogin)
             }).then(async response => {
                 let result = await response.json();
                 if(result.message == "OK"){
