@@ -52,14 +52,14 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '/api':{
-                target: 'http://localhost:5000',
-                changeOrigin: true,
-            },
-            '/resources':{
-                target: 'http://localhost:5000',
-                changeOrigin: true,
-            }
+            // '/api':{
+            //     target: 'http://localhost:5000',
+            //     changeOrigin: true,
+            // },
+            // '/resources':{
+            //     target: 'http://localhost:5000',
+            //     changeOrigin: true,
+            // }
         },
         port: 7171,
         https: {
