@@ -12,5 +12,7 @@ namespace EpilLaserLab.Server.Data.Applications
         public bool CheckForDuplication(Application application);
         public bool AccessDelete(Application application);
         public IQueryable<Application> GetQuerable();
+
+        public bool Update();
     }
 }

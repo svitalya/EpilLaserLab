@@ -32,7 +32,7 @@
             <table-body v-text="row.service"/>
             <table-body v-text="row.price"/>
             <table-body :data-id="row.applicationId" style="width: 7%">
-                <!-- <button type="button" class="btn btn-primary me-2" @click="editClick">Открыть</button> -->
+                <button type="button" class="btn btn-primary me-2" @click="editClick">Открыть</button>
             </table-body>
         </template>
         <template #empty>
@@ -56,6 +56,7 @@
   import DataTable from "../../../lib/DataTable/DataTable.vue";
   import { TableBody, TableHead } from "@jobinsjp/vue3-datatable"
   import "@jobinsjp/vue3-datatable/dist/style.css";
+  import UserStore from "@/components/Pages/Utils/UserStore";
   export default defineComponent({
       components: { TableBody, TableHead, DataTable },
 
@@ -110,7 +111,13 @@
                     page: page,
                     limit: limit,
                     sort: sortDirection,
-                    order: order
+                    order: order,
+                    branchId: null
+            }
+
+            var user = await UserStore.user();
+            if(user.roleId == 2){
+                params.branchId = user.admin.branchId
             }
 
             var prms = new URLSearchParams(params);

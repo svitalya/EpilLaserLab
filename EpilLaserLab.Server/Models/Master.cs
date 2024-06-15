@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EpilLaserLab.Server.Models
 {
@@ -20,6 +21,7 @@ namespace EpilLaserLab.Server.Models
 
         public Employee Employee { get; set; }
 
+        [JsonIgnore]
         public ICollection<Schedule> Schedules { get; set; }
 
     }

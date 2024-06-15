@@ -99,7 +99,7 @@ export default defineComponent({
                     dataLogin.password = dataRegister.password;
                     await submitLogin();
                 }else if(result.message == "BLOCK"){
-                    toast.warning("Данный логин уже занят");
+                    toast.error("Дублирование учетных данных");
                 }
             });
 

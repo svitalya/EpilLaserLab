@@ -48,6 +48,7 @@
   import DataTable from "../../../../lib/DataTable/DataTable.vue";
   import { TableBody, TableHead } from "@jobinsjp/vue3-datatable"
   import "@jobinsjp/vue3-datatable/dist/style.css";
+  import UserStore from "@/components/Pages/Utils/UserStore";
   const Paginated = defineComponent({
       components: { TableBody, TableHead, DataTable },
 
@@ -134,8 +135,15 @@
                     page: page,
                     limit: limit,
                     sort: sortDirection,
-                    order: order
+                    order: order,
+                    branchId: null,
             }
+
+            var user = await UserStore.user();
+            if(user.roleId == 2){
+                params.branchId = user.admin.branchId
+            }
+
 
             var prms = new URLSearchParams(params);
 

@@ -35,7 +35,7 @@ namespace EpilLaserLab.Server.Controllers.Employees
             int limit = 10,
             string order = "masterId",
             string sort = "asc",
-            int? branchId = null)
+            string? branchId = null)
         {
             Dictionary<string, Func<Master, object?>> functor = [];
 
@@ -51,9 +51,9 @@ namespace EpilLaserLab.Server.Controllers.Employees
                 .Trim()
                 ?? "-1";
 
-            if(branchId is not null)
+            if(branchId is not null && int.TryParse(branchId, out int branchIdInt))
             {
-                querable = querable.Where(m => m.BranchId == branchId).AsQueryable();
+                querable = querable.Where(m => m.BranchId == branchIdInt).AsQueryable();
             }
             
 
@@ -70,11 +70,6 @@ namespace EpilLaserLab.Server.Controllers.Employees
             if (page + 1 * limit > maxRecs)
             {
                 page = 0;
-            }
-
-            if(branchId is not null)
-            {
-                querable = querable.Where(m => m.BranchId == branchId).AsQueryable();
             }
 
 

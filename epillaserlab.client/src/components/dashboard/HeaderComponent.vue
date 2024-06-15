@@ -22,6 +22,7 @@
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
+
 export default defineComponent({
     data(){
         return {

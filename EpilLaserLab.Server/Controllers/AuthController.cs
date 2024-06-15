@@ -156,17 +156,34 @@ namespace EpilLaserLab.Server.Controllers
         [HttpPost("register/clients")]
         public IActionResult RegisterClient(RegisterClientsDto dto)
         {
-
-            var client = new Client
+            try
             {
-                Name = dto.Name,
-                Phone = dto.Phone,
-                User = RegisterUser(dto),
-            };
+                var client = _clientRepository
+                    .GetQueryable()
+                    .FirstOrDefault(c => c.Phone == dto.Phone);
+                if (client is null)
+                {
+                    client = new Client
+                    {
+                        Name = dto.Name,
+                        Phone = dto.Phone,
+                        User = RegisterUser(dto),
+                    };
+                    _clientRepository.Add(client);
+                }
+                else
+                {
+                    client.User = RegisterUser(dto);
+                    _clientRepository.Update();
+                }
 
-            _clientRepository.Add(client);
+                return Ok(new { Message = "OK" });
+            }
+            catch
+            {
+                return Ok(new { Message = "BLOCK" });
+            }
 
-            return Ok(new {Message = "OK"});
         }
 
         [HttpPost("register/admins")]

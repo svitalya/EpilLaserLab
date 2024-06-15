@@ -77,6 +77,7 @@ export default defineComponent({
     hidden: {type: Boolean, default: true},
     timeCost: {type: Number, required: true},
     priceId: {type: Number, required: true},
+    user: {type: Object, default: {}}
   },
 
 
@@ -92,8 +93,8 @@ export default defineComponent({
         timeStart: "",
 
         client:{
-          phone: "",
-          name: "",
+          phone: this.user.client.phone ?? '',
+          name: this.user.client.name ?? '',
         }
 
       },
@@ -106,11 +107,7 @@ export default defineComponent({
 
   async mounted(){
     await this.getBranches();
-
     this.initSelectBox(window.document.getElementById("select-box-address"), this.selectBranch) 
-    this.initSelectBox(window.document.getElementById("select-box-masters"), this.selectMaster)
-    this.initSelectBox(window.document.getElementById("select-box-schedule"), this.selectSchedule) 
-    this.initSelectBox(window.document.getElementById("select-box-intervals"), this.selectIntervale, false) 
   },
   methods: {
     async getBranches(){
@@ -124,12 +121,14 @@ export default defineComponent({
         this.data.branchId = recs[0].branchId  
 
         await this.getMasters();
+        this.initSelectBox(window.document.getElementById("select-box-masters"), this.selectMaster)
       })
     },
 
-    selectBranch(branchId: number){
+    async selectBranch(branchId: number){
       this.data.branchId = branchId;
-      this.getMasters();
+      await this.getMasters();
+      this.initSelectBox(window.document.getElementById("select-box-masters"), this.selectMaster)
     },
 
     async getMasters(){
@@ -156,11 +155,13 @@ export default defineComponent({
       }
 
       await this.getSchedules();
+      this.initSelectBox(window.document.getElementById("select-box-schedule"), this.selectSchedule) 
     },
 
-    selectMaster(masterId: number){
+    async selectMaster(masterId: number){
       this.data.masterId = masterId;
-      this.getSchedules();
+      await this.getSchedules();
+      this.initSelectBox(window.document.getElementById("select-box-schedule"), this.selectSchedule) 
     },
 
     async getSchedules(){
@@ -186,11 +187,13 @@ export default defineComponent({
       }
 
       await this.getTimeIntervals();
+      this.initSelectBox(window.document.getElementById("select-box-intervals"), this.selectIntervale, false) 
     },
 
-    selectSchedule(scheduleId: number){
+    async selectSchedule(scheduleId: number){
       this.data.scheduleId = scheduleId;
-      this.getTimeIntervals();
+      await this.getTimeIntervals();
+      this.initSelectBox(window.document.getElementById("select-box-intervals"), this.selectIntervale, false) 
     },
 
     async getTimeIntervals(){
@@ -243,9 +246,7 @@ export default defineComponent({
 
 
     initSelectBox(el: HTMLElement, callback: SelectChangedCallbackFunction|SelectChangedCallbackFunctionWithString = null, valIsNum:Boolean = true){
-      var items = el.querySelectorAll('.select-item');
-      console.log("sdfsdfsdf");
-      
+      var items = el.querySelectorAll('.select-item');  
       const selected = async (e) => {
         let localEl = e.target as HTMLElement;
 

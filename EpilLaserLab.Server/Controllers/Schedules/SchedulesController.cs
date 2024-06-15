@@ -8,6 +8,7 @@ using EpilLaserLab.Server.Helpers;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace EpilLaserLab.Server.Controllers.Schedules
@@ -25,7 +26,7 @@ namespace EpilLaserLab.Server.Controllers.Schedules
         object? OrderByDate(Schedule s) => s.Date;
 
         [HttpGet]
-        public IActionResult GetList(int page = 0, int limit = 10, string order = "scheduleId", string sort = "asc", int? masterId = null)
+        public IActionResult GetList(int page = 0, int limit = 10, string order = "scheduleId", string sort = "asc", int? masterId = null, string? branchId=null)
         {
             Dictionary<string, Func<Schedule, object?>> functor = [];
 
@@ -33,7 +34,7 @@ namespace EpilLaserLab.Server.Controllers.Schedules
             functor.Add("master", OrderByMaster);
             functor.Add("date", OrderByDate);
 
-            var querable = schedulesRepository.GetQueryable();
+            var querable = schedulesRepository.GetQueryable().Include(s => s.Master).AsQueryable();
             if (functor.TryGetValue(order, out Func<Schedule, object?>? f) && f is not null)
             {
                 querable = (sort == "desc"
@@ -46,6 +47,11 @@ namespace EpilLaserLab.Server.Controllers.Schedules
             if(masterId is not null)
             {
                 querable = querable.Where(s => s.MasterId == masterId);
+            }
+
+            if (branchId is not null && int.TryParse(branchId, out int branchIdInt))
+            {
+                querable = querable.Where(s => s.Master.BranchId == branchIdInt);
             }
 
             var now = DateTime.Now.ToDateOnly().ToDateTime(new TimeOnly(0, 0, 0));

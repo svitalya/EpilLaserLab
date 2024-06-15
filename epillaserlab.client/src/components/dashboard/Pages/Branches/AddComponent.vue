@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="row form-group mt-3">
-          <label class="h5">Адресс</label>
+          <label class="h5">Адрес</label>
           <div class="col-12">
             <input type="text" v-model="data.address" class="form-control" placeholder="Введите адрес">
           </div>

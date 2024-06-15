@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    <div class="row form-group mt-3">
+    <div class="row form-group mt-3" v-if="showBranch">
       <label class="h5">Филиал</label>
       <div class="col-12">
         <select class="form-control" v-model="data.branchId" @change="branchChange">
@@ -121,9 +121,12 @@
 import { getCurrentInstance, defineComponent, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import UserStore from "@/components/Pages/Utils/UserStore";
 
 export default defineComponent({
   async beforeCreate() {
+
+
     fetch(`/api/clients?limit=1000`, {
       method: "GET",
       credentials: "include",
@@ -165,8 +168,13 @@ export default defineComponent({
       this.data.categoryId = recs[0].id  
     });
 
-
-   fetch(`/api/branches?limit=1000`, {
+    var user = await UserStore.user();
+    if(user.roleId == 2){
+        this.data.branchId = user.admin.branchId
+        this.showBranch = false;
+        await this.branchChange();
+    }else{
+      fetch(`/api/branches?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -178,6 +186,7 @@ export default defineComponent({
       await this.branchChange();
       this.$forceUpdate();
     })
+    }
   },
   setup(){
     const instance = getCurrentInstance();
@@ -195,6 +204,8 @@ export default defineComponent({
     let scheduls = ref([{scheduleId: null, dateString: ""}]);
     let intervals = ref({intervalString: ""});
     let timeCost = 0;
+
+    const showBranch = ref(true);
     
     const data = reactive({
       clientId: null,
@@ -210,6 +221,8 @@ export default defineComponent({
         phone: null
       }
     })
+
+
 
     const clientSelected = reactive({val: true});
 
@@ -228,7 +241,7 @@ export default defineComponent({
           masters.value = recs;
           data.masterId = recs[0].masterId ?? null;
         }else{
-          masters.value = [];
+          masters.value = [{fio: "Нет записей", masterId: null}];
           data.masterId = null;
         }
 
@@ -248,7 +261,7 @@ export default defineComponent({
           scheduls.value = recs;
           data.scheduleId = recs[0].scheduleId ?? null;
         }else{
-          scheduls.value = [];
+          scheduls.value = [{scheduleId: null, dateString: "Нет записей"}];
           data.scheduleId = null;
         }
 
@@ -327,6 +340,7 @@ export default defineComponent({
     }
 
     return {data,
+      showBranch,
       clientsData,
       servicesData,
       typesData,

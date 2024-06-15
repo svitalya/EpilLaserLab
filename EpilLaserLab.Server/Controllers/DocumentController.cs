@@ -7,6 +7,7 @@ using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq;
 
 namespace EpilLaserLab.Server.Controllers
 {
@@ -73,16 +74,24 @@ namespace EpilLaserLab.Server.Controllers
                      ];
                 }
 
-                string[][] rows = masterRepository.GetQueryable()
+                var queryable = masterRepository.GetQueryable()
                         .Include(m => m.Employee)
                         .Include(m => m.Schedules)
                             .ThenInclude(s => s.Intervals)
                                 .ThenInclude(i => i.Application)
                                     .ThenInclude(a => a.Client)
-                        .GroupBy(m => m.Employee)
-                        .ToArray()
+                        .AsQueryable();
+
+                User authUser = userRepository!.GetAuth(HttpContext);
+                if(authUser.RoleId == 2)
+                {
+                    queryable = queryable.Where(m => m.BranchId == authUser.Admin.BranchId);
+                }
+
+                string[][] rows = queryable.GroupBy(m => m.Employee).ToArray()
                         .Select(Selector)
                         .ToArray();
+
 
                 rows = rows.Append(new string[] {
                     "Всего",
@@ -188,7 +197,7 @@ namespace EpilLaserLab.Server.Controllers
                     return r;
                 }
 
-                string[][] rows = masterRepository.GetQueryable()
+                var queryable = masterRepository.GetQueryable()
                         .Include(m => m.Employee)
                         .Include(m => m.Schedules)
                             .ThenInclude(s => s.Intervals)
@@ -200,8 +209,15 @@ namespace EpilLaserLab.Server.Controllers
                                 .ThenInclude(i => i.Application)
                                     .ThenInclude(a => a.PurchasedSeasonTicket)
                                         .ThenInclude(pst => pst.SeasonTicketPrice)
-                                            .ThenInclude(stp => stp.SeasonTicket)
-                        .GroupBy(m => m.Employee)
+                                            .ThenInclude(stp => stp.SeasonTicket).AsQueryable();
+
+            User authUser = userRepository!.GetAuth(HttpContext);
+            if (authUser.RoleId == 2)
+            {
+                queryable = queryable.Where(m => m.BranchId == authUser.Admin.BranchId);
+            }
+
+             var rows =  queryable.GroupBy(m => m.Employee)
                         .ToArray()
                         .Select(Selector)
                         .ToArray();
@@ -293,11 +309,17 @@ namespace EpilLaserLab.Server.Controllers
                     return r;
                 }
 
-                string[][] rows = serviceRepository.GetQuerable()
+                var queryable = serviceRepository.GetQuerable()
                         .Include(s => s.ServicePrices)
                             .ThenInclude(sp => sp.Applications)
-                                .ThenInclude(a => a.PurchasedSeasonTicket)
-                        .Select(Selector)
+                                .ThenInclude(a => a.Interval)
+                                    .ThenInclude(i => i.Schedule)
+                                        .ThenInclude(s => s.Master)
+                        .Include(s => s.ServicePrices)
+                            .ThenInclude(sp => sp.Applications)
+                                .ThenInclude(a => a.PurchasedSeasonTicket).AsQueryable();
+
+                var rows = queryable.Select(Selector)
                         .ToArray();
 
                 rows = rows.Select(CalculatingPercentage).ToArray();

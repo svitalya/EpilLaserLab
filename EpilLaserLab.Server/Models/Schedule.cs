@@ -1,4 +1,6 @@
-﻿namespace EpilLaserLab.Server.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EpilLaserLab.Server.Models
 {
     public class Schedule
     {
@@ -9,6 +11,7 @@
 
         public DateTime Date {  get; set; }
 
+        [JsonIgnore]
         public ICollection<Interval> Intervals { get; set; }
     }
 }

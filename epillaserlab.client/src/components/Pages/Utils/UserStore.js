@@ -6,12 +6,16 @@ export default {
       credentials: "include",
     });
 
-    return await responce.json();
+    var result = await responce.json();
+
+    if(result.message == "OK"){
+      return result.user;
+    }
+
+    return null;
   },
 
-  isClient(user){
-    if(user.message == "ACCESS DENIED" || !user.user) return false;
-
-    return user.user.roleId == 3; 
+  isClient(user){ 
+    return user.roleId == 3;
   }
 }

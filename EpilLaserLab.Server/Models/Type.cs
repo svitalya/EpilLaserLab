@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EpilLaserLab.Server.Models
 {
@@ -9,6 +10,7 @@ namespace EpilLaserLab.Server.Models
         [Required]
         public required string Name { get; set; }
 
+        [JsonIgnore]
         public ICollection<ServicePrice> ServicePrices { get; set; } = [];
     }
 }

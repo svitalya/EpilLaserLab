@@ -86,14 +86,14 @@ export default defineComponent({
   props: {
     show: {type: Boolean, required: false},
     vertical: {type: Boolean, required: true},
-    pageId: {type: String, required: true}
+    pageId: {type: String, required: true},
+    isClient: {type: Boolean, default: false}
   },
   async mounted(){
-    this.user.isClient = UserStore.isClient(await UserStore.user());
+    this.user.isClient = this.isClient;
   },
   watch: { 
     show: function(newVal, oldVal) { // watch it
-      
       if(this.short !== newVal) this.click(null, newVal);
     }
   },
@@ -110,22 +110,22 @@ export default defineComponent({
       router.push({name: 'login'});
     }
 
-    const logout = () => {
+
+    return {short, hideText, hideIcon, openLoginForm, UserStore, user, toast}
+  },
+
+  methods:{
+    logout(){
       fetch('api/auth/logout', {
         method: "POST",
         headers: {'Content-Type': "application/json"},
         credentials: "include",
       }).then( async r => {
-        toast.success("Выход выполнен");
-        user.isClient = false;
+        this.toast.success("Выход выполнен");
+        this.user.isClient = false;
+        this.$emit('logOut');
       })
-    }
-
-    return {short, hideText, hideIcon, openLoginForm, UserStore, user, logout}
-  },
-
-  methods:{
-
+    },
     click(_: MouseEvent|null = null, show: boolean|undefined = undefined){
       if(show == undefined){
         this.$emit('shortCloseClick', this.pageId);

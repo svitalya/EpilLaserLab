@@ -10,18 +10,22 @@
     <component
       @scrollToComponent="handleScrollToComponent"
       @shortCloseClick="shortCloseClickHandler"
+      @logOut="logOutHandler"
       v-for="componentData in components"
       :is="componentData.component"
       :id="componentData.id"
+      :user="user"
       :ref="async (el) => componentData.page = el.$el"
       :show-menu="showMenu"
-      :key="JSON.stringify(componentData)"
+      :key="JSON.stringify(componentData)+isClient"
+      :isClient="isClient"
       class="full-screen-component"></component>
   </div>
 </template>
 
 <script lang="ts">
 import { ref, onMounted, Ref, reactive} from 'vue'
+import { watch } from 'vue'
 import MainPageComponent  from './Pages/MainPageComponent.vue'
 import PricePageComponent  from './Pages/PricePageComponent.vue'
 import CabinetPageComponent  from './Pages/CabinetPageComponent.vue'
@@ -39,30 +43,40 @@ export default {
     'help': HelpComponent
   },
   async mounted() {
-    let isClient = UserStore.isClient(await UserStore.user());
-
-    if(isClient){
-      const cabinetPage = ref<HTMLElement | null>(null);
-      this.components.push({page: cabinetPage, id: "cabinet", component: CabinetPageComponent})
-    }
+    this.user = await UserStore.user();
+    this.isClient = UserStore.isClient(this.user);
   },
   setup() {
     const showMenu = ref(false);
     const mainPage = ref<HTMLElement | null>(null);
     const pricePage = ref<HTMLElement | null>(null);
-  
-    const components = reactive<Component[]>( [
+
+    const user = ref({});
+    const isClient = ref(false);
+
+    const components = ref([
       {page: mainPage, id: "main", component: MainPageComponent},
       {page: pricePage, id: "price", component: PricePageComponent},
     ]);
 
+    watch(isClient, (newValue, oldValue) => {
+      if(newValue == oldValue) return;
+
+      if(newValue){
+        const cabinetPage: HTMLElement = null;
+        components.value.push({page: cabinetPage, id: "cabinet", component: CabinetPageComponent})
+      }else{
+        components.value.pop();
+      }
+    });
+  
     const currentIndex = ref(0)
 
     const handleWheel = (event: WheelEvent) => {
         event.preventDefault();
       if (event.deltaY > 0) {
         // Scroll down
-        currentIndex.value = Math.min(currentIndex.value + 1, components.length - 1)
+        currentIndex.value = Math.min(currentIndex.value + 1, components.value.length - 1)
       } else {
         // Scroll up
         currentIndex.value = Math.max(currentIndex.value - 1, 0)
@@ -71,7 +85,7 @@ export default {
     }
 
     const handleScrollToComponent = (pageId: string) => {
-      components.forEach((c, i) => {
+      components.value.forEach((c, i) => {
         if(pageId == c.id) currentIndex.value = i;
       });
       scrollToComponent();
@@ -82,20 +96,28 @@ export default {
     }
 
     const scrollToComponent = () => { 
-        components[currentIndex.value].page.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+        components.value[currentIndex.value].page.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     }
 
     onMounted(() => {       
         document.addEventListener('wheel', handleWheel, {passive: false});
     });
-
     return {
       components,
       currentIndex,
       handleWheel,
       handleScrollToComponent,
       shortCloseClickHandler,
-      showMenu
+      showMenu,
+      user,
+      isClient
+    }
+  },
+
+  methods: {
+    async logOutHandler(){
+      this.user = {};
+      this.isClient = false;
     }
   }
 }
@@ -104,6 +126,7 @@ export default {
 <style>
 
 body{
+  font:"EB Garamond", serif !important;
   overflow: hidden;
 }
 

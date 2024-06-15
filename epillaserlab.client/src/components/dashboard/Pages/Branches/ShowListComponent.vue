@@ -10,7 +10,7 @@
               >
         <template #thead>
             <table-head>Изображение</table-head>
-            <table-head sortable="address" @sorting="loadData">Адресс</table-head>
+            <table-head sortable="address" @sorting="loadData">Адрес</table-head>
             <table-head>
                 <router-link
                     :to="{name: 'dashboard.branches.add'}"

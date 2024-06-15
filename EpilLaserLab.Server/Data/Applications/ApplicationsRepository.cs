@@ -45,5 +45,10 @@ namespace EpilLaserLab.Server.Data.Applications
         {
             throw new NotImplementedException();
         }
+
+        public bool Update()
+        {
+            return context.SaveChanges() > 0;
+        }
     }
 }

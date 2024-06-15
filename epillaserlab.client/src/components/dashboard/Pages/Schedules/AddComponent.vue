@@ -43,11 +43,19 @@ import { defineComponent } from 'vue';
 import DataTable from "../../../../lib/DataTable/DataTable.vue";
   import { TableBody, TableHead } from "@jobinsjp/vue3-datatable"
   import "@jobinsjp/vue3-datatable/dist/style.css";
+  import UserStore from "@/components/Pages/Utils/UserStore";
 
 export default defineComponent({
   components: {DataTable, TableBody, TableHead},
   async beforeCreate(){
-    await fetch(`/api/masters?limit=9999`, {
+
+    var user = await UserStore.user();
+    var branchId = null;
+    if(user.roleId == 2){
+        branchId = user.admin.branchId
+    }
+
+    await fetch(`/api/masters?limit=9999&branchId=${branchId}`, {
       headers: {'Content-Type': "application/json"},
         credentials: "include"
     }).then(async responce => {

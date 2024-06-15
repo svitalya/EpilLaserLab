@@ -8,6 +8,7 @@ using EpilLaserLab.Server.Helpers;
 using EpilLaserLab.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
 
@@ -32,11 +33,62 @@ namespace EpilLaserLab.Server.Controllers
         object? orderByService(ApplicationRecTableDto a) => a.Service;
         object? orderByPrice(ApplicationRecTableDto a) => a.Price;
 
+        string minutsToTimeStr(int minuts) => $"{(minuts / 60).ToString().PadLeft(2, '0')}" +
+             $":{(minuts % 60).ToString().PadLeft(2, '0')}";
+
+
+        [HttpGet("short")]
+        public IActionResult ListShort([FromQuery] int? clientId = null)
+        {
+            var request = applicationsRepository.GetQuerable()
+                    .Include(a => a.Client)
+                    .Include(a => a.ServicePrice)
+                        .ThenInclude(sp => sp.Service)
+                    .Include(a => a.ServicePrice)
+                        .ThenInclude(sp => sp.Type)
+                    .Include(a => a.Interval)
+                        .ThenInclude(i => i.Schedule)
+                            .ThenInclude(s => s.Master)
+                                .ThenInclude(m => m.Branch)
+                    .Include(a => a.Interval)
+                        .ThenInclude(i => i.Schedule)
+                            .ThenInclude(s => s.Master)
+                                .ThenInclude(m => m.Employee)
+                    .AsQueryable();
+
+            if (clientId is not null)
+            {
+                request = request.Where(a => a.ClientId == clientId).AsQueryable();
+            }
+
+            var querable = request.ToArray().Select(app => new
+                {
+                    Client = app.Client.Name,
+                    Service = app.ServicePrice.Service.Name,
+                    Branch = app.Interval.Schedule.Master.Branch.Address,
+                    Master = app.Interval.Schedule.Master.Employee.FIO,
+                    DateTime = $"{app.Interval.Schedule.Date:dd.MM} {minutsToTimeStr(app.Interval.TimeStart)}",
+                    CategoryId = app.CategoryId,
+                })
+                .AsQueryable();
+
+            return Ok(new
+            {
+                Data = new
+                {
+                    Recs = querable.ToArray(),
+                },
+                Message = "OK"
+            });
+        }
+
         [HttpGet]
         public IActionResult GetList([FromQuery] int page = 0,
             [FromQuery] int limit = 10,
             [FromQuery] string order = "dateTime",
             [FromQuery] int? clientId = null,
+            [FromQuery] string? branchId = null,
+
             [FromQuery] string sort = "desc")
         {
             Dictionary<string, Func<ApplicationRecTableDto, object?>> functor = [];
@@ -68,6 +120,11 @@ namespace EpilLaserLab.Server.Controllers
             if (clientId is not null)
             {
                 request = request.Where(a => a.ClientId == clientId).AsQueryable();
+            }
+
+            if(branchId is not null && int.TryParse(branchId, out int branchIdInt))
+            {
+                request = request.Where(a => a.Interval.Schedule.Master.BranchId == branchIdInt).AsQueryable();
             }
 
 
@@ -150,6 +207,44 @@ namespace EpilLaserLab.Server.Controllers
             });
         }
 
+        [HttpGet("{id}/short")]
+        public IActionResult GetShort(int id)
+        {
+            var app = applicationsRepository.GetQuerable()
+                        .Include(a => a.Client)
+                        .Include(a => a.ServicePrice)
+                            .ThenInclude(sp => sp.Service)
+                        .Include(a => a.ServicePrice)
+                            .ThenInclude(sp => sp.Type)
+                        .Include(a => a.Interval)
+                            .ThenInclude(i => i.Schedule)
+                                .ThenInclude(s => s.Master)
+                                    .ThenInclude(m => m.Branch)
+                        .Include(a => a.Interval)
+                            .ThenInclude(i => i.Schedule)
+                                .ThenInclude(s => s.Master)
+                                    .ThenInclude(m => m.Employee)
+                        .FirstOrDefault(a => a.ApplicationId == id);
+
+            if (app is null) return Ok("NOT FOUND");
+
+
+
+            return Ok(new
+            {
+                Data = new
+                {
+                    Client = app.Client.Name,
+                    Service = app.ServicePrice.Service.Name,
+                    Branch = app.Interval.Schedule.Master.Branch.Address,
+                    Master = app.Interval.Schedule.Master.Employee.FIO,
+                    DateTime = $"{app.Interval.Schedule.Date:dd.MM} {minutsToTimeStr(app.Interval.TimeStart)}",
+                    CategoryId = app.CategoryId,
+                },
+                Message = "OK"
+            });
+        }
+
         [HttpPost]
         public IActionResult Create(ApplicationCreateDto applicationCreateDto)
         {
@@ -225,6 +320,31 @@ namespace EpilLaserLab.Server.Controllers
 
 
                 return Ok(new { Message = "OK" });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        [HttpPut("{id}/category")]
+        public IActionResult UpdateCategory(int id, [FromBody] int idCategory)
+        {
+            try
+            {
+                var oldApplication = applicationsRepository.Get(id);
+
+                if (oldApplication is null)
+                {
+                    return Ok(new { Message = "NOT FOUND" });
+                }
+                oldApplication.CategoryId = idCategory;
+                oldApplication.DateTimeClosed = DateTime.Now;
+
+                applicationsRepository.Update();
+
+                return Ok(new {Message = "OK"});
 
             }
             catch (Exception ex)

@@ -48,8 +48,10 @@
         <men
           pageId="main"
           :vertical="false"
+          :isClient="isClient"
           :show="showMenu"
           @scrollToComponent="$emit('scrollToComponent', $event)"
+          @logOut="$emit('logOut', $event)"
           @shortCloseClick="$emit('shortCloseClick', $event)"/>
         <div class="suggestion">
           <div class="description">
@@ -91,7 +93,8 @@ import  MenuComponent  from '../MenuComponent.vue';
 export default defineComponent({
   name: "main-page",
   props:{
-    showMenu: {type: Boolean, default: false}
+    showMenu: {type: Boolean, default: false},
+    isClient: {type: Boolean, default: false},
   },
   components:{
     "men": MenuComponent

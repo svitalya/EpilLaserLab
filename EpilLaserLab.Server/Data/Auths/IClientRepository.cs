@@ -6,6 +6,8 @@ namespace EpilLaserLab.Server.Data.Auths
     {
         public bool Add(Client client);
 
+        public bool Update();
+
         public IQueryable<Client> GetQueryable();
     }
 }

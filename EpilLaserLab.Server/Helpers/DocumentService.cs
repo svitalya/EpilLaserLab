@@ -32,7 +32,7 @@ public class DocumentService
         titleRange.Merge = true;
         
 
-        worksheet.Cells[2, 1].Value = $"Сформирован: {data.Created.ToString("D")}";
+        worksheet.Cells[2, 1].Value = $"Сформирован: {data.Created.ToString("d")}";
         var createdAtRange = worksheet.Cells[2, 1, 2, data.Columns.Length];
         createdAtRange.Style.Font.Bold = true;
         createdAtRange.Style.Font.Name = "Calibri";

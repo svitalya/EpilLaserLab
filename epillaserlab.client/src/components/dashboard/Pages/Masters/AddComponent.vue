@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div class="row form-group mt-3">
+      <div class="row form-group mt-3" v-if="showBranch">
         <label class="h5">Филиал</label>
         <div class="col-12">
           <select class="form-control" v-model="data.branchId">
@@ -73,29 +73,37 @@ import { defineComponent } from 'vue';
 import DataTable from "../../../../lib/DataTable/DataTable.vue";
   import { TableBody, TableHead } from "@jobinsjp/vue3-datatable"
   import "@jobinsjp/vue3-datatable/dist/style.css";
+  import UserStore from "@/components/Pages/Utils/UserStore";
 
 export default defineComponent({
   components: {DataTable, TableBody, TableHead},
-  beforeCreate() {
-    fetch(`/api/branches?`
-      +"page=0&limit=999&order=name&sort=asc", {
-        headers: {'Content-Type': "application/json"},
-        credentials: "include",
-      }).then(async responce => {
-        let responceJson = await responce.json();
-        if(responceJson.message == "OK"){
-          
-          this.branches = responceJson.data.recs;
-          this.data.branchId = this.branches[0].branchId;
-          this.$forceUpdate();
-        }
-    });
+  async  beforeCreate() {
+    var user = await UserStore.user();
+    if(user.roleId == 2){
+        this.data.branchId = user.admin.branchId
+        this.showBranch = false;
+    }else{
+      fetch(`/api/branches?`
+        +"page=0&limit=999&order=name&sort=asc", {
+          headers: {'Content-Type': "application/json"},
+          credentials: "include",
+        }).then(async responce => {
+          let responceJson = await responce.json();
+          if(responceJson.message == "OK"){
+            
+            this.branches = responceJson.data.recs;
+            this.data.branchId = this.branches[0].branchId;
+            this.$forceUpdate();
+          }
+      });
+    }
   },
   setup(){
 
     const router = useRouter();
     const toast = useToast();
     const branches = reactive([{branchId: 0, address: ""}])
+    const showBranch = ref(true);
     const data = reactive({
       branchId: 0,
       employee: {
@@ -156,7 +164,7 @@ export default defineComponent({
         }).catch(r => router.push({name: "dashboard"}))
     }; 
 
-    return {data, submitForm, getBase64, branches}
+    return {data, submitForm, getBase64, branches, showBranch}
   }
 });
 </script>

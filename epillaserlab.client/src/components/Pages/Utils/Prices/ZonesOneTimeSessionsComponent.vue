@@ -3,6 +3,7 @@
   :price-id="priceId"
   :time-cost="timeCost"
   :hidden="modalHidden.val"
+  :user="user"
   @closeModal="closeModalHandler"
   :key="JSON.stringify(modalHidden)"/>
   <div class="price-content" id="zonesOneTimeSessions">
@@ -38,7 +39,8 @@ export default defineComponent({
     "create-applications": CreateApplicationsComponent
   },
   props:{
-    prices: {type: Array<ZoneOneTimeSessionsContent>, required:true}
+    prices: {type: Array<ZoneOneTimeSessionsContent>, required:true},
+    user: {type: Object, default: {}}
   },
   data(){
     return {

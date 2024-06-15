@@ -2,37 +2,30 @@
 <div>
   <div class ="flex-column">
     <h1 class="row h3">
-      Добавить запись заявки
+      Закрыть заявку
     </h1>
   </div>
 
   <form @submit.prevent="clickBtn">
 
     <div class="row form-group mt-3">
-      <label class="h5">Клиент</label>
-      <div class="col-12">
-        <select class="form-control" v-model="data.clientId">
-          <option v-for="client in clientsData" :value="client.clientId">{{client.name}}</option>
-        </select>
-      </div>
+      <label class="h5">Клиент: {{data.client}}</label>
     </div>
 
     <div class="row form-group mt-3">
-      <label class="h5">Услуга</label>
-      <div class="col-12">
-        <select class="form-control" v-model="data.serviceId" @change="changeService">
-          <option v-for="service in servicesData" :value="service.serviceId" >{{service.name}} - {{service.timeCost}}мин.</option>
-        </select>
-      </div>
+      <label class="h5">Услуга: {{data.service}}</label>
     </div>
 
     <div class="row form-group mt-3">
-      <label class="h5">Прайс лист</label>
-      <div class="col-12">
-        <select class="form-control" v-model="data.typeId">
-          <option v-for="typePrice in typesData" :value="typePrice.id">{{typePrice.name}}</option>
-        </select>
-      </div>
+      <label class="h5">Филиал: {{data.branch}}</label>
+    </div>
+
+    <div class="row form-group mt-3">
+      <label class="h5">Мастер: {{data.master}}</label>
+    </div>
+
+    <div class="row form-group mt-3">
+      <label class="h5">Дата: {{data.dateTime}}</label>
     </div>
 
     <div class="row form-group mt-3">
@@ -43,48 +36,6 @@
         </select>
       </div>
     </div>
-
-    <div class="row form-group mt-3">
-      <label class="h5">Филиал</label>
-      <div class="col-12">
-        <select class="form-control" v-model="data.branchId" @change="branchChange">
-          <option v-for="branch in branches" :value="branch.branchId">{{branch.address}}</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row form-group mt-3">
-      <label class="h5">Мастер</label>
-      <div class="col-12">
-        <select class="form-control" v-model="data.masterId"  @change="changeMaster">
-          <option v-for="master in masters" :value="master.masterId">{{master.fio}}</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row form-group mt-3">
-      <label class="h5">Дни работы</label>
-      <div class="col-12">
-        <select class="form-control" v-model="data.scheduleId" @change="changeSchedule">
-          <option v-for="schedul in scheduls" :value="schedul.scheduleId">{{schedul.dateString}}</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row form-group mt-3">
-      <label class="h5">Доступное время</label>
-        <div class="col-12">
-          <textarea type="text" :value="intervals.intervalString" class="form-control" disabled/>
-        </div>
-    </div>
-
-    <div class="row form-group mt-3">
-      <label class="h5">Введите время</label>
-        <div class="col-12">
-          <input type="text" v-model="data.timeStart" class="form-control"/>
-        </div>
-    </div>
-
   
   <div class="row mt-4">
     <button type="submit" class="btn btn-success me-3" style="width: 120px;">Сохранить</button>
@@ -101,38 +52,7 @@ import { useToast } from 'vue-toastification';
 
 export default defineComponent({
   async beforeCreate() {
-    fetch(`/api/clients?limit=1000`, {
-      method: "GET",
-      credentials: "include",
-      headers: {'Content-Type': "application/json"}
-    }).then(async responce => {
-      let recs = (await responce.json()).data.recs;
-      this.clientsData = recs;
-      this.data.clientId = recs[0].clientId
-    });
-
-    fetch(`/api/services?limit=1000`, {
-      method: "GET",
-      credentials: "include",
-      headers: {'Content-Type': "application/json"}
-    }).then(async responce => {
-      let recs = (await responce.json()).data.recs;
-      this.servicesData = recs;
-      this.data.serviceId = recs[0].serviceId
-      this.timeCost = await this.getTimeCostService();
-    });
-
-    fetch(`/api/types?limit=1000`, {
-      method: "GET",
-      credentials: "include",
-      headers: {'Content-Type': "application/json"}
-    }).then(async responce => {
-      let recs = (await responce.json()).data.recs;
-      this.typesData = recs;
-      this.data.typeId = recs[0].id  
-    });
-
-    fetch(`/api/categories?limit=1000`, {
+    await fetch(`/api/categories?limit=1000`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
@@ -142,152 +62,51 @@ export default defineComponent({
       this.data.categoryId = recs[0].id  
     });
 
-
-   fetch(`/api/branches?limit=1000`, {
+    await fetch(`/api/applications/${this.id}/short`, {
       method: "GET",
       credentials: "include",
       headers: {'Content-Type': "application/json"}
     }).then(async responce => {
-      let recs = (await responce.json()).data.recs;
-      this.branches = recs;
-      this.data.branchId = recs[0].branchId  
-
-      await this.branchChange();
-    })
+      this.data = (await responce.json()).data;
+    });
   },
   setup(){
     const instance = getCurrentInstance();
-
     const toast = useToast();
     const router = useRouter();
     const id = router.currentRoute.value.params.id;
     
-
-    const clientsData = reactive([{clientId: 0, name: null}]);
-    const servicesData = reactive([{serviceId: 0, name: null}]); // typesData
-    const typesData = reactive([{id: 0, name: null}]);
     const categories = reactive([{id: 0, name: null}]);
-    const branches = reactive([{branchId: 0, address: null}]);
-    let masters = ref([{masterId: null, fio: ""}]);
-    let scheduls = ref([{scheduleId: null, dateString: ""}]);
-    let intervals = ref({intervalString: ""});
-    let timeCost = 0;
     
-    const data = reactive({
-      clientId: null,
-      serviceId: null,
-      typeId: null,
-      categoryId: null,
-      branchId: null,
-      masterId: null,
-      scheduleId: null,
-      timeStart: null
+    const data = ref({
+      client: "",
+      service: "",
+      branch: "",
+      master: "",
+      dateTime: "",
+      categoryId:0
     })
 
-    const branchChange = async() => {
-      fetch(`/api/masters?limit=1000&branchId=${(data.branchId ?? -1)}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {'Content-Type': "application/json"}
-      }).then(async responce => {
-        let recs = (await responce.json()).data.recs;
-        
-
-        if(recs.length > 0){
-          masters.value = recs;
-          data.masterId = recs[0].masterId ?? null;
-        }else{
-          masters.value = [];
-          data.masterId = null;
-        }
-
-        await changeMaster()
-        
-      })
-    };
-
-    const changeMaster = async() => {
-      fetch(`/api/schedules?limit=1000&masterId=${(data.masterId ?? -1)}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {'Content-Type': "application/json"}
-      }).then(async responce => {
-        let recs = (await responce.json()).data.recs;
-        if(recs.length > 0){
-          scheduls.value = recs;
-          data.scheduleId = recs[0].scheduleId ?? null;
-        }else{
-          scheduls.value = [];
-          data.scheduleId = null;
-        }
-
-        timeCost = await getTimeCostService();
-
-        await changeSchedule()
-      })
-    }
-
-    const changeSchedule = async() => {
-      fetch(`/api/intervals/${data.scheduleId ?? -1}?timeCost=${timeCost}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {'Content-Type': "application/json"}
-      }).then(async responce => {
-        intervals.value.intervalString = (await responce.json()).intervalsString ?? "Нет графика";
-      })
-    }
-
-    const getTimeCostService = async () =>{
-      let servicesData = [];
-      await fetch(`/api/services?limit=1000`, {
-        method: "GET",
-        credentials: "include",
-        headers: {'Content-Type': "application/json"}
-      }).then(async responce => {
-        let recs = (await responce.json()).data.recs;
-        servicesData = recs;
-      });
-
-      for(let service of servicesData){
-        if(service.serviceId == data.serviceId){
-          return service.timeCost;
-        }
-      }
-    }
-
     const clickBtn = async () => {
-      await fetch(`/api/applications`, {
-        method: "POST",
+      await fetch(`/api/applications/${id}/category`, {
+        method: "PUT",
         credentials: "include",
         headers: {'Content-Type': "application/json"},
-        body: JSON.stringify(data)
+        body: data.value.categoryId.toString()
       }).then(async responce => {
-          console.log(data);
-          toast.success("ПППП");
+        var request = await(responce.json())
+
+        if(request.message == "OK"){
+          toast.success("Заявка успешно закрыта");
+          router.push({name: "dashboard.home"});
+        }
       })
     };
 
-    const changeService = async() =>{
-      timeCost = await getTimeCostService();
-      await changeSchedule()
-    }
-
     return {data,
-      clientsData,
-      servicesData,
-      typesData,
       categories,
-      branches,
-      masters,
-      branchChange,
-      changeMaster,
-      scheduls,
-      intervals,
-      changeSchedule,
-      timeCost,
-      getTimeCostService,
-      changeService,
-      clickBtn
+      clickBtn,
+      id
     }
   }
 });

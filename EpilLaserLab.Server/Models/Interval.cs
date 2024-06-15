@@ -1,4 +1,6 @@
-﻿namespace EpilLaserLab.Server.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EpilLaserLab.Server.Models
 {
     public class Interval
     {
@@ -9,6 +11,7 @@
         public int TimeStart { get; set; }
         public int TimeEnd { get; set; }
 
+        [JsonIgnore]
         public Application? Application { get; set; }
     }
 }

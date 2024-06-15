@@ -4,8 +4,10 @@
     <men
       :show="showMenu"
       pageId="price"
+      :isClient="isClient"
       :vertical="true"
       @shortCloseClick="$emit('shortCloseClick', $event)"
+      @logOut="$emit('logOut', $event)"
       @scrollToComponent="$emit('scrollToComponent', $event)"/>
 
 
@@ -15,7 +17,7 @@
       </div>
       <div id="priceZoneContent">
         <price-zone :header="header" :subheader="subheader">
-          <component :is="selectedPriceList" :prices="prices"></component>
+          <component :is="selectedPriceList" :prices="prices" :user="user"></component>
         </price-zone>
       </div>
     </div>
@@ -33,9 +35,12 @@ import SubscriptionPricesComponent from './Utils/Prices/SubscriptionPricesCompon
 
 export default defineComponent({
   props:{
-    showMenu: {type: Boolean, default: false}
+    showMenu: {type: Boolean, default: false},
+    isClient: {type: Boolean, default: false},
+    user: {type: Object, default: {}}
   },
   data(){
+    console.log(this.user.client);
     return {
       selectedPriceList: defineComponent({}),
       prices: [],
