@@ -137,7 +137,7 @@ namespace EpilLaserLab.Server.Controllers
                     Client = a.Client.Name,
                     DateTime = (a.Interval.Schedule.Date.AddMinutes(a.Interval.TimeStart)).ToString("dd.MM HH:mm"),
                     Service = $"{a.ServicePrice.Service.Name}:{a.ServicePrice.Type.Name}",
-                    Price = a.ServicePrice.Price.ToString("C")
+                    Price = a.ServicePrice.Price.ToString("N2")
                 })
                 .AsQueryable();
 
