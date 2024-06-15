@@ -12,10 +12,10 @@ export default {
       return result.user;
     }
 
-    return null;
+    return {};
   },
 
   isClient(user){ 
-    return user.roleId == 3;
+    return user && user.roleId == 3;
   }
 }

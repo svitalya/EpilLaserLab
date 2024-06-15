@@ -15,7 +15,6 @@
       :is="componentData.component"
       :id="componentData.id"
       :user="user"
-      :ref="async (el) => componentData.page = el.$el"
       :show-menu="showMenu"
       :key="JSON.stringify(componentData)+isClient"
       :isClient="isClient"
@@ -33,7 +32,6 @@ import HelpComponent from './Pages/Utils/Modals/HelpComponent.vue'
 import UserStore from './Pages/Utils/UserStore'
 
 interface Component {
-  page: Ref<HTMLElement | null>
   id: string
   component: Object
 }
@@ -48,15 +46,13 @@ export default {
   },
   setup() {
     const showMenu = ref(false);
-    const mainPage = ref<HTMLElement | null>(null);
-    const pricePage = ref<HTMLElement | null>(null);
 
     const user = ref({});
     const isClient = ref(false);
 
     const components = ref([
-      {page: mainPage, id: "main", component: MainPageComponent},
-      {page: pricePage, id: "price", component: PricePageComponent},
+      {id: "main", component: MainPageComponent},
+      {id: "price", component: PricePageComponent},
     ]);
 
     watch(isClient, (newValue, oldValue) => {
@@ -96,7 +92,7 @@ export default {
     }
 
     const scrollToComponent = () => { 
-        components.value[currentIndex.value].page.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+        window.document.getElementById(components.value[currentIndex.value].id).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     }
 
     onMounted(() => {       
@@ -126,7 +122,7 @@ export default {
 <style>
 
 body{
-  font:"EB Garamond", serif !important;
+  font:"EB Garamond", serif !important  ;
   overflow: hidden;
 }
 
