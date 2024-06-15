@@ -4,7 +4,7 @@ namespace EpilLaserLab.Server.Helpers
 {
     public static class DBConnectData
     {
-        Server=localhost;Database=epillaserlab;User=root;Password=qwerty;Port=3306
+        //Server=localhost;Database=epillaserlab;User=root;Password=qwerty;Port=3306
         public static string Server = "127.0.0.1";
         public static string Database = "user_epillaserlab";
         public static string User = "epillaserlab";
