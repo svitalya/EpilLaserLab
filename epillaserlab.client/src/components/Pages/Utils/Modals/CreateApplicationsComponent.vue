@@ -82,6 +82,13 @@ export default defineComponent({
 
 
   data(){
+    let phone = "";
+    let name = "";
+    if(this.user.client){
+      phone = this.user.client.phone;
+      name = this.user.client.name;
+    }
+
     return {
       modalEl: {},
       hostname: window.location.hostname,
@@ -93,8 +100,8 @@ export default defineComponent({
         timeStart: "",
 
         client:{
-          phone: this.user.client.phone ?? '',
-          name: this.user.client.name ?? '',
+          phone: phone,
+          name: name,
         }
 
       },
